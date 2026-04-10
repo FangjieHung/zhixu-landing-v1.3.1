@@ -3,7 +3,7 @@ footer {
 }
 
 .max-w-container {
-  @apply px-5 w-full max-w-screen-3xl mx-auto;
+  @apply px-5 w-full  mx-auto;
 
   &:has(swiper) {
     @apply px-0;

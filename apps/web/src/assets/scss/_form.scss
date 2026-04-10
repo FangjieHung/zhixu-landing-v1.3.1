@@ -84,7 +84,7 @@ input:is(:-webkit-autofill, :autofill) {
     }
 
     .input-prefix {
-        @apply relative top-px 4xl:top-0;
+        @apply relative top-px;
     }
 
     .mat-mdc-form-field-icon-prefix .material-symbols-rounded,

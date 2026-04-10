@@ -1,28 +1,636 @@
-header.hero {
-    @apply relative;
-
-    video {
-        @apply w-full h-[99svh] object-cover opacity-80 lg:opacity-100;
-        filter: hue-rotate(340deg) saturate(1.6);
-    }
-
-    .content {
-        @apply text-base absolute inset-0 h-fit my-auto pt-20;
-    }
-
-    .headline {
-        @apply my-10;
-    }
-}
-
+/* ── Page shell ─────────────────────────────────────────────────────────── */
 .default-container {
-    @apply relative overflow-x-hidden;
+  @apply relative overflow-x-hidden;
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
 }
 
-.news-list {
-    @apply min-w-0 flex-auto w-full my-6 xl:w-auto xl:mr-20;
+/* ── ① Hero ────────────────────────────────────────────────────────────── */
+.hero-grid {
+  @apply min-h-screen grid grid-cols-1 md:grid-cols-2;
 }
 
-h2.display {
-    @apply text-pretty;
+.hero-visual-panel {
+  @apply relative flex flex-col items-center justify-center px-8 py-16 md:py-0;
+  background-color: var(--md-sys-color-surface-container-low);
+}
+
+.hero-corner-frame {
+  @apply relative w-full max-w-md mx-auto;
+}
+
+.hero-corner-tl {
+  @apply absolute -top-4 -left-4 w-14 h-14 border-t-2 border-l-2;
+  border-color: color-mix(in srgb, var(--md-sys-color-secondary) 40%, transparent);
+}
+
+.hero-corner-br {
+  @apply absolute -bottom-4 -right-4 w-14 h-14 border-b-2 border-r-2;
+  border-color: color-mix(in srgb, var(--md-sys-color-secondary) 40%, transparent);
+}
+
+.hero-product-label {
+  @apply mt-8 uppercase text-center;
+  color: color-mix(in srgb, var(--md-sys-color-secondary) 70%, transparent);
+}
+
+.hero-content-panel {
+  @apply relative flex flex-col justify-center px-8 md:px-16 xl:px-20 py-20;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.hero-inner-border {
+  @apply absolute top-8 left-8 right-8 bottom-8 border pointer-events-none;
+  border-color: color-mix(in srgb, var(--md-sys-color-on-primary) 10%, transparent);
+}
+
+.hero-eyebrow {
+  @apply uppercase text-xs block mb-6;
+  letter-spacing: 0.3em;
+  color: var(--md-sys-color-secondary-fixed);
+}
+
+.hero-heading {
+  @apply font-bold leading-tight text-3xl sm:text-4xl md:text-5xl xl:text-6xl mb-8;
+}
+
+.hero-desc {
+  @apply text-base md:text-lg max-w-md mb-10 leading-relaxed;
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.hero-cta-group {
+  @apply flex flex-wrap gap-4;
+}
+
+.btn-hero-primary {
+  @apply px-8 py-4 tracking-widest text-sm transition-opacity;
+  background-color: var(--md-sys-color-secondary-fixed);
+  color: var(--md-sys-color-on-secondary-fixed);
+  &:hover { opacity: 0.9; }
+}
+
+.btn-hero-outline {
+  @apply border px-8 py-4 tracking-widest text-sm transition-colors;
+  border-color: color-mix(in srgb, var(--md-sys-color-on-primary) 40%, transparent);
+  color: var(--md-sys-color-on-primary);
+  &:hover {
+    border-color: color-mix(in srgb, var(--md-sys-color-on-primary) 80%, transparent);
+  }
+}
+
+.hero-vertical-deco {
+  @apply hidden xl:block absolute right-10 top-1/2 -translate-y-1/2;
+}
+
+.hero-vertical-deco-text {
+  @apply text-xl select-none;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.5em;
+  color: color-mix(in srgb, var(--md-sys-color-on-primary) 20%, transparent);
+}
+
+/* ── ② Brand Story ──────────────────────────────────────────────────────── */
+.brand-story-section {
+  @apply py-24 xl:py-32 overflow-hidden;
+  background-color: var(--md-sys-color-surface-container-low);
+}
+
+.brand-story-inner {
+  @apply max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 xl:gap-16 items-center;
+}
+
+.brand-vertical-deco {
+  @apply hidden md:flex md:col-span-1 justify-center;
+}
+
+.brand-vertical-deco-text {
+  @apply text-lg select-none whitespace-nowrap;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.4em;
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 15%, transparent);
+}
+
+.brand-eyebrow {
+  @apply uppercase text-xs;
+  letter-spacing: 0.25em;
+  color: var(--md-sys-color-secondary);
+}
+
+.brand-heading {
+  @apply font-bold text-3xl md:text-4xl leading-snug;
+  color: var(--md-sys-color-primary);
+}
+
+.brand-body {
+  @apply space-y-4 leading-relaxed;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.brand-stats {
+  @apply flex gap-0 mt-4 pt-6 border-t;
+  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 40%, transparent);
+}
+
+.brand-stat-item {
+  @apply flex-1 text-center border-r last:border-r-0;
+  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 40%, transparent);
+}
+
+.brand-stat-num {
+  @apply font-black text-2xl md:text-3xl;
+  color: var(--md-sys-color-primary);
+}
+
+.brand-stat-label {
+  @apply tracking-widest uppercase mt-1;
+  font-size: 9px;
+  color: var(--md-sys-color-secondary);
+}
+
+/* ── ③ Brand Mission ────────────────────────────────────────────────────── */
+.mission-section {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.mission-grid {
+  @apply grid grid-cols-1 md:grid-cols-2;
+  min-height: 600px;
+}
+
+.mission-content {
+  @apply flex flex-col justify-center px-8 md:px-16 xl:px-20 py-20;
+}
+
+.mission-eyebrow {
+  @apply tracking-widest text-xs block mb-4 uppercase;
+  color: var(--md-sys-color-secondary-fixed);
+}
+
+.mission-heading {
+  @apply font-bold text-3xl md:text-4xl mb-10 leading-snug;
+}
+
+.mission-body {
+  @apply space-y-6 leading-relaxed text-sm md:text-base;
+  color: var(--md-sys-color-on-primary-container);
+}
+
+/* ── ④ Persona ──────────────────────────────────────────────────────────── */
+.persona-section {
+  @apply py-24 xl:py-32;
+  background-color: var(--md-sys-color-surface);
+}
+
+.persona-section-header {
+  @apply mb-16;
+}
+
+.persona-eyebrow {
+  @apply text-sm mb-2 block;
+  color: var(--md-sys-color-secondary);
+}
+
+.persona-heading {
+  @apply font-bold text-3xl md:text-4xl;
+  color: var(--md-sys-color-primary);
+}
+
+.persona-layout {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12;
+}
+
+.persona-mosaic {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.persona-content-list {
+  @apply flex flex-col justify-center gap-10;
+}
+
+.persona-item-heading {
+  @apply font-bold text-lg mb-2;
+  color: var(--md-sys-color-primary);
+}
+
+.persona-item-body {
+  @apply text-sm leading-relaxed;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* ── ⑤ Benefits Bento ───────────────────────────────────────────────────── */
+.bento-section {
+  @apply py-24 xl:py-32;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.bento-header {
+  @apply flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-6;
+}
+
+.bento-eyebrow {
+  @apply tracking-widest text-xs block mb-3 uppercase;
+  color: var(--md-sys-color-secondary-fixed);
+}
+
+.bento-heading {
+  @apply font-bold text-3xl md:text-4xl;
+}
+
+.bento-desc {
+  @apply max-w-sm text-sm leading-relaxed;
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.bento-grid {
+  @apply grid grid-cols-1 md:grid-cols-4 gap-4;
+  grid-auto-rows: 240px;
+}
+
+.bento-main-cell {
+  @apply md:col-span-2 md:row-span-2 relative overflow-hidden;
+  background-color: var(--md-sys-color-primary-container);
+}
+
+.bento-cell-overlay {
+  @apply absolute inset-0 flex flex-col justify-end p-8 md:p-10;
+}
+
+.bento-radish-cell {
+  @apply md:col-span-1 p-8 flex flex-col items-center justify-center text-center;
+  background-color: var(--md-sys-color-tertiary-container);
+}
+
+.bento-cell-divider {
+  @apply w-8 h-px mb-3;
+  background-color: color-mix(in srgb, var(--md-sys-color-on-primary) 20%, transparent);
+}
+
+.bento-nutrients-cell {
+  @apply md:col-span-1 md:row-span-2 border p-8 flex flex-col justify-between;
+  border-color: color-mix(in srgb, var(--md-sys-color-on-primary) 10%, transparent);
+}
+
+.bento-nutrients-eyebrow {
+  @apply tracking-widest uppercase block mb-2;
+  font-size: 10px;
+  color: var(--md-sys-color-secondary-fixed);
+}
+
+.bento-zero-add-cell {
+  @apply md:col-span-1 p-8 flex flex-col items-center justify-center text-center;
+  background-color: color-mix(in srgb, var(--md-sys-color-secondary) 80%, transparent);
+}
+
+.bento-zero-add-heading {
+  @apply text-lg font-bold mb-3;
+  color: var(--md-sys-color-on-secondary);
+}
+
+.bento-zero-add-divider {
+  @apply w-8 h-px mb-3;
+  background-color: color-mix(in srgb, var(--md-sys-color-on-secondary) 30%, transparent);
+}
+
+.bento-zero-add-label {
+  @apply text-xs tracking-widest;
+  color: color-mix(in srgb, var(--md-sys-color-on-secondary) 70%, transparent);
+}
+
+/* ── ⑥ Certifications ───────────────────────────────────────────────────── */
+.cert-section {
+  @apply py-24 xl:py-32;
+  background-color: var(--md-sys-color-surface-container-low);
+}
+
+.cert-section-header {
+  @apply text-center mb-14;
+}
+
+.cert-heading {
+  @apply font-bold text-2xl md:text-3xl mb-4;
+  color: var(--md-sys-color-primary);
+}
+
+.cert-desc {
+  @apply text-sm max-w-md mx-auto leading-relaxed;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.cert-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.cert-card {
+  @apply flex flex-col items-center text-center;
+}
+
+.cert-frame {
+  @apply w-full flex items-center justify-center mb-6 relative overflow-hidden border-2;
+  aspect-ratio: 3 / 4;
+  background-color: var(--md-sys-color-surface);
+  border-color: color-mix(in srgb, var(--md-sys-color-secondary) 15%, transparent);
+}
+
+.cert-badge-primary {
+  @apply absolute top-3 left-3 w-8 h-8 flex items-center justify-center;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-secondary-fixed);
+}
+
+.cert-badge-secondary {
+  @apply absolute top-3 right-3 w-8 h-8 flex items-center justify-center;
+  background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
+}
+
+.cert-frame-body {
+  @apply text-center px-6;
+}
+
+.cert-frame-title {
+  @apply text-3xl italic mb-2;
+  color: color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
+}
+
+.cert-frame-subtitle {
+  @apply text-xs italic;
+  color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 40%, transparent);
+}
+
+.cert-frame-divider {
+  @apply w-12 h-px my-4 mx-auto;
+  background-color: color-mix(in srgb, var(--md-sys-color-secondary) 30%, transparent);
+}
+
+.cert-frame-name {
+  @apply text-lg italic;
+  color: color-mix(in srgb, var(--md-sys-color-primary) 30%, transparent);
+}
+
+.cert-name {
+  @apply font-bold text-lg mb-1;
+  color: var(--md-sys-color-primary);
+}
+
+.cert-label {
+  @apply text-sm;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* ── ⑦ Products ─────────────────────────────────────────────────────────── */
+.products-section {
+  @apply py-24 xl:py-32;
+  background-color: var(--md-sys-color-surface);
+}
+
+.products-header {
+  @apply text-center mb-16;
+}
+
+.products-eyebrow {
+  @apply tracking-widest text-xs block mb-3 uppercase;
+  color: var(--md-sys-color-secondary);
+}
+
+.products-heading {
+  @apply font-bold text-3xl md:text-4xl;
+  color: var(--md-sys-color-primary);
+}
+
+.products-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8;
+}
+
+.product-card {
+  @apply border p-8 md:p-10 flex flex-col sm:flex-row gap-6 items-center transition-all duration-500;
+  background-color: var(--md-sys-color-surface-container-low);
+  border-color: color-mix(in srgb, var(--md-sys-color-secondary) 10%, transparent);
+  &:hover {
+    border-color: color-mix(in srgb, var(--md-sys-color-secondary) 30%, transparent);
+  }
+}
+
+.product-img-wrap {
+  @apply w-full sm:w-2/5 flex-shrink-0;
+}
+
+.product-placeholder {
+  @apply w-full aspect-square flex items-center justify-center;
+  background-color: var(--md-sys-color-surface-container);
+  color: color-mix(in srgb, var(--md-sys-color-outline) 30%, transparent);
+}
+
+.product-info {
+  @apply w-full sm:w-3/5;
+}
+
+.product-name {
+  @apply font-bold text-xl mb-1;
+  color: var(--md-sys-color-primary);
+}
+
+.product-subtitle {
+  @apply text-sm mb-4;
+  color: var(--md-sys-color-secondary);
+}
+
+.product-desc {
+  @apply text-sm leading-relaxed mb-6;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.product-price {
+  @apply text-2xl font-bold mb-5;
+  color: var(--md-sys-color-primary);
+}
+
+/* ── ⑧ Partners ─────────────────────────────────────────────────────────── */
+.partners-section {
+  @apply py-16;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.partners-inner {
+  @apply max-w-5xl mx-auto px-6 md:px-12;
+}
+
+.partners-heading {
+  @apply font-bold text-center text-xl md:text-2xl mb-10;
+}
+
+.partners-list {
+  @apply flex flex-wrap justify-center items-center gap-10 md:gap-16;
+}
+
+.partner-item {
+  @apply flex items-center gap-2;
+  color: color-mix(in srgb, var(--md-sys-color-on-primary) 70%, transparent);
+  .material-symbols-outlined {
+    color: var(--md-sys-color-secondary-fixed);
+  }
+}
+
+/* ── ⑨ Franchise / Contact ──────────────────────────────────────────────── */
+.franchise-section {
+  @apply py-24 xl:py-32;
+  background-color: var(--md-sys-color-surface);
+}
+
+.franchise-inner {
+  @apply max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16 xl:gap-24 items-start;
+}
+
+.franchise-heading {
+  @apply font-bold text-3xl md:text-4xl leading-snug mb-8;
+  color: var(--md-sys-color-primary);
+}
+
+.franchise-desc {
+  @apply leading-relaxed mb-10;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.franchise-benefits {
+  @apply grid grid-cols-2 gap-x-8 gap-y-5;
+}
+
+.franchise-benefit-item {
+  @apply flex items-start gap-3;
+}
+
+.franchise-benefit-icon {
+  @apply mt-0.5;
+  color: var(--md-sys-color-secondary);
+}
+
+.contact-card {
+  @apply p-8 md:p-10 flex flex-col gap-8;
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.contact-card-heading {
+  @apply font-bold text-xl pb-4 border-b;
+  color: var(--md-sys-color-primary);
+  border-color: color-mix(in srgb, var(--md-sys-color-secondary) 20%, transparent);
+}
+
+.contact-row {
+  @apply flex items-center gap-5;
+  &:hover .contact-icon {
+    transform: scale(1.1);
+  }
+}
+
+.contact-icon {
+  @apply w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-transform;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-secondary-fixed);
+}
+
+.contact-label {
+  @apply uppercase mb-0.5;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--md-sys-color-secondary);
+}
+
+.contact-value {
+  @apply text-lg;
+  color: var(--md-sys-color-primary);
+}
+
+.contact-qr-label {
+  @apply uppercase;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--md-sys-color-secondary);
+}
+
+.contact-qr-frame {
+  @apply p-4 bg-white border w-fit;
+  border-color: color-mix(in srgb, var(--md-sys-color-secondary) 10%, transparent);
+}
+
+.contact-qr-placeholder {
+  @apply w-28 h-28 flex flex-col items-center justify-center;
+  background-color: var(--md-sys-color-surface-container);
+  color: color-mix(in srgb, var(--md-sys-color-outline) 40%, transparent);
+}
+
+.contact-qr-hint {
+  @apply text-xs italic;
+  color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 60%, transparent);
+}
+
+/* ── ⑩ Footer ───────────────────────────────────────────────────────────── */
+.site-footer {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.footer-inner {
+  @apply max-w-7xl mx-auto px-6 md:px-12 py-16 grid grid-cols-1 md:grid-cols-3 gap-12;
+}
+
+.footer-brand-name {
+  @apply text-xl font-bold mb-4;
+  color: var(--md-sys-color-secondary-fixed);
+}
+
+.footer-brand-desc {
+  @apply text-sm leading-relaxed max-w-xs;
+  color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 60%, transparent);
+}
+
+.footer-nav-heading {
+  @apply text-xs tracking-widest mb-6 uppercase;
+  color: var(--md-sys-color-secondary-fixed);
+}
+
+.footer-nav-list {
+  @apply space-y-3;
+}
+
+.footer-nav-link {
+  @apply text-sm transition-colors;
+  color: color-mix(in srgb, var(--md-sys-color-on-primary) 60%, transparent);
+  &:hover { color: var(--md-sys-color-secondary-fixed); }
+}
+
+.footer-contact-text {
+  @apply text-sm leading-relaxed mb-4;
+  color: color-mix(in srgb, var(--md-sys-color-on-primary) 60%, transparent);
+}
+
+.footer-social-group {
+  @apply flex gap-3;
+}
+
+.social-icon-btn {
+  @apply w-9 h-9 border flex items-center justify-center transition-all;
+  border-color: color-mix(in srgb, var(--md-sys-color-on-primary) 10%, transparent);
+  &:hover {
+    border-color: var(--md-sys-color-secondary-fixed);
+    color: var(--md-sys-color-secondary-fixed);
+  }
+}
+
+.footer-copyright {
+  @apply border-t;
+  border-color: color-mix(in srgb, var(--md-sys-color-on-primary) 10%, transparent);
+}
+
+.footer-copyright-inner {
+  @apply max-w-7xl mx-auto px-6 md:px-12 py-6 flex flex-col md:flex-row justify-between items-center;
+  font-size: 11px;
+  color: color-mix(in srgb, var(--md-sys-color-on-primary) 30%, transparent);
+}
+
+.footer-copyright-links {
+  @apply mt-2 md:mt-0 flex gap-6;
 }

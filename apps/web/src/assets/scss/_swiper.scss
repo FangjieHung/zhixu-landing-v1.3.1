@@ -24,11 +24,11 @@
     @apply absolute inset-y-0 m-auto z-10;
 
     &.prev {
-        @apply left-1 4xl:-left-10;
+        @apply left-1;
     }
 
     &.next {
-        @apply right-1 4xl:-right-10;
+        @apply right-1;
     }
 
     &.swiper-button-disabled {
