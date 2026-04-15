@@ -40,7 +40,6 @@
           "lottie-web",
           "leaflet",
           "form-data",
-          "aos",
           "quill"
         ]
       },
