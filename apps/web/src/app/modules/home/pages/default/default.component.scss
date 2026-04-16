@@ -239,12 +239,52 @@
 
 .bento-grid {
   @apply grid grid-cols-1 md:grid-cols-4 gap-4;
-  grid-auto-rows: 240px;
+  grid-auto-rows: minmax(220px, auto);
 }
 
 .bento-main-cell {
   @apply md:col-span-2 md:row-span-2 relative overflow-hidden;
   background-color: var(--md-sys-color-primary-container);
+}
+
+/* 試喝專家心得 ── 最大格 col×2 row×2 */
+.bento-review-cell {
+  @apply md:col-span-2 md:row-span-2 p-8 md:p-10 flex flex-col justify-between;
+  background-color: color-mix(in srgb, var(--md-sys-color-primary-container) 85%, transparent);
+
+  blockquote {
+    @apply text-sm md:text-base leading-relaxed flex-1;
+    color: var(--md-sys-color-on-primary-container);
+
+    strong {
+      color: var(--md-sys-color-secondary-fixed);
+    }
+  }
+}
+
+/* 多元礦物質 ── col×2, 圖片橫排 */
+.bento-nutrients-wide-cell {
+  @apply md:col-span-2 p-8 flex flex-row items-center gap-6;
+  background-color: color-mix(in srgb, var(--md-sys-color-surface-container) 80%, transparent);
+}
+
+.bento-nutrients-wide-text {
+  @apply flex flex-col flex-1;
+}
+
+.bento-nutrients-wide-img {
+  @apply w-36 h-auto object-contain shrink-0;
+}
+
+/* GABA / PM chart cells ── col×2 */
+.bento-chart-cell {
+  @apply md:col-span-2 overflow-hidden flex items-center justify-center;
+  background-color: var(--md-sys-color-surface-container-low);
+  min-height: 220px;
+
+  img {
+    @apply w-full h-full object-contain max-h-64;
+  }
 }
 
 .bento-cell-overlay {
@@ -441,7 +481,7 @@
 }
 
 .safety-grid {
-  @apply grid grid-cols-1 md:grid-cols-3 gap-10;
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10;
 }
 
 .safety-item {
