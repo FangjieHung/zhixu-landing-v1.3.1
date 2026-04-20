@@ -33,19 +33,14 @@ export class DefaultContainerComponent extends BBDBaseComponent implements OnIni
   response: OrgContactJto | null = null;
 
   navList = [
-    {
-      label: '安心憑證',
-      link: '/'
-    },
-    {
-      label: '關於我們',
-      link: '/'
-    },
-    {
-      label: '加入我們',
-      link: '/'
-    }
+    { label: '安心憑證', section: 'cert-section' },
+    { label: '關於我們', section: 'about-section' },
+    { label: '加入我們', section: 'franchise-section' }
   ];
+
+  scrollTo(id: string): void {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  }
 
   constructor(
     private logoStateService: LogoStateService,

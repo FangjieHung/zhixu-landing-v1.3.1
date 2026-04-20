@@ -8,17 +8,16 @@
 
   <!-- Desktop links -->
   <div class="hidden lg:flex items-center gap-1 ml-auto">
-    <a *ngFor="let menu of navList"
-       class="nav-link"
-       [routerLink]="menu.link"
-       routerLinkActive="active">
+    <button *ngFor="let menu of navList"
+            class="nav-link"
+            (click)="scrollTo(menu.section)">
       {{ menu.label }}
-    </a>
+    </button>
 
     <!-- CTA -->
-    <a routerLink="/product" class="btn-filled ml-5 max-h-10">
+    <button class="btn-filled ml-5 max-h-10" (click)="scrollTo('products-section')">
       立即選購
-    </a>
+    </button>
   </div>
 
   <!-- Mobile hamburger -->
@@ -44,19 +43,19 @@
       </div>
 
       <mat-nav-list class="sidenav-list">
-        <a *ngFor="let menu of navList"
-           [routerLink]="menu.link"
-           (click)="snav.close()">
+        <button *ngFor="let menu of navList"
+                mat-list-item
+                (click)="scrollTo(menu.section); snav.close()">
           {{ menu.label }}
-        </a>
+        </button>
       </mat-nav-list>
 
       <div class="px-6 pt-4">
-        <a routerLink="/product" (click)="snav.close()"
+        <button (click)="scrollTo('products-section'); snav.close()"
            class="block w-full text-center py-3 text-xs tracking-widest"
            style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); font-family: 'Work Sans', sans-serif;">
           立即選購
-        </a>
+        </button>
       </div>
     </div>
   </mat-sidenav>
