@@ -139,8 +139,7 @@
 }
 
 .brand-stat-label {
-  @apply tracking-widest uppercase mt-1;
-  font-size: 9px;
+  @apply tracking-widest text-sm mt-1;
   color: var(--md-sys-color-secondary);
 }
 
@@ -309,8 +308,7 @@
 }
 
 .bento-nutrients-eyebrow {
-  @apply tracking-widest uppercase block mb-2;
-  font-size: 10px;
+  @apply tracking-widest text-xs uppercase block mb-2;
   color: var(--md-sys-color-secondary-fixed);
 }
 
@@ -387,7 +385,7 @@
 }
 
 .cert-desc {
-  @apply text-sm max-w-md mx-auto leading-relaxed;
+  @apply text-base max-w-md mx-auto leading-relaxed;
   color: var(--md-sys-color-on-surface-variant);
 }
 
@@ -486,7 +484,7 @@
 }
 
 .safety-desc {
-  @apply text-sm max-w-md mx-auto leading-relaxed;
+  @apply text-base max-w-md mx-auto leading-relaxed;
   color: var(--md-sys-color-on-surface-variant);
 }
 
@@ -766,8 +764,7 @@
   }
 
   p {
-    font-size: 10px;
-    @apply uppercase opacity-60 tracking-tighter mt-1;
+    @apply uppercase text-xs opacity-60 tracking-tighter mt-1;
   }
 }
 
@@ -842,8 +839,7 @@
 }
 
 .org-chart-right-label {
-  font-size: 12px;
-  @apply uppercase tracking-wider;
+  @apply uppercase text-xs tracking-wider;
   color: color-mix(in srgb, var(--md-sys-color-secondary) 70%, transparent);
 }
 
@@ -972,8 +968,7 @@
 }
 
 .parent-stat-label {
-  font-size: 10px;
-  @apply uppercase tracking-widest;
+  @apply text-xs uppercase tracking-widest;
   color: var(--md-sys-color-on-surface-variant);
 }
 
@@ -1035,9 +1030,7 @@
 }
 
 .contact-label {
-  @apply uppercase mb-0.5;
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  @apply  text-xs tracking-wide uppercase mb-0.5;
   color: var(--md-sys-color-secondary);
 }
 
