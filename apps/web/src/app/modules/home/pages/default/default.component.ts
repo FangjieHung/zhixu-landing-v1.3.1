@@ -12,10 +12,6 @@ SwiperCore.use([Autoplay, Navigation]);
 
 // Custom packages
 import { BBDBaseComponent } from '@core/shared';
-import {
-  AppNewsMsgView, BannerAdView
-} from '@core/models';
-import { AppMsgApiServ } from '@core/services';
 
 @Component({
   selector: 'app-default',
@@ -23,10 +19,6 @@ import { AppMsgApiServ } from '@core/services';
   styleUrls: ['./default.component.scss'],
 })
 export class DefaultComponent extends BBDBaseComponent implements OnInit, AfterViewInit {
-  private _appMsgApiServ = inject(AppMsgApiServ);
-  ads: BannerAdView[] = [];
-  newsMsgs: AppNewsMsgView[] = [];
-
   products = [
     {
       name: '尊享滋養體驗包',
@@ -168,8 +160,7 @@ export class DefaultComponent extends BBDBaseComponent implements OnInit, AfterV
   @ViewChild('parentCarousel') parentCarousel?: SwiperComponent;
 
   ngOnInit(): void {
-    this.getCaches();
-    console.log('DefaultComponent initialized');
+    console.log();
   }
 
   ngAfterViewInit(): void {
@@ -198,15 +189,6 @@ export class DefaultComponent extends BBDBaseComponent implements OnInit, AfterV
   scrollTo(id: string): void {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   }
-  
-  getCaches(): void {
-    this.spinnerServ.show();
-    forkJoin([
-      this._appMsgApiServ.getAppNewsMsgViews(),
-      this._appMsgApiServ.getBannerAdViews()
-    ]).subscribe(([news, ads]) => {
-      this.newsMsgs = news;
-      this.ads = ads;
-    }).add(() => this.spinnerServ.hide());
-  }
+
+  // getCaches(): void { }
 }
