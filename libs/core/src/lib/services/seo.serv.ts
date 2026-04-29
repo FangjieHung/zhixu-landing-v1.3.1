@@ -41,13 +41,13 @@ export class SEOServ {
       { property: 'og:title', content: this.appEnv.siteName },
       { property: 'og:url', content: this.appEnv.siteServer },
       { property: 'og:image', content: `${this.appEnv.siteServer}/assets/image/og/chuhung-og.png` },
-      { property: 'og:description', content: this.appEnv.siteName },
+      { property: 'og:description', content: '傳承職人手藝的老菜脯滴雞精、陶甕窖藏熬製。' },
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: this.appEnv.siteName },
-      { name: 'twitter:description', content: this.appEnv.siteName },
+      { name: 'twitter:description', content: '傳承職人手藝的老菜脯滴雞精、陶甕窖藏熬製。' },
       { name: 'twitter:image', content: `${this.appEnv.siteServer}/assets/image/og/chuhung-og.png` },
       { name: 'keywords', content: '蘊和堂' },
-      { name: 'description', content: this.appEnv.siteName }
+      { name: 'description', content: '傳承職人手藝的老菜脯滴雞精、陶甕窖藏熬製。' }
     ]);
     this.setCanonical(this.appEnv.siteServer);
   }
@@ -56,7 +56,7 @@ export class SEOServ {
     title = this.appEnv.siteName,
     url = this.appEnv.siteServer,
     image = `${this.appEnv.siteServer}/assets/image/og/chuhung-og.png`,
-    description = this.appEnv.siteName
+    description = '傳承職人手藝的老菜脯滴雞精、陶甕窖藏熬製。'
   ) {
     this.metaTitle = title;
     this.upsertMeta({ property: 'og:type' }, { property: 'og:type', content: 'website' });
