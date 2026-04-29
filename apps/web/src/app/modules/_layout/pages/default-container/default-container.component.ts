@@ -76,6 +76,7 @@ export class DefaultContainerComponent extends BBDBaseComponent implements OnIni
   }
 
   doDataInit(): void {
+    /*
     this._appStoreApiServ.getAppObjectStoreValueByCode(AppObjectStoreCodes.學會聯絡方式設定檔).subscribe({
       next: (res) => {
         if (!res) {
@@ -88,6 +89,8 @@ export class DefaultContainerComponent extends BBDBaseComponent implements OnIni
         this.bbdNotifyServ.error('執行失敗', err);
       },
     });
+    */
+    return;
   }
 
   @HostListener('document:click', ['$event'])

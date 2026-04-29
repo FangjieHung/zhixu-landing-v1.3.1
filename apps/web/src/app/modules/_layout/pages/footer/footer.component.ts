@@ -27,6 +27,9 @@ export class FooterComponent extends BBDBaseComponent implements OnInit {
   }
 
   doDataInit(): void {
+    // Temporarily disabled fetching contact info to avoid external call during debugging.
+    // To re-enable, uncomment the code below.
+    /*
     this._appStoreApiServ.getAppObjectStoreValueByCode(AppObjectStoreCodes.學會聯絡方式設定檔).subscribe({
       next: (res) => {
         if (!res) {
@@ -39,6 +42,8 @@ export class FooterComponent extends BBDBaseComponent implements OnInit {
         this.bbdNotifyServ.error('執行失敗', err);
       },
     });
+    */
+    return;
   }
 
 }

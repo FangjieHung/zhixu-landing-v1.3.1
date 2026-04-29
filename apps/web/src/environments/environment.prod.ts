@@ -4,8 +4,8 @@ export const environment = {
   storageTokenName: 'chuhungWebToken',
   storageAuthUserName: 'chuhungWebAuthUser',
   siteName: '蘊和堂',
-  siteServer: 'https://tslmai.org.tw',
-  apiServer: 'https://apiv1.tslmai.org.tw/Portal',
-  cdnServer: 'https://apiv1.tslmai.org.tw',
+  siteServer: 'https://zhuhong.com.tw',
+  apiServer: 'https://apiv1.zhuhong.com.tw/Portal',
+  cdnServer: 'https://apiv1.zhuhong.com.tw',
   downloadUrl: '/AppAttach/DownloadAppFileAtt'
 };
