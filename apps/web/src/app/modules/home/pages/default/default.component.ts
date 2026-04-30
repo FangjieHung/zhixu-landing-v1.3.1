@@ -74,25 +74,25 @@ export class DefaultComponent extends BBDBaseComponent implements OnInit {
     {
       name: 'ISO 22000',
       label: '食品安全管理國際認證',
-      image: 'assets/image/photo/certificate-iso22000-blur.jpg',
+      image: 'assets/image/certificate/certificate-iso22000-blur.webp',
       alt: 'ISO 22000 食品安全管理國際認證',
     },
     {
       name: 'HACCP',
       label: '危害分析重要管制點認證',
-      image: 'assets/image/photo/certificate-haccp-blur.jpg',
+      image: 'assets/image/certificate/certificate-haccp-blur.webp',
       alt: 'HACCP 危害分析重要管制點認證',
     },
     {
       name: 'SGS',
       label: '國際第三方檢驗認證',
-      image: 'assets/image/photo/certificate-sgs-blur.png',
+      image: 'assets/image/certificate/certificate-sgs-blur.webp',
       alt: 'SGS 國際檢驗認證',
     },
     {
       name: 'SGS',
       label: '橘黴素未檢出',
-      image: 'assets/image/photo/certificate-sgs-citrinin.jpg',
+      image: 'assets/image/certificate/certificate-sgs-citrinin.webp',
       alt: 'SGS 橘黴素未檢出',
     },
   ];
