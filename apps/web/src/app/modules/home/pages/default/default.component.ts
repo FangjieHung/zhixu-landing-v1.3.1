@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, OnInit, Injector, AfterViewInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, inject } from '@angular/core';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { forkJoin } from 'rxjs';
@@ -22,7 +22,7 @@ import { AppMsgApiServ } from '@core/services';
   templateUrl: './default.component.html',
   styleUrls: ['./default.component.scss'],
 })
-export class DefaultComponent extends BBDBaseComponent implements OnInit, AfterViewInit {
+export class DefaultComponent extends BBDBaseComponent implements OnInit {
   private _appMsgApiServ = inject(AppMsgApiServ);
   ads: BannerAdView[] = [];
   newsMsgs: AppNewsMsgView[] = [];
@@ -89,7 +89,7 @@ export class DefaultComponent extends BBDBaseComponent implements OnInit, AfterV
       image: 'assets/image/photo/certificate-sgs-blur.png',
       alt: 'SGS 國際檢驗認證',
     },
-        {
+    {
       name: 'SGS',
       label: '橘黴素未檢出',
       image: 'assets/image/photo/certificate-sgs-citrinin.jpg',
@@ -97,7 +97,7 @@ export class DefaultComponent extends BBDBaseComponent implements OnInit, AfterV
     },
   ];
 
-      // Partner logos centralized here so multiple components can reuse the same data
+  // Partner logos centralized here so multiple components can reuse the same data
   private _partnerLogosBase = [
     { src: 'assets/image/partner/春生LOGO-03.png', alt: '春生' },
     { src: 'assets/image/partner/alic-logo.png', alt: 'alic' },
@@ -122,19 +122,12 @@ export class DefaultComponent extends BBDBaseComponent implements OnInit, AfterV
       1024: {
         slidesPerView: 3,
       },
-    },
-  };
-
-    // 合作夥伴
-  partnersSwiperConfig: SwiperOptions = {
-    slidesPerView: 1,
-    loop: true,
-    autoplay: { delay: 3000, disableOnInteraction: false },
-    spaceBetween: 24,
-    breakpoints: {
-      320: { slidesPerView: 1 },
-      640: { slidesPerView: 2 },
-      1024: { slidesPerView: 3 },
+      1200: {
+        slidesPerView: 4,
+      },
+      1440: {
+        slidesPerView: 5,
+      },
     },
   };
 
@@ -165,7 +158,6 @@ export class DefaultComponent extends BBDBaseComponent implements OnInit, AfterV
       gsap.registerPlugin(ScrollTrigger);
   }
 
-  @ViewChild('partnersSwiper') partnersSwiper?: SwiperComponent;
   @ViewChild('parentCarousel') parentCarousel?: SwiperComponent;
 
   ngOnInit(): void {
@@ -173,33 +165,10 @@ export class DefaultComponent extends BBDBaseComponent implements OnInit, AfterV
     console.log('DefaultComponent initialized');
   }
 
-  ngAfterViewInit(): void {
-    if (this.isBrowser) {
-      // Delay to ensure Swiper instances are initialized
-      setTimeout(() => {
-        try {
-          const ps = (this.partnersSwiper as any)?.swiper;
-          if (ps && ps.autoplay && ps.params?.autoplay) {
-            ps.autoplay.start();
-            console.log('partnersSwiper autoplay started programmatically');
-          }
-
-          const pc = (this.parentCarousel as any)?.swiper;
-          if (pc && pc.autoplay && pc.params?.autoplay) {
-            pc.autoplay.start();
-            console.log('parentCarousel autoplay started programmatically');
-          }
-        } catch (e) {
-          console.warn('Failed to start swiper autoplay', e);
-        }
-      }, 0);
-    }
-  }
-
   scrollTo(id: string): void {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   }
-  
+
   getCaches(): void {
     this.spinnerServ.show();
     forkJoin([

@@ -4,12 +4,16 @@
   background-color: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface);
 
-  > section:not(.section-filled) {
-    @apply px-4;
+  > section:not(.safety-section) {
+    @apply flex flex-col justify-center items-center min-h-[80svh];
   }
 
-  > section {
-    min-height: 80svh;
+  > section:not(.mission-section) {
+    @apply pt-6 pb-8 lg:py-24;
+  }
+
+  > section:not(.products-section, .cert-section, .mission-section) {
+    @apply px-4;
   }
 }
 
@@ -41,10 +45,9 @@
   border-color: color-mix(in srgb, var(--md-sys-color-secondary) 40%, transparent);
 }
 
-// scale: label-small  color: text-secondary (muted alpha)
 .hero-product-label {
   @apply text-sm tracking-widest mt-8 uppercase text-center;
-  color: color-mix(in srgb, var(--md-sys-color-secondary) 70%, transparent);
+  color: var(--md-sys-color-secondary);
 }
 
 .hero-content-panel {
@@ -54,21 +57,14 @@
 }
 
 .hero-inner-border {
-  @apply absolute inset-4 md:inset-8 border pointer-events-none;
+  @apply absolute inset-x-4 inset-y-5 md:inset-x-8 md:inset-y-9 border pointer-events-none;
   border-color: color-mix(in srgb, var(--md-sys-color-on-primary) 10%, transparent);
 }
 
-// scale: label-large  color: text-accent-fixed  → class="hero-eyebrow label-large text-accent-fixed"
 .hero-eyebrow {
   @apply text-lg tracking-widest block mb-2;
 }
 
-// scale: display-large  → class="hero-heading display-large"
-.hero-heading {
-  @apply mb-8;
-}
-
-// color: text-on-primary-muted  → class="hero-desc text-on-primary-muted"
 .hero-desc {
   @apply text-base md:text-lg max-w-md mb-10 leading-relaxed;
 }
@@ -90,7 +86,6 @@
 
 /* ── ② Brand Story ──────────────────────────────────────────────────────── */
 .brand-story-section {
-  @apply py-24 xl:py-32 overflow-hidden;
   background-color: var(--md-sys-color-surface-container-low);
 }
 
@@ -109,18 +104,11 @@
   color: color-mix(in srgb, var(--md-sys-color-on-surface) 15%, transparent);
 }
 
-// scale: label-eyebrow  color: text-secondary  → class="brand-eyebrow label-eyebrow text-secondary"
 // Note: wider letter-spacing than the default tracking-widest (0.1em)
 .brand-eyebrow {
   letter-spacing: 0.25em;
 }
 
-// scale: title-large  color: text-primary  → class="brand-heading title-large text-primary font-headline"
-.brand-heading {
-  // unique: nothing — all typography handled by title-large text-primary
-}
-
-// color: text-muted  → class="brand-body text-muted"
 .brand-body {
   @apply space-y-4 leading-relaxed;
 }
@@ -135,14 +123,12 @@
   border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 40%, transparent);
 }
 
-// color: text-primary  → class="brand-stat-num text-primary font-headline"
 .brand-stat-num {
   @apply font-black text-2xl md:text-3xl;
 }
 
-// color: text-secondary  → class="brand-stat-label text-secondary"
 .brand-stat-label {
-  @apply tracking-widest text-sm mt-1;
+  @apply tracking-widest text-base mt-2 font-bold;
 }
 
 /* ── ③ Brand Mission ────────────────────────────────────────────────────── */
@@ -157,42 +143,20 @@
 }
 
 .mission-content {
-  @apply w-full max-w-7xl mx-auto p-4 flex flex-col justify-center lg:absolute inset-0;
+  @apply w-full max-w-md mx-auto px-4 py-10 flex flex-col justify-center;
 }
 
-// scale: label-eyebrow  color: text-accent-fixed  → class="mission-eyebrow label-eyebrow text-accent-fixed"
-.mission-eyebrow {
-  @apply mb-4;
-}
-
-// scale: title-large  → class="mission-heading title-large font-headline"  (inherits on-primary from section)
-.mission-heading {
-  @apply mb-10;
-}
-
-// color: text-on-primary-muted  → class="mission-body text-on-primary-muted"
 .mission-body {
   @apply space-y-6 leading-relaxed text-sm md:text-base;
 }
 
 /* ── ④ Persona ──────────────────────────────────────────────────────────── */
 .persona-section {
-  @apply py-24 xl:py-32;
   background-color: var(--md-sys-color-surface);
 }
 
-.persona-section-header {
-  @apply mb-16;
-}
-
-// color: text-secondary  → class="persona-eyebrow text-secondary"
 .persona-eyebrow {
   @apply text-sm mb-2 block;
-}
-
-// scale: title-large  color: text-primary  → class="persona-heading title-large text-primary font-headline"
-.persona-heading {
-  // unique: nothing
 }
 
 .persona-layout {
@@ -204,10 +168,10 @@
 }
 
 .persona-content-list {
-  @apply flex flex-col justify-center gap-14;
+  @apply flex flex-col justify-center gap-14 mb-10;
   color: var(--md-sys-color-primary);
 
-  .body-large {
+  .body-medium {
     @apply mt-2 opacity-70;
     color: var(--md-sys-color-on-surface-variant);
   }
@@ -215,28 +179,12 @@
 
 /* ── ⑤ Benefits Bento ───────────────────────────────────────────────────── */
 .bento-section {
-  @apply py-24 xl:py-32;
   background-color: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
 }
 
 .bento-header {
-  @apply flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-6;
-}
-
-// scale: label-eyebrow  color: text-accent-fixed  → class="bento-eyebrow label-eyebrow text-accent-fixed"
-.bento-eyebrow {
-  @apply mb-3;
-}
-
-// scale: title-large  → class="bento-heading title-large font-headline"  (inherits on-primary from section)
-.bento-heading {
-  // unique: nothing
-}
-
-// color: text-on-primary-muted  → class="bento-desc body-medium text-on-primary-muted"
-.bento-desc {
-  @apply max-w-sm;
+  @apply flex flex-col md:flex-row justify-between items-start md:items-end my-16 gap-6 lg:mt-0;
 }
 
 .bento-grid {
@@ -279,11 +227,6 @@
 
 .bento-nutrients-wide-img {
   @apply w-full h-auto object-contain mt-6;
-}
-
-// scale: label-eyebrow  color: text-accent-fixed  → class="bento-nutrients-eyebrow label-eyebrow text-accent-fixed"
-.bento-nutrients-eyebrow {
-  @apply mb-2;
 }
 
 .bento-chart-cell {
@@ -348,23 +291,18 @@
   @apply flex flex-col;
 }
 
-// color: text-on-secondary  → class="bento-cal-num text-on-secondary font-headline"
 .bento-cal-num {
   @apply text-3xl font-bold;
 }
 
 .bento-cal-unit {
   @apply tracking-widest uppercase;
-  color: color-mix(in srgb, var(--md-sys-color-on-secondary) 60%, transparent);
+  color: color-mix(in srgb, var(--md-sys-color-on-secondary) 80%, transparent);
 }
 
 .bento-cal-label {
   @apply mt-1;
-  color: color-mix(in srgb, var(--md-sys-color-on-secondary) 50%, transparent);
-}
-
-.bento-cal-muted .bento-cal-num {
-  color: color-mix(in srgb, var(--md-sys-color-on-secondary) 40%, transparent);
+  color: color-mix(in srgb, var(--md-sys-color-on-secondary) 80%, transparent);
 }
 
 .bento-cal-divider-v {
@@ -374,20 +312,13 @@
 
 /* ── ⑥ Certifications ───────────────────────────────────────────────────── */
 .cert-section {
-  @apply py-24 xl:py-32;
   background-color: var(--md-sys-color-surface-container-low);
 }
 
 .cert-section-header {
-  @apply text-center mb-14;
+  @apply text-center my-14 lg:mt-0;
 }
 
-// scale: title-medium  color: text-primary  → class="cert-heading title-medium text-primary"
-.cert-heading {
-  @apply mb-4;
-}
-
-// color: text-muted  → class="cert-desc body-large text-muted"
 .cert-desc {
   @apply max-w-md mx-auto;
 }
@@ -456,43 +387,30 @@
   color: color-mix(in srgb, var(--md-sys-color-primary) 30%, transparent);
 }
 
-// color: text-primary  → class="cert-name text-primary font-headline"
 .cert-name {
   @apply font-bold text-lg mb-1;
 }
 
-// color: text-muted  → class="cert-label text-muted"
 .cert-label {
   @apply text-sm;
 }
 
 /* ── ⑥-B Safety ─────────────────────────────────────────────────────────── */
 .safety-section {
-  @apply py-24 xl:py-32;
+  @apply lg:max-h-fit;
   background-color: var(--md-sys-color-surface);
 }
 
 .safety-header {
-  @apply text-center mb-14;
+  @apply text-center my-14 lg:mt-0;
 }
 
-// scale: label-eyebrow  color: text-secondary  → class="safety-eyebrow label-eyebrow text-secondary"
-.safety-eyebrow {
-  @apply mb-4;
-}
-
-// scale: title-medium  color: text-primary  → class="safety-heading title-medium text-primary font-headline"
-.safety-heading {
-  @apply mb-4;
-}
-
-// color: text-muted  → class="safety-desc body-large text-muted"
 .safety-desc {
   @apply max-w-md mx-auto;
 }
 
 .safety-grid {
-  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-14;
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-14 w-fit mx-auto;
 }
 
 .safety-item {
@@ -504,39 +422,13 @@
   color: var(--md-sys-color-on-primary-container);
 }
 
-// scale: title-xs  color: text-primary  → class="safety-item-heading title-xs text-primary font-headline"
-.safety-item-heading {
-  @apply mb-3;
-}
-
-// scale: body-medium  color: text-muted  → class="safety-item-body body-medium text-muted"
-.safety-item-body {
-  // unique: nothing
-}
-
 /* ── ⑥-C Liability ───────────────────────────────────────────────────────── */
 .liability-section {
-  @apply py-24 xl:py-32;
   background-color: var(--md-sys-color-surface-container-low);
 }
 
 .liability-inner {
   @apply grid grid-cols-1 lg:grid-cols-2 gap-16 items-center;
-}
-
-// scale: label-eyebrow  color: text-secondary  → class="liability-eyebrow label-eyebrow text-secondary"
-.liability-eyebrow {
-  @apply mb-4;
-}
-
-// scale: title-medium  color: text-primary  → class="liability-heading title-medium text-primary font-headline"
-.liability-heading {
-  @apply mb-6;
-}
-
-// scale: body-medium  color: text-muted  → class="liability-body body-medium text-muted"
-.liability-body {
-  @apply mb-6;
 }
 
 .liability-note {
@@ -557,22 +449,11 @@
 
 /* ── ⑦ Products ─────────────────────────────────────────────────────────── */
 .products-section {
-  @apply py-24 xl:py-32;
   background-color: var(--md-sys-color-surface);
 }
 
 .products-header {
   @apply text-center mb-16;
-}
-
-// scale: label-eyebrow  color: text-secondary  → class="products-eyebrow label-eyebrow text-secondary"
-.products-eyebrow {
-  @apply mb-3;
-}
-
-// scale: title-large  color: text-primary  → class="products-heading title-large text-primary font-headline"
-.products-heading {
-  // unique: nothing
 }
 
 .product-card {
@@ -598,19 +479,8 @@
   @apply w-full;
 }
 
-// scale: title-small  color: text-primary  → class="product-name title-small text-primary font-headline"
-.product-name {
-  @apply mb-1;
-}
-
-// color: text-secondary  → class="product-subtitle text-secondary"
 .product-subtitle {
   @apply text-base mb-4;
-}
-
-// scale: body-medium  color: text-muted  → class="product-desc body-medium text-muted"
-.product-desc {
-  @apply mb-6;
 }
 
 .product-price {
@@ -620,31 +490,19 @@
 
 /* ── ⑦-B Process ────────────────────────────────────────────────────────── */
 .process-section {
-  @apply py-24 xl:py-32;
   background-color: var(--md-sys-color-surface-container-low);
 }
 
 .process-header {
-  @apply text-center mb-16;
+  @apply text-center my-16 lg:mt-0;
 }
 
-// scale: label-eyebrow  color: text-secondary  → class="process-eyebrow label-eyebrow text-secondary"
-.process-eyebrow {
-  @apply mb-4;
-}
-
-// scale: title-medium  color: text-primary  → class="process-heading title-medium text-primary font-headline"
-.process-heading {
-  @apply mb-4;
-}
-
-// scale: body-medium  color: text-muted  → class="process-desc body-medium text-muted"
 .process-desc {
   @apply max-w-md mx-auto;
 }
 
 .process-steps {
-  @apply flex flex-col md:flex-row items-start md:items-center gap-6 mb-20;
+  @apply flex flex-col md:flex-row items-start gap-6 mb-20;
 }
 
 .process-step {
@@ -659,16 +517,6 @@
 .process-step-num {
   @apply text-4xl font-bold mb-2;
   color: color-mix(in srgb, var(--md-sys-color-secondary) 40%, transparent);
-}
-
-// color: text-primary  → class="process-step-title text-primary font-headline"
-.process-step-title {
-  @apply font-bold text-base mb-2;
-}
-
-// scale: body-medium  color: text-muted  → class="process-step-desc body-medium text-muted"
-.process-step-desc {
-  // unique: nothing
 }
 
 .process-step-arrow {
@@ -692,27 +540,12 @@
   aspect-ratio: 4 / 3;
 }
 
-// scale: label-eyebrow  color: text-secondary  → class="supplier-eyebrow label-eyebrow text-secondary"
-.supplier-eyebrow {
-  @apply mb-3;
-}
-
-// scale: title-small  color: text-primary  → class="supplier-heading title-small text-primary font-headline"
-.supplier-heading {
-  @apply mb-4;
-}
-
-// scale: body-medium  color: text-muted  → class="supplier-body body-medium text-muted"
-.supplier-body {
-  @apply mb-6;
-}
-
 .supplier-features {
   @apply flex flex-col gap-3;
 }
 
 .supplier-feature-item {
-  @apply flex items-center gap-2 text-sm;
+  @apply flex items-center gap-2 text-base;
   color: var(--md-sys-color-on-surface-variant);
 
   .material-symbols-outlined {
@@ -727,26 +560,15 @@
 }
 
 .org-header {
-  @apply max-w-7xl mx-auto px-12 text-center mb-24;
+  @apply max-w-7xl mx-auto px-12 text-center my-16 lg:mt-0;
 }
 
-// scale: label-eyebrow-sm  color: text-secondary  → class="org-header-eyebrow label-eyebrow-sm text-secondary"
-.org-header-eyebrow {
-  @apply mb-4;
-}
-
-// scale: title-xl  color: text-primary  → class="org-header-title title-xl text-primary"
-.org-header-title {
-  @apply mb-6;
-}
-
-// color: text-muted  → class="org-header-subtitle text-muted"
 .org-header-subtitle {
   @apply max-w-2xl mx-auto font-light italic;
 }
 
 .org-chart-wrapper {
-  @apply max-w-6xl mx-auto px-4 overflow-x-auto;
+  @apply max-w-6xl mx-auto overflow-x-auto;
 }
 
 .org-chart {
@@ -772,12 +594,13 @@
 }
 
 .org-chart-main-grid {
-  @apply grid grid-cols-3 w-full gap-0 relative mt-8;
+  @apply grid grid-cols-3 w-full gap-4 relative mt-8;
 }
 
 .org-chart-divider {
-  @apply absolute top-0 inset-x-0 mx-auto w-2/3 h-px;
+  @apply absolute top-0 inset-x-0 mx-auto h-px;
   background-color: color-mix(in srgb, var(--md-sys-color-secondary) 30%, transparent);
+  width: calc(66% + 1rem);
 }
 
 .org-chart-section {
@@ -785,7 +608,7 @@
 }
 
 .org-chart-section-box {
-  @apply text-sm p-1 md:text-base md:px-8 md:py-4 text-center shadow-lg border relative;
+  @apply text-sm px-2 py-3 md:text-base md:px-8 md:py-4 text-center shadow-lg border relative;
 
   &::after {
     @apply absolute w-px h-12 inset-x-0 -bottom-12 m-auto;
@@ -793,11 +616,11 @@
     background-color: color-mix(in srgb, var(--md-sys-color-secondary) 35%, transparent);
   }
 
-  span:first-child {
+  > p:first-child {
     @apply font-bold block;
   }
 
-  span:last-child {
+  > p:last-child {
     @apply text-sm uppercase opacity-70;
   }
 }
@@ -806,11 +629,17 @@
   background-color: var(--md-sys-color-secondary);
   color: var(--md-sys-color-on-secondary);
   border-color: color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent);
+  z-index: 1;
+
+  p > span {
+    @apply inline-block;
+  }
 
   &::before {
     @apply absolute w-px h-12 inset-x-0 -top-12 m-auto mt-4;
     content: "";
     background-color: color-mix(in srgb, var(--md-sys-color-secondary) 35%, transparent);
+    z-index: -1;
   }
 }
 
@@ -831,7 +660,7 @@
 }
 
 .org-chart-section-item {
-  @apply border px-6 py-2 text-sm font-medium text-center;
+  @apply border p-2 text-sm font-medium text-center;
   border-color: color-mix(in srgb, var(--md-sys-color-outline) 30%, transparent);
   background-color: var(--md-sys-color-surface-container);
   color: var(--md-sys-color-primary);
@@ -843,7 +672,7 @@
 
 .org-chart-right-label {
   @apply uppercase text-xs tracking-wider;
-  color: color-mix(in srgb, var(--md-sys-color-secondary) 70%, transparent);
+  color: var(--md-sys-color-secondary);
 }
 
 .org-chart-right-label-hr {
@@ -869,7 +698,7 @@
 }
 
 .parent-container {
-  @apply max-w-7xl mx-auto px-12;
+  @apply max-w-7xl mx-auto md:px-12;
 }
 
 .parent-grid {
@@ -884,16 +713,6 @@
   @apply mb-12;
 }
 
-// scale: label-eyebrow-sm  color: text-secondary  → class="parent-content-eyebrow label-eyebrow-sm text-secondary"
-.parent-content-eyebrow {
-  @apply mb-4;
-}
-
-// scale: title-xl  color: text-primary  → class="parent-content-title title-xl text-primary font-headline"
-.parent-content-title {
-  @apply mb-6 leading-tight;
-}
-
 .parent-content-divider {
   @apply w-16 h-1 mb-8;
   background-color: var(--md-sys-color-secondary);
@@ -902,11 +721,6 @@
 .parent-content-motto {
   @apply text-xl font-light leading-relaxed mb-6;
   color: var(--md-sys-color-on-surface);
-}
-
-// scale: body-large  color: text-muted  → class="parent-content-body body-large text-muted"
-.parent-content-body {
-  @apply mb-4;
 }
 
 .parent-content-features {
@@ -953,8 +767,11 @@
 }
 
 .parent-carousel {
-  @apply w-full transition-transform duration-1000;
-  height: 500px;
+  @apply w-full transition-transform duration-1000 aspect-video;
+}
+
+.carousel-img {
+  @apply w-full h-full object-cover;
 }
 
 .parent-stats {
@@ -965,19 +782,16 @@
   @apply flex flex-col;
 }
 
-// color: text-secondary  → class="parent-stat-num text-secondary"
 .parent-stat-num {
   @apply block text-3xl font-bold;
 }
 
-// scale: label-small  color: text-muted  → class="parent-stat-label label-small text-muted"
 .parent-stat-label {
   @apply uppercase tracking-widest;
 }
 
 /* ── ⑨ Franchise / Contact ──────────────────────────────────────────────── */
 .franchise-section {
-  @apply py-24 xl:py-32;
   background-color: var(--md-sys-color-surface);
 }
 
@@ -985,12 +799,6 @@
   @apply max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 xl:gap-24 items-start;
 }
 
-// scale: title-large  color: text-primary  → class="franchise-heading title-large text-primary font-headline"
-.franchise-heading {
-  @apply leading-snug mb-8;
-}
-
-// color: text-muted  → class="franchise-desc text-muted"
 .franchise-desc {
   @apply leading-relaxed mb-10;
 }
@@ -1013,7 +821,6 @@
   background-color: var(--md-sys-color-surface-container-high);
 }
 
-// color: text-primary  → class="contact-card-heading text-primary font-headline"
 .contact-card-heading {
   @apply font-bold text-xl pb-4 border-b;
   border-color: color-mix(in srgb, var(--md-sys-color-secondary) 20%, transparent);
@@ -1032,17 +839,14 @@
   color: var(--md-sys-color-secondary-fixed);
 }
 
-// color: text-secondary  → class="contact-label text-secondary"
 .contact-label {
   @apply text-xs tracking-wide uppercase mb-0.5;
 }
 
-// color: text-primary  → class="contact-value text-primary font-headline"
 .contact-value {
   @apply text-lg;
 }
 
-// color: text-secondary  → class="contact-qr-label text-secondary"
 .contact-qr-label {
   @apply text-sm uppercase;
 }
