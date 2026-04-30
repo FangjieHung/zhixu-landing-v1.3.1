@@ -8,13 +8,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment as env } from '../environments/environment';
 
-// Third party packages
-import { LottieModule } from 'ngx-lottie';
-
-export function playerFact() {
-  return import('lottie-web');
-}
-
 // Custom packages
 import { StatesModule } from '@core/+states';
 import {
@@ -23,7 +16,6 @@ import {
   AppEnvHelper
 } from '@core/shared';
 
-const THIRD_MODULES = [LottieModule.forRoot({ player: playerFact })];
 const CUSTOM_MODULES = [SharedModule, StatesModule];
 
 @NgModule({
@@ -34,7 +26,6 @@ const CUSTOM_MODULES = [SharedModule, StatesModule];
     HttpClientModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    ...THIRD_MODULES,
     ...CUSTOM_MODULES
   ],
   providers: [

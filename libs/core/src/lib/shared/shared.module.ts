@@ -6,8 +6,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThirdPartyModule } from './modules/third-party.module';
 
 // Custom packages
+// BBDQuillEditorComponent / BBDQuillEditorViewerComponent 已從此 SharedModule 移除：
+// web 前台專案完全不使用富文字編輯器，保留 import 會讓 quill（506 KB）被打包進 lazy chunk。
 import {
-  BBDQuillEditorComponent, BBDQuillEditorViewerComponent,
   BBDImageUploadComponent, BBDImgNativeUploadComponent, BBDFileUploadComponent, BBDConfirmDialogComponent, BBDLoadingIndicatorComponent,
 } from './components';
 import { ZipCodeControlComponent } from './controls';
@@ -22,7 +23,6 @@ import { ImageFallbackDirective } from './../directives';
 
 const CUST_MODULES = [AntdModule, MaterialModule];
 const CUST_COMPONENTS = [
-  BBDQuillEditorComponent, BBDQuillEditorViewerComponent,
   BBDImageUploadComponent, BBDImgNativeUploadComponent,
   BBDFileUploadComponent, BBDConfirmDialogComponent, BBDLoadingIndicatorComponent,
 ];

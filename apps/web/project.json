@@ -37,10 +37,8 @@
         "allowedCommonJsDependencies": [
           "enum-values",
           "linqts",
-          "lottie-web",
           "leaflet",
-          "form-data",
-          "quill"
+          "form-data"
         ]
       },
       "configurations": {
