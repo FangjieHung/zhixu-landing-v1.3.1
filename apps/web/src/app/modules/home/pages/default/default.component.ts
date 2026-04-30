@@ -64,7 +64,7 @@ export class DefaultComponent extends BBDBaseComponent implements OnInit {
       name: '極致尊榮典藏禮盒',
       subtitle: '60 入',
       desc: '品牌最高規格禮盒，象徵最深厚的心意與關懷，適合頂級送禮、企業貴賓與長期滋養。',
-      image: 'assets/image/product/product-09.png',
+      image: 'assets/image/product/product-09.webp',
       price: 12000,
       memberPrice: 9000,
     },

@@ -5,11 +5,15 @@
   color: var(--md-sys-color-on-surface);
 
   > section:not(.safety-section) {
-    @apply flex flex-col justify-center items-center min-h-[80svh];
+    @apply min-h-fit h-[80svh];
+
+    &:has(.brand-story-inner) {
+      @apply h-auto;
+    }
   }
 
   > section:not(.mission-section) {
-    @apply pt-6 pb-8 lg:py-24;
+    @apply pt-6 pb-8 md:py-12 lg:py-24;
   }
 
   > section:not(.products-section, .cert-section, .mission-section) {

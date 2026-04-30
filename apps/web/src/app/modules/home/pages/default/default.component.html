@@ -159,7 +159,7 @@
     <!-- WebP 60KB，原始 2MB PNG，節省 97% -->
     <picture>
       <source srcset="assets/image/photo/hero-handtohand.webp" type="image/webp" />
-      <img src="assets/image/photo/hero-handtohand.png" alt="蘊和堂職人細心調製草本配方" loading="lazy" width="1536" height="1024"
+      <img src="assets/image/photo/hero-handtohand.webp" alt="蘊和堂職人細心調製草本配方" loading="lazy" width="1536" height="1024"
         class="mission-img" />
     </picture>
 
@@ -371,7 +371,8 @@
       <ng-template swiperSlide *ngFor="let cert of certifications">
         <div class="cert-card">
           <div class="cert-frame">
-            <img [src]="cert.image" [alt]="cert.alt" loading="lazy" />
+            <!-- width/height 依認證書最常見比例（約 2:3 直向），讓瀏覽器預留版面空間防 CLS -->
+            <img [src]="cert.image" [alt]="cert.alt" loading="lazy" width="600" height="840" />
           </div>
           <!-- h3：cert-heading（h2）的直屬子標題 -->
           <h3 class="cert-name text-primary font-headline">{{ cert.name }}</h3>
@@ -757,7 +758,8 @@
         [breakpoints]="{ '640': { slidesPerView: 1 }, '768': { slidesPerView: 2, navigation: true }, '1024': { slidesPerView: 3 } }">
         <ng-template swiperSlide *ngFor="let p of partnerLogos">
           <div class="partner-item">
-            <img [src]="p.src" [alt]="p.alt" class="partner-logo-img" />
+            <!-- width/height 使用橫式 logo 常見比例（約 2:1），CSS class 控制實際顯示尺寸 -->
+            <img [src]="p.src" [alt]="p.alt" loading="lazy" width="200" height="100" class="partner-logo-img" />
           </div>
         </ng-template>
       </swiper>

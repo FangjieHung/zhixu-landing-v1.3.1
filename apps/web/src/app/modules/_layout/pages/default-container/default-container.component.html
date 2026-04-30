@@ -37,8 +37,15 @@
   <mat-sidenav #snav mode="over" position="end" class="sidenav-container">
     <div class="sidemenu-inner">
       <mat-nav-list class="sidenav-list">
+        <!--
+          當 mat-sidenav 關閉時，Angular Material 會對整個 sidenav 設定 aria-hidden="true"。
+          若內部按鈕未設 tabindex="-1"，鍵盤使用者仍可 Tab 到這些按鈕，
+          違反 WCAG 1.3.1（aria-hidden 元素不可包含可聚焦子元素）。
+          [attr.tabindex] 在 sidenav 關閉時設為 -1，開啟時還原為預設值（null）。
+        -->
         <button *ngFor="let menu of navList"
                 mat-list-item
+                [attr.tabindex]="snav.opened ? null : -1"
                 (click)="scrollTo(menu.section); snav.close()">
           {{ menu.label }}
         </button>
@@ -46,6 +53,7 @@
 
       <div class="px-6 pt-4">
         <button (click)="scrollTo('products-section'); snav.close()"
+           [attr.tabindex]="snav.opened ? null : -1"
            class="block w-full text-center py-3 text-xs tracking-widest"
            style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); font-family: 'Work Sans', sans-serif;">
           立即選購
