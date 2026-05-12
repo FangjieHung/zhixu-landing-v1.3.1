@@ -91,10 +91,16 @@
 
         <div class="brand-body text-muted">
           <p>
-            民間流傳被譽為「窮人的人蔘」的老菜脯（此為民間說法，非療效認定），是經過時光、食鹽與微生物長時間共同交織出的生命結晶。在蘊和堂，我們堅持選用無毒契作白蘿蔔，封存在陶甕中，埋入地底深處。
+            民間流傳被譽為「窮人的人蔘 <span class="text-secondary">*</span> 」的老菜脯，是經過時光、食鹽與微生物長時間共同交織出的生命結晶。在蘊和堂，我們堅持選用無毒契作白蘿蔔，封存在陶甕中，埋入地底深處。
           </p>
           <p>
             經過光陰轉化，蘿蔔由白轉褐，終至透黑發亮。這不只是發酵，更是大自然賦予的溫潤補給，含有豐富多酚、礦物質與天然酵素，是全家人補充日常營養的好選擇。
+          </p>
+          <p class="italic">
+            <span class="text-secondary">*</span>
+            <span class="opacity-50 text-xs">
+              為民間說法，非療效認定
+            </span>
           </p>
         </div>
 
@@ -471,7 +477,7 @@
     </div>
 
     <div>
-      <swiper class="w-full arrow-horizontal" [navigation]="false" [spaceBetween]="16"
+      <swiper class="w-full arrow-horizontal" [navigation]="true" [spaceBetween]="16"
         [breakpoints]="{ '640': { slidesPerView: 1 }, '768': { slidesPerView: 2 }, '1024': { slidesPerView: 3 }, '1440': { slidesPerView: 4 } }">
         <ng-template swiperSlide *ngFor="let product of products">
           <div class="product-card">
@@ -502,11 +508,10 @@
 
     <!-- 食品標示說明（食安法第 22 條）────────────────────────────────────────── -->
     <div class="products-legal-notice">
-      <p class="products-legal-title">食品標示重要資訊</p>
       <ul class="products-legal-list">
         <li>
           <span class="products-legal-label">過敏原</span>
-          本系列產品含有<strong>蛋類</strong>。對雞蛋過敏者請勿飲用。製造環境亦處理其他動物性食材，敏感體質者請參閱個別商品完整標示後評估。
+          本系列產品含有<strong>蛋類</strong>對雞蛋過敏者請勿飲用。製造環境亦處理其他動物性食材，敏感體質者請參閱個別商品完整標示後評估。
         </li>
         <li>
           <span class="products-legal-label">保存方式</span>

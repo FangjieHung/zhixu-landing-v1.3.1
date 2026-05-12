@@ -492,6 +492,38 @@
   color: var(--md-sys-color-primary);
 }
 
+/* ── ⑦ Products Legal Notice (食安法第 22 條) ────────────────────────────── */
+.products-legal-notice {
+  @apply mt-10 px-6 max-w-5xl mx-auto;
+  border-top: 1px solid color-mix(in srgb, var(--md-sys-color-outline) 20%, transparent);
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.products-legal-list {
+  @apply list-none p-0 m-0 flex flex-col gap-3;
+
+  li {
+    @apply flex flex-wrap items-baseline gap-x-1 gap-y-0.5 text-base leading-relaxed;
+    color: var(--md-sys-color-on-surface-variant);
+
+    strong {
+      color: var(--md-sys-color-on-surface);
+      font-weight: 600;
+    }
+  }
+}
+
+.products-legal-label {
+  @apply flex-shrink-0 tracking-widest font-medium;
+  color: var(--md-sys-color-secondary);
+}
+
+.products-legal-disclaimer {
+  @apply mt-5 text-xs text-center;
+  color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 65%, transparent);
+}
+
 /* ── ⑦-B Process ────────────────────────────────────────────────────────── */
 .process-section {
   background-color: var(--md-sys-color-surface-container-low);
