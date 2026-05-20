@@ -40,7 +40,7 @@ export class DefaultComponent extends BBDBaseComponent implements OnInit {
       name: '日常尊養禮盒',
       subtitle: '12 入',
       desc: '專為細水長流的滋養所設，體面份量，適合送給長輩或重視日常調養的對象。',
-      image: 'assets/image/product/product-00.jpg',
+      image: 'assets/image/product/product-08.jpg',
       price: 2400,
       memberPrice: 1920,
     },
