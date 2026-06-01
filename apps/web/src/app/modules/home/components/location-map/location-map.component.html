@@ -1,7 +1,5 @@
 <section #section class="lm-section">
   <div #stage class="lm-stage">
-
-
     <svg
       #map
       class="lm-map"
@@ -28,7 +26,7 @@
           *ngFor="let r of routes; trackBy: routesTrack"
           class="lm-route-path"
           [attr.data-id]="r.id"
-          [attr.d]="r.d"
+          [attr.d]="routeD(r)"
           [attr.stroke]="r.stroke"
           [attr.stroke-width]="r.width"
           fill="none"
@@ -45,7 +43,7 @@
           [attr.text-anchor]="r.labelAnchor"
           [attr.fill]="r.stroke"
           font-family="Noto Serif SC, serif"
-          font-size="15"
+          font-size="28"
           font-weight="600"
           letter-spacing="0.06em"
         >{{ r.label }}</text>
@@ -59,34 +57,34 @@
           [attr.data-i]="i"
           [attr.transform]="'translate(' + m.x + ',' + m.y + ')'"
         >
-          <!-- 右半圓（開口朝右），圓心在 viewBox 左邊界外 -->
-          <path [attr.d]="edgeMarkerPath(m.r)" fill="#2f3a26" />
+          <!-- 完整圓；父層 overflow:hidden 由使用者控制可視範圍 -->
+          <circle [attr.r]="m.r" fill="#2f3a26" />
           <text
-            x="30"
+            x="0"
             y="0"
             text-anchor="middle"
             dominant-baseline="central"
             font-family="Playfair Display, serif"
-            font-size="22"
+            font-size="28"
             fill="#f0e6d0"
             font-weight="500"
           >{{ m.min }}</text>
           <text
-            x="105"
-            y="-8"
+            [attr.x]="m.r + 25"
+            y="-12"
             text-anchor="start"
             font-family="Montserrat, sans-serif"
-            font-size="10"
+            font-size="16"
             letter-spacing="2.4"
             fill="#c9b88a"
             font-weight="600"
           >MINUTES BY CAR</text>
           <text
-            x="105"
-            y="14"
+            [attr.x]="m.r + 25"
+            y="20"
             text-anchor="start"
             font-family="Noto Serif SC, serif"
-            font-size="18"
+            font-size="24"
             fill="#ece4d3"
             font-weight="500"
           >{{ m.name }}</text>
@@ -173,20 +171,12 @@
       </div>
       <button class="lm-debug-clear" (click)="clearDebugPoints(); $event.stopPropagation()">清空</button>
     </div>
+  </div>
 
-    <div class="lm-caption lm-caption-near">
-      <div class="lm-cap-eyebrow">{{ captionNear.eyebrow }}</div>
-      <div class="lm-cap-line">
-        {{ captionNear.line1 }}<br />
-        {{ captionNear.line2 }}
-      </div>
-    </div>
-    <div class="lm-caption lm-caption-far">
-      <div class="lm-cap-eyebrow">{{ captionFar.eyebrow }}</div>
-      <div class="lm-cap-line">
-        {{ captionFar.line1 }}<br />
-        {{ captionFar.line2 }}
-      </div>
-    </div>
+  <!-- Mobile only — 橫向 scroll 提示 -->
+  <div class="lm-scroll-hint" aria-hidden="true">
+    <span class="lm-hint-arrow">‹</span>
+    <span class="lm-hint-text">左右滑動查看完整地圖</span>
+    <span class="lm-hint-arrow">›</span>
   </div>
 </section>

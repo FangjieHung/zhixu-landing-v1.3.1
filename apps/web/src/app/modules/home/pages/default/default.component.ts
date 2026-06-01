@@ -21,6 +21,7 @@ interface SpecCell { k: string; v: string; sub: string; }
 })
 export class DefaultComponent extends BBDBaseComponent implements AfterViewInit, OnDestroy {
   scrolled = false;
+  pastHero = false;
   active = 'hero';
 
   layout: '47' | '52' | 'any' = 'any';
@@ -104,7 +105,6 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
     { id: 'whynow', label: '水湳願景' },
     { id: 'spec', label: '精工格局' },
     { id: 'design', label: '大師巨作' },
-    { id: 'contact', label: '預約鑑賞' },
   ];
 
   readonly walks: Walk[] = [
@@ -171,20 +171,123 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
       // ───── Hero entrance ─────
       const heroTl = gsap.timeline({ defaults: { ease, duration: 1.1 } });
       heroTl
-        .from('.hero .eyebrow', { y: 18, opacity: 0, duration: 0.7 })
-        .from('.hero h1.zh', { y: 36, opacity: 0, duration: 1.2 }, '-=0.3')
-        .from('.hero .lede', { y: 24, opacity: 0, duration: 0.9 }, '-=0.7')
-        .from('.hero .stack .tl', { y: 16, opacity: 0, stagger: 0.12, duration: 0.6 }, '-=0.5')
-        .from('.hero-img .ph-img', { scale: 1.08, opacity: 0, duration: 1.6, ease: 'power2.out' }, 0)
-        .from('.hero-img .overlay-en, .hero-img .overlay-tag', { opacity: 0, y: 12, stagger: 0.15, duration: 0.8 }, '-=0.6')
-        .from('.hero-footer > *', { opacity: 0, y: 12, stagger: 0.12, duration: 0.6 }, '-=0.4');
+        .from('.hero .hero-bg', { scale: 1.08, opacity: 0, duration: 1.6, ease: 'power2.out' }, 0)
+        .from('.hero .hero-title', { y: 36, opacity: 0, duration: 1.2 }, '-=1.0')
+        .from('.hero .hero-lede > *', { y: 16, opacity: 0, stagger: 0.12, duration: 0.7 }, '-=0.6')
+        .from('.hero .scroll-cue', { opacity: 0, y: 12, duration: 0.6 }, '-=0.4');
 
       // ───── Hero image parallax ─────
-      gsap.to('.hero-img .ph-img', {
+      gsap.to('.hero .hero-bg', {
         yPercent: 12,
         ease: 'none',
         scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
       });
+
+      // ───── Hero content exit lift ─────
+      // Lift content up & dim opacity while hero scrolls out — 避免硬切到下一節
+      gsap.to('.hero .hero-content', {
+        yPercent: -22,
+        opacity: 0.25,
+        ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 },
+      });
+
+      // Vignette 在 hero 退場時加深，與下一節米色形成柔焦
+      gsap.to('.hero .hero-vignette', {
+        opacity: 1.6,
+        ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'center top', end: 'bottom top', scrub: 0.6 },
+      });
+
+      // ───── DISTRICT INTRO · pin + 四圖飛入 ─────
+      const diSection = root.querySelector<HTMLElement>('.district-intro');
+      const diCanvas  = root.querySelector<HTMLElement>('.district-intro .di-canvas');
+      if (diSection && diCanvas) {
+        const diImgs     = gsap.utils.toArray<HTMLElement>('.district-intro .di-img');
+        const diHeadline = root.querySelector<HTMLElement>('.district-intro .di-headline');
+        const isMobile   = window.matchMedia('(max-width: 768px)').matches;
+
+        if (!isMobile) {
+          // 初始態：圖片偏移到邊緣之外，標題透明，veil 透明
+          const offsets: Record<string, { x: number; y: number }> = {
+            'di-img--tl': { x: -120, y: -60 },
+            'di-img--tr': { x:  120, y: -80 },
+            'di-img--bl': { x: -100, y:  80 },
+            'di-img--br': { x:  100, y:  60 },
+          };
+          diImgs.forEach((img) => {
+            const key = Object.keys(offsets).find((k) => img.classList.contains(k));
+            const off = key ? offsets[key] : { x: 0, y: 60 };
+            gsap.set(img, { x: off.x, y: off.y, opacity: 0 });
+          });
+          if (diHeadline) gsap.set(diHeadline, { opacity: 0, yPercent: 6 });
+
+          // ── Pre-pin entry parallax ──
+          // section 在 pin 啟動前先做整塊 yPercent 滑入 + 淡入，
+          // 吃掉「米色 bg 已就位但內容還沒進場」的空白感
+          gsap.fromTo(
+            diCanvas,
+            { yPercent: 14, opacity: 0.55 },
+            {
+              yPercent: 0,
+              opacity: 1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: diSection,
+                start: 'top bottom',
+                end: 'top top',
+                scrub: 0.6,
+              },
+            },
+          );
+
+          // 建立 pinned timeline（縮為 1.4× vh，移除尾段純停留）
+          const diTl = gsap.timeline({
+            defaults: { ease: 'power2.out' },
+            scrollTrigger: {
+              trigger: diSection,
+              start: 'top top',
+              end: () => `+=${window.innerHeight * 1.4}`,
+              pin: true,
+              pinSpacing: true,
+              scrub: 0.6,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          // 圖片飛入（前段 0 → 0.55）
+          diImgs.forEach((img, i) => {
+            diTl.to(img, { x: 0, y: 0, opacity: 1, duration: 0.4 }, i * 0.08);
+          });
+          // 標題滑入（中段 0.25 → 0.55）
+          if (diHeadline) {
+            diTl.to(diHeadline, { opacity: 1, yPercent: 0, duration: 0.3 }, 0.25);
+          }
+          // ── Outro：pin 末段（0.7 → 1.0）淡入深藍 veil + headline 上移微出 ──
+          diTl.to('.district-intro .di-exit-veil', { opacity: 1, duration: 0.3, ease: 'power1.in' }, 0.7);
+          if (diHeadline) {
+            diTl.to(diHeadline, { opacity: 0.2, yPercent: -8, duration: 0.25 }, 0.75);
+          }
+        } else {
+          // Mobile：簡單淡入，不做 pin
+          if (diHeadline) gsap.set(diHeadline, { opacity: 0, y: 24 });
+          diImgs.forEach((img) => gsap.set(img, { opacity: 0, y: 30 }));
+          diImgs.forEach((img, i) => {
+            gsap.to(img, {
+              opacity: 1, y: 0, duration: 0.9, ease,
+              scrollTrigger: { trigger: diSection, start: 'top 85%', toggleActions: 'play none none none' },
+              delay: i * 0.1,
+            });
+          });
+          if (diHeadline) {
+            gsap.to(diHeadline, {
+              opacity: 1, y: 0, duration: 1, ease,
+              scrollTrigger: { trigger: diSection, start: 'top 80%', toggleActions: 'play none none none' },
+            });
+          }
+        }
+      }
 
       // ───── THE CRAFT (甲級營造) reveals ─────
       gsap.from('.craft .craft-anchor', {
@@ -364,7 +467,8 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
   onScroll(): void {
     if (typeof window === 'undefined') return;
     const y = window.scrollY;
-    this.scrolled = y > window.innerHeight * 0.6;
+    this.scrolled = y > 40;
+    this.pastHero = y > window.innerHeight * 0.6;
 
     const ids = ['hero', 'trust', 'whynow', 'spec', 'springs-bays', 'design', 'contact'];
     let cur = 'hero';

@@ -23,7 +23,8 @@ interface Poi {
 
 interface Route {
   id: string;
-  d: string;
+  /** sequential anchor points along the route; converted to smooth bezier via pointsToPath() */
+  points: Array<{ x: number; y: number }>;
   stroke: string;
   width: number;
   label: string;
@@ -32,6 +33,27 @@ interface Route {
   labelAnchor: 'start' | 'middle' | 'end';
   reveal: number;
   duration: number;
+}
+
+/** Catmull-Rom-style smoothing：把折線控制點轉成平滑的三次貝茲曲線 d 字串 */
+function pointsToPath(pts: Array<{ x: number; y: number }>): string {
+  if (pts.length === 0) return '';
+  if (pts.length === 1) return `M ${pts[0].x} ${pts[0].y}`;
+  if (pts.length === 2) return `M ${pts[0].x} ${pts[0].y} L ${pts[1].x} ${pts[1].y}`;
+  const tension = 0.5;
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] ?? pts[i];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[i + 2] ?? p2;
+    const c1x = p1.x + ((p2.x - p0.x) * tension) / 3;
+    const c1y = p1.y + ((p2.y - p0.y) * tension) / 3;
+    const c2x = p2.x - ((p3.x - p1.x) * tension) / 3;
+    const c2y = p2.y - ((p3.y - p1.y) * tension) / 3;
+    d += ` C ${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${p2.x} ${p2.y}`;
+  }
+  return d;
 }
 
 interface EdgeMarker {
@@ -54,8 +76,8 @@ const SVG_CENTER = { x: 895, y: 596 };
 const ZOOM_ORIGIN = '48.9% 58.8%';
 
 // 鏡頭縮放關鍵節點
-const ZOOM_PHASE1_START = 3.4;  // 緊鎖之序
-const ZOOM_PHASE1_END = 1.3;    // 顯示 8 個近端 POI 涵蓋範圍
+const ZOOM_PHASE1_START = 3.0;  // 緊鎖之序
+const ZOOM_PHASE1_END = 1.2;    // 顯示 12 個近端 POI 涵蓋範圍（含洲際/中清/逢甲在上緣）
 const ZOOM_PHASE2_END = 1.0;    // 顯示完整 viewBox（含左側 1/4 圓示意）
 
 @Component({
@@ -81,14 +103,18 @@ export class LocationMapComponent
    * min 為非尖峰時段車程估算，待使用者用 Google Maps 路線確認。
    */
   readonly pois: Poi[] = [
-    { x: 755, y: 592, min: 3, name: '中央公園 · 主入口',   reveal: 0.28, anchor: 'end',   vAnchor: 'above' },
-    { x: 776, y: 363, min: 5, name: '台中綠美圖',         reveal: 0.32, anchor: 'end',   vAnchor: 'above' },
-    { x: 710, y: 248, min: 8, name: '水湳轉運中心',       reveal: 0.36, anchor: 'end',   vAnchor: 'above' },
-    { x: 268, y: 290, min: 7, name: '台中國際會展中心',   reveal: 0.40, anchor: 'start', vAnchor: 'above' },
-    { x: 598, y: 835, min: 2, name: '台中超巨蛋',         reveal: 0.44, anchor: 'end',   vAnchor: 'below' },
-    { x: 845, y: 693, min: 2, name: '台中流行影音中心',   reveal: 0.48, anchor: 'start', vAnchor: 'below' },
-    { x: 855, y: 697, min: 2, name: '水湳經貿園區站',     reveal: 0.52, anchor: 'start', vAnchor: 'above' },
-    { x: 861, y: 935, min: 5, name: '捷運文華高中站',     reveal: 0.56, anchor: 'end',   vAnchor: 'below' },
+    { x: 755,  y: 592, min: 3,  name: '中央公園 · 主入口', reveal: 0.22, anchor: 'end',   vAnchor: 'above' },
+    { x: 776,  y: 363, min: 5,  name: '台中綠美圖',        reveal: 0.25, anchor: 'end',   vAnchor: 'above' },
+    { x: 710,  y: 248, min: 8,  name: '水湳轉運中心',      reveal: 0.28, anchor: 'end',   vAnchor: 'above' },
+    { x: 268,  y: 290, min: 7,  name: '台中國際會展中心',  reveal: 0.31, anchor: 'start', vAnchor: 'above' },
+    { x: 598,  y: 835, min: 2,  name: '台中超巨蛋',        reveal: 0.34, anchor: 'end',   vAnchor: 'below' },
+    { x: 853,  y: 770, min: 2,  name: '台中流行影音中心',  reveal: 0.37, anchor: 'start', vAnchor: 'below' },
+    { x: 855,  y: 697, min: 2,  name: '水湳經貿園區站',    reveal: 0.40, anchor: 'start', vAnchor: 'above' },
+    { x: 861,  y: 935, min: 5,  name: '捷運文華高中站',    reveal: 0.43, anchor: 'end',   vAnchor: 'below' },
+    { x: 858,  y: 370, min: 4,  name: '迪卡儂',           reveal: 0.46, anchor: 'start', vAnchor: 'above' },
+    { x: 1477, y: 188, min: 12, name: '臺中洲際棒球場',   reveal: 0.49, anchor: 'end',   vAnchor: 'above' },
+    { x: 1024, y: 184, min: 6,  name: '中清商圈',         reveal: 0.52, anchor: 'end',   vAnchor: 'above' },
+    { x: 554,  y: 189, min: 8,  name: '逢甲商圈',         reveal: 0.55, anchor: 'end',   vAnchor: 'above' },
   ];
 
   /**
@@ -96,75 +122,165 @@ export class LocationMapComponent
    * 視覺上只露出右側 1/4 ~ 1/2 的弧，作為「往該方向 X 分鐘」的方向標。
    */
   readonly edgeMarkers: EdgeMarker[] = [
-    { x: 0, y: 122, r: 90, min: 8,  name: '中部科學園區', reveal: 0.78 },
-    { x: 0, y: 952, r: 90, min: 10, name: '台中七期',     reveal: 0.84 },
+    { x: 0,   y: 122, r: 90, min: 8,  name: '中部科學園區', reveal: 0.77 },
+    { x: 0,   y: 952, r: 90, min: 10, name: '台中七期',     reveal: 0.81 },
+    { x: -99, y: 651, r: 90, min: 12, name: '台中工業區',   reveal: 0.85 },
   ];
 
   /**
-   * Phase 2 線路 — d 為手繪示意 path，使用者尚未提供精準描線。
-   * 顏色採台灣官方規範：國道綠、快速道路紅、捷運色票。
+   * Phase 2 線路 — points 為使用者用 debug 浮層沿線描點而來，
+   * pointsToPath() 把點轉成平滑貝茲曲線。
    */
   readonly routes: Route[] = [
     {
       id: 'freeway-1',
-      d: 'M 366 -38 Q 407 207 417 506 Q 427 807 458 1050',
-      stroke: '#4a6b3c',
+      stroke: '#1d8e62',
       width: 4,
       label: '國道 1 號',
-      labelX: 448,
-      labelY: 920,
-      labelAnchor: 'start',
+      labelX: 1962,
+      labelY: 639,
+      labelAnchor: 'middle',
       reveal: 0.62,
-      duration: 0.05,
+      duration: 0.04,
+      points: [
+        { x: 1,   y: 1008 },
+        { x: 266, y: 701  },
+        { x: 344, y: 495  },
+        { x: 422, y: 364  },
+        { x: 543, y: 229  },
+        { x: 643, y: 142  },
+        { x: 719, y: 97   },
+        { x: 767, y: 74   },
+      ],
     },
     {
       id: 'freeway-74',
-      d: 'M -41 225 Q 610 188 1119 244 Q 1525 281 1871 244',
       stroke: '#b04a3a',
       width: 4.5,
       label: '國道 74 快速道路',
-      labelX: 1670,
-      labelY: 225,
-      labelAnchor: 'end',
-      reveal: 0.66,
-      duration: 0.05,
+      labelX: 418,
+      labelY: 476,
+      labelAnchor: 'middle',
+      reveal: 0.64,
+      duration: 0.04,
+      points: [
+        { x: 212,  y: 1008 },
+        { x: 279,  y: 798  },
+        { x: 297,  y: 693  },
+        { x: 335,  y: 584  },
+        { x: 389,  y: 492  },
+        { x: 449,  y: 399  },
+        { x: 521,  y: 332  },
+        { x: 619,  y: 280  },
+        { x: 718,  y: 233  },
+        { x: 835,  y: 184  },
+        { x: 911,  y: 168  },
+        { x: 1037, y: 169  },
+        { x: 1157, y: 167  },
+        { x: 1283, y: 168  },
+        { x: 1395, y: 166  },
+        { x: 1500, y: 168  },
+      ],
     },
     {
       id: 'mrt-orange',
-      d: 'M -41 656 Q 508 638 915 675 Q 1322 713 1871 694',
       stroke: '#d97a3a',
-      width: 4,
+      width: 3.6,
       label: '捷運橘線',
-      labelX: 1670,
-      labelY: 713,
-      labelAnchor: 'end',
-      reveal: 0.70,
-      duration: 0.05,
+      labelX: 870,
+      labelY: 637,
+      labelAnchor: 'middle',
+      reveal: 0.66,
+      duration: 0.04,
+      points: [
+        { x: 673, y: 77  },
+        { x: 712, y: 153 },
+        { x: 756, y: 239 },
+        { x: 810, y: 334 },
+        { x: 840, y: 421 },
+        { x: 849, y: 510 },
+        { x: 845, y: 591 },
+        { x: 856, y: 687 },
+        { x: 856, y: 717 },
+        { x: 874, y: 799 },
+        { x: 916, y: 898 },
+        { x: 959, y: 990 },
+      ],
     },
     {
       id: 'mrt-green',
-      d: 'M 1037 -38 Q 1027 375 1017 657 Q 1017 891 1057 1050',
-      stroke: '#5a8f4c',
-      width: 4,
+      stroke: '#99cb98',
+      width: 3.6,
       label: '捷運綠線',
-      labelX: 1078,
-      labelY: 938,
-      labelAnchor: 'start',
-      reveal: 0.74,
-      duration: 0.05,
+      labelX: 1430,
+      labelY: 875,
+      labelAnchor: 'end',
+      reveal: 0.68,
+      duration: 0.04,
+      points: [
+        { x: 747,  y: 1008 },
+        { x: 803,  y: 964  },
+        { x: 881,  y: 927  },
+        { x: 965,  y: 900  },
+        { x: 1037, y: 885  },
+        { x: 1136, y: 864  },
+        { x: 1186, y: 861  },
+        { x: 1298, y: 883  },
+        { x: 1409, y: 900  },
+        { x: 1938, y: 989  },
+      ],
+    },
+    {
+      id: 'highway-1',
+      stroke: '#c9a771',
+      width: 3.4,
+      label: '台 1 線',
+      labelX: 1125,
+      labelY: 803,
+      labelAnchor: 'middle',
+      reveal: 0.70,
+      duration: 0.04,
+      points: [
+        { x: 708,  y: 76   },
+        { x: 782,  y: 217  },
+        { x: 857,  y: 354  },
+        { x: 925,  y: 476  },
+        { x: 994,  y: 608  },
+        { x: 1051, y: 715  },
+        { x: 1114, y: 808  },
+        { x: 1137, y: 835  },
+        { x: 1157, y: 941  },
+        { x: 1175, y: 1003 },
+      ],
+    },
+    {
+      id: 'thsr',
+      stroke: '#c3002f',
+      width: 4,
+      label: '台灣高鐵',
+      labelX: 230,
+      labelY: 940,
+      labelAnchor: 'middle',
+      reveal: 0.72,
+      duration: 0.04,
+      points: [
+        { x: 369, y: 73   },
+        { x: 361, y: 156  },
+        { x: 346, y: 267  },
+        { x: 316, y: 361  },
+        { x: 285, y: 488  },
+        { x: 253, y: 583  },
+        { x: 204, y: 708  },
+        { x: 161, y: 786  },
+        { x: 101, y: 985  },
+        { x: 98,  y: 1006 },
+      ],
     },
   ];
 
-  readonly captionNear = {
-    eyebrow: '07 · THE LOCATION · 位置之必然',
-    line1: '水湳，',
-    line2: '在你的步行距離裡成形。',
-  };
-  readonly captionFar = {
-    eyebrow: '07 · THE REACH · 城市的中心',
-    line1: '以之序為原點，',
-    line2: '抵達台中所有要地。',
-  };
+  routeD(route: Route): string {
+    return pointsToPath(route.points);
+  }
 
   /** TEMP: 路徑收集 debug 浮層，收集完所有座標後刪除 */
   debugHover = '移動滑鼠到地圖上 · 點擊累積座標 · 「清空」重置';
@@ -206,7 +322,27 @@ export class LocationMapComponent
 
   ngAfterViewInit(): void {
     if (!this.isBrowser) return;
+    // Mobile：地圖橫向可滑、無動畫敘事，並把預設捲位捲到「之序」水平中心
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+      this.centerOnZhixuMobile();
+      return;
+    }
     this.initScrollAnimation();
+  }
+
+  /** mobile 初始時把橫向 scrollLeft 滑到讓「之序」位於可視中心 */
+  private centerOnZhixuMobile(): void {
+    // 等下一個 frame 確保 SVG 已經依 intrinsic 寬度算出實際尺寸
+    requestAnimationFrame(() => {
+      const stage = this.stageRef.nativeElement;
+      const svg = this.mapRef.nativeElement;
+      const mapWidth = svg.getBoundingClientRect().width;
+      const stageWidth = stage.getBoundingClientRect().width;
+      // 之序 在 viewBox 的水平比例 = 895 / 1831 ≈ 0.489
+      const target = mapWidth * (SVG_CENTER.x / 1831) - stageWidth / 2;
+      stage.scrollLeft = Math.max(0, target);
+    });
   }
 
   ngOnDestroy(): void {
@@ -314,7 +450,7 @@ export class LocationMapComponent
       });
 
       // 遠景 caption 進場
-      tl.to('.lm-caption-far', { opacity: 1, y: 0, duration: 0.06, ease: 'power2.out' }, 0.90);
+      tl.to('.lm-caption-far', { opacity: 1, y: 0, duration: 0.06, ease: 'power2.out' }, 0.89);
 
       // 中心 pin 持續呼吸（與 scroll 無關）
       gsap.fromTo(
@@ -345,11 +481,6 @@ export class LocationMapComponent
   }
   poiLabelBottomY(poi: Poi): number {
     return poi.vAnchor === 'below' ? poi.y + 54 : poi.y + 4;
-  }
-
-  /** Edge marker 半圓 path d — 圓心 (0, 0)、半徑 r、開口朝右 */
-  edgeMarkerPath(r: number): string {
-    return `M 0 ${-r} A ${r} ${r} 0 0 1 0 ${r} Z`;
   }
 
   poisTrack(_index: number, p: Poi): number {

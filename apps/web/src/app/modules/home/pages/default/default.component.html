@@ -1,22 +1,27 @@
 <!-- Sticky topbar -->
 <div class="topbar" [class.shown]="scrolled">
-  <div class="mark">之序<span class="en">ZHI XU</span></div>
+  <a class="mark" routerLink="/">
+      <img src="assets/image/logo/type-main.svg" alt="之序" class="w-24" />
+    </a>
   <nav class="ghost">
     <a
       *ngFor="let item of navItems"
       (click)="scrollToId(item.id)"
       [style.color]="active === item.id ? 'var(--accent)' : null"
-      >{{ item.label }}</a>
+      >{{ item.label }}</a
+    >
   </nav>
   <div class="cta-row">
-    <a (click)="scrollToId('contact')">預約參觀</a>
+    <button class="btn-stroked" (click)="scrollToId('contact')">
+      預約鑒賞
+    </button>
   </div>
 </div>
 
 <!-- Floating CTA -->
-<div class="cta-dock" [class.shown]="scrolled">
+<div class="cta-dock" [class.shown]="pastHero">
   <button class="primary" (click)="scrollToId('contact')">
-    預約參觀 · BOOK
+    預約鑒賞 · BOOK
   </button>
   <button
     class="secondary"
@@ -28,53 +33,67 @@
 
 <!-- 01 · Hero -->
 <section class="hero dark" id="hero">
-  <header class="hero-header">
-    <a class="mark" routerLink="/">
-      <img src="assets/image/logo/type-main.svg" alt="之序" class="w-24" />
-    </a>
-    <nav class="top-nav">
-      <a
-      *ngFor="let item of navItems"
-      (click)="scrollToId(item.id)"
-      >{{ item.label }}</a>
-    </nav>
-  </header>
+  <img class="hero-bg" [src]="img.hero" alt="之序 · 建築外觀" />
+  <div class="hero-vignette"></div>
 
-  <div class="hero-body">
-    <div class="hero-text">
-      <div class="stack">
-        <h1 class="zh">
-          回家，<br />
-          是航向中央公園，<br />
-          泊岸生活的<span class="accent">儀式</span>。
-        </h1>
+  <div class="hero-content">
+    <h1 class="hero-title">
+      回家，<br />
+      是航向中央公園，<br />
+      泊岸生活的<span class="accent">儀式</span>。
+    </h1>
 
-        <div class="lede">
-          <p>四面臨路，國際新奢寓所</p>
-          <div style="display: flex; gap: 2rem; margin-top: 5rem">
-            <button class="btn-outline" (click)="scrollToId('contact')">預約參觀</button>
-          </div>
-        </div>
+    <div class="hero-foot">
+      <div class="hero-lede">
+        <p class="hero-sub">四面臨路 · 國際新奢寓所</p>
+        <p class="hero-yearmark">CENTRAL PARK · SHUI-NAN · TAICHUNG</p>
       </div>
-    </div>
 
-    <div class="hero-img">
-      <div class="ph canopy">
-        <img class="ph-img tinted" [src]="img.hero" alt="之序 · 建築外觀" />
-      </div>
-    </div>
-  </div>
-
-  <div class="hero-footer">
-    <div class="yearmark">
-      CENTRAL PARK <br />SHUI-NAN · TAICHUNG
-    </div>
-    <div class="scroll-cue">向下 · SCROLL</div>
-    <div class="yearmark" style="color: #b8ad9e; text-align: right">
-      <em>Crossing the new divide</em>
+      <div class="scroll-cue">向下 · SCROLL</div>
     </div>
   </div>
 </section>
+
+<!-- District Intro · 周邊國際特區 -->
+<section class="district-intro" id="district-intro">
+  <div class="di-canvas">
+    <img
+      class="di-img di-img--tl"
+      src="assets/image/refers/周邊機能/387.jpg"
+      alt="水湳國際特區 周邊建設"
+      loading="lazy"
+    />
+    <img
+      class="di-img di-img--tr"
+      src="assets/image/refers/周邊機能/396.jpg"
+      alt="水湳國際特區 周邊建設"
+      loading="lazy"
+    />
+    <img
+      class="di-img di-img--bl"
+      src="assets/image/refers/周邊機能/364.jpg"
+      alt="水湳國際特區 周邊建設"
+      loading="lazy"
+    />
+    <img
+      class="di-img di-img--br"
+      src="assets/image/refers/周邊機能/437.jpg"
+      alt="水湳國際特區 周邊建設"
+      loading="lazy"
+    />
+
+    <div class="di-headline">
+      <p class="di-title">
+        水湳，<br />
+        在你的步行距離裡成形。
+      </p>
+    </div>
+
+    <!-- exit veil：pin 末段淡入，銜接下一節深色 location-map -->
+    <div class="di-exit-veil" aria-hidden="true"></div>
+  </div>
+</section>
+
 <!-- The Location · scroll-driven map -->
 <app-location-map></app-location-map>
 <!-- Trust -->
@@ -127,8 +146,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
 
   <!-- 02 / D · THE CRAFT — 甲級營造的 VVIP 語氣 -->
@@ -368,27 +385,26 @@
             <span class="num">06 / A</span><span>THE CLUBHOUSE · 獨棟會館</span>
           </div>
           <div style="height: 1.5rem"></div>
-          <h3 class="pull-zh">
-            獨棟公設，<br />讓你的家，<br />只是你的家。
-          </h3>
+          <h3 class="pull-zh">獨棟公設，<br />讓你的家，<br />只是你的家。</h3>
         </div>
         <div class="right">
           <p class="body zh">
-            靈感來自一艘<span style="color: var(--accent)">泊岸的船</span
-            >—— 流線沒有銳角，回家不需要稜角。
+            靈感來自一艘<span style="color: var(--accent)">泊岸的船</span>——
+            流線沒有銳角，回家不需要稜角。
           </p>
           <p class="body zh">
             一條動線屬於生活，一條動線屬於招待<br />
             ——細節，請於現場親見。
           </p>
-          <div style="margin-top: 5rem; display: flex; justify-content: flex-end">
-        <button class="tl" (click)="scrollToId('contact')">
-          預約入內 · 從建材看到公設
-        </button>
-      </div>
+          <div
+            style="margin-top: 5rem; display: flex; justify-content: flex-end"
+          >
+            <button class="tl" (click)="scrollToId('contact')">
+              預約入內 · 從建材看到公設
+            </button>
+          </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
@@ -398,7 +414,7 @@
   <div class="pre">
     <div>
       <div class="eyebrow">
-        <span class="num">07</span><span>PRIVATE VIEWING · 預約參觀</span>
+        <span class="num">07</span><span>PRIVATE VIEWING · 預約鑒賞</span>
       </div>
     </div>
     <div class="invite">
@@ -461,7 +477,7 @@
             <option>週末下午 · 14:00 — 17:00</option>
           </select>
         </div>
-        <button type="submit" class="submit">預約參觀 · BOOK A VIEWING</button>
+        <button type="submit" class="submit">預約鑒賞 · BOOK A VIEWING</button>
       </ng-container>
 
       <ng-template #thanks>

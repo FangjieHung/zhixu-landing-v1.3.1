@@ -5,6 +5,8 @@
   --lm-ink: #1c1a17;
   --lm-pin: #2f3a26;
   --lm-text-muted: #6b5e52;
+
+  --map-bg: #212a36;
 }
 
 .lm-section {
@@ -18,7 +20,7 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: var(--lm-cream);
+  background: var(--map-bg);
 }
 
 /* Top bar — flat dark transparent strip echoing the reference */
@@ -80,33 +82,6 @@
 .lm-pin { will-change: transform; }
 .lm-pin .pin-pulse { transform-box: fill-box; transform-origin: center; }
 
-/* Bottom caption — phase 1 & phase 2 stacked at same position for cross-fade */
-.lm-caption {
-  position: absolute;
-  left: 36px;
-  bottom: 36px;
-  z-index: 3;
-  max-width: 38ch;
-  color: var(--lm-ink);
-  will-change: opacity, transform;
-}
-.lm-cap-eyebrow {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: #c9b88a;
-  margin-bottom: 1rem;
-}
-.lm-cap-line {
-  font-family: 'Noto Serif SC', serif;
-  font-size: clamp(1.4rem, 2.2vw, 2rem);
-  line-height: 1.55;
-  letter-spacing: 0.04em;
-  color: #ece4d3;
-  font-weight: 500;
-}
 
 /* TEMP: 路徑收集 debug 浮層 */
 .lm-debug-panel {
@@ -153,9 +128,70 @@
   &:hover { background: rgba(201, 184, 138, 0.25); }
 }
 
+/* ── Mobile scroll hint ───────────────────────────────────────────── */
+.lm-scroll-hint {
+  display: none;
+}
+
 @media (max-width: 900px) {
-  .lm-topbar { padding: 14px 18px; font-size: 0.875rem; letter-spacing: 0.2em;
-    .lm-tb-left { gap: 18px; } .lm-tb-right { gap: 14px; }
-  }
   .lm-caption { left: 18px; right: 18px; bottom: 22px; }
+}
+
+@media (max-width: 768px) {
+  /* lm-stage 縮成 80vh、橫向可滑、垂直 hidden */
+  .lm-stage {
+    height: 80vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* SVG 改用 intrinsic 寬度：高度 100%、寬度依 viewBox 比例自動 */
+  .lm-map {
+    position: relative;
+    inset: auto;
+    width: auto;
+    height: 100%;
+    flex-shrink: 0;
+  }
+
+  /* 隱藏桌機版 caption 與 debug 浮層（mobile 不走動畫敘事） */
+  .lm-caption,
+  .lm-debug-panel {
+    display: none;
+  }
+
+  /* 顯示滑動提示 */
+  .lm-scroll-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 14px 20px 28px;
+    background: var(--lm-cream);
+    color: var(--lm-text-muted);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+  .lm-hint-arrow {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--lm-pin);
+    animation: lm-hint-pulse-left 1.8s ease-in-out infinite;
+  }
+  .lm-hint-arrow:last-child {
+    animation-name: lm-hint-pulse-right;
+  }
+}
+
+@keyframes lm-hint-pulse-left {
+  0%, 100% { opacity: 0.45; transform: translateX(0); }
+  50%      { opacity: 1;    transform: translateX(-4px); }
+}
+@keyframes lm-hint-pulse-right {
+  0%, 100% { opacity: 0.45; transform: translateX(0); }
+  50%      { opacity: 1;    transform: translateX(4px); }
 }
