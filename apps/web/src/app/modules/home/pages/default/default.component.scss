@@ -304,9 +304,17 @@ section.frame {
   }
 }
 
-/* Frame bridges — fade from previous dark section into cream */
-section.frame#whynow,
+/* Frame bridges — section 頂部 16vh 漸層銜接上一節色調 */
+/* design 接在 lm-stage (#212a36 深藍) 之後 → 米色 design 頂部 fade from 深藍 */
 section.frame.design {
+  background-image: linear-gradient(180deg, #212a36 0%, transparent 100%);
+  background-size: 100% 16vh;
+  background-repeat: no-repeat;
+  background-position: top;
+}
+/* whynow 接在 springs-bays (var(--bg-2) 深咖) 之後 → 米色 whynow 頂部 fade from 深咖 */
+section.frame#whynow {
+  background-image: linear-gradient(180deg, var(--bg-2) 0%, transparent 100%);
   background-size: 100% 16vh;
   background-repeat: no-repeat;
   background-position: top;
@@ -689,6 +697,20 @@ p.body {
   background: #212a36;
 }
 
+/* 把 app-location-map 用負 margin 向上拉一個 viewport，
+   消除 district pin-spacer 釋放後到 lm-stage pin 啟動之間的「100vh 深藍空白」。
+   原本：pin-spacer 結束 → 100vh 空白 → lm-stage 接著 pin
+   現在：pin-spacer 結束時 lm-section.top 剛好在 viewport top，lm-stage 立即 pin
+   桌機只用；mobile 取消（mobile 沒 pin、不需要這個重疊） */
+@media (min-width: 769px) {
+  app-location-map {
+    display: block;
+    position: relative;
+    z-index: 1;
+    margin-top: -100vh;
+  }
+}
+
 /* ── mobile ── */
 @media (max-width: 768px) {
   .district-intro {
@@ -739,6 +761,8 @@ p.body {
 /* Trust */
 .trust {
   background-color: var(--bg-2);
+  /* trust 接在 design (米色) 之後 → 深咖 trust 頂部 fade from 米色 */
+  background-image: linear-gradient(180deg, var(--bg-1) 0%, transparent 100%);
   background-size: 100% 16vh;
   background-repeat: no-repeat;
   background-position: top;
@@ -1632,13 +1656,9 @@ p.body {
   }
 }
 
-/* Contact */
+/* Contact — 接在 spec (深咖) 之後，同色不需要 bridge */
 .contact {
   background-color: var(--bg-2);
-  background-image: linear-gradient(180deg, var(--bg-1) 0%, transparent 100%);
-  background-size: 100% 16vh;
-  background-repeat: no-repeat;
-  background-position: top;
   color: var(--color-text-on-dark);
   padding: 8rem 3rem 4rem;
   .pre {

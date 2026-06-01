@@ -11,15 +11,26 @@ import { BBDBaseComponent } from '@core/shared';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-interface Walk { p: string; m: string; n: string; }
-interface SpecCell { k: string; v: string; sub: string; }
+interface Walk {
+  p: string;
+  m: string;
+  n: string;
+}
+interface SpecCell {
+  k: string;
+  v: string;
+  sub: string;
+}
 
 @Component({
   selector: 'app-default',
   templateUrl: './default.component.html',
   styleUrls: ['./default.component.scss'],
 })
-export class DefaultComponent extends BBDBaseComponent implements AfterViewInit, OnDestroy {
+export class DefaultComponent
+  extends BBDBaseComponent
+  implements AfterViewInit, OnDestroy
+{
   scrolled = false;
   pastHero = false;
   active = 'hero';
@@ -53,49 +64,49 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
     theme: 'cream' | 'forest' | 'umber';
   }> = [
     {
-      id: 'bay-lobby',
-      title: 'Lobby',
-      tag: 'A RITUAL OF ARRIVAL',
-      src: `${this.assetBase}/refers/公設-內部/164.jpg`,
-      lede:
-        '迎賓大廳是日常的第一句問候。從車道到玄關，動線被細細編排——一條屬於生活，一條屬於招待。當門在身後闔上，城市的喧囂便留在了外面。',
+      id: 'bay-sanctuary',
+      title: 'Sanctuary',
+      tag: 'A DAILY RETURN TO SELF',
+      src: `${this.assetBase}/refers/衛浴/toto-main.jpg`,
+      lede: '以 TOTO 全系列精工衛浴，重新定義沐浴的儀式感。智能馬桶、豪華浴缸、四合一暖風機，每一件配備皆源自對生活品質的嚴謹堅持——洗浴不再只是日常清潔，而是每日可以期待的私人療癒時光。',
       stats: [
-        '挑高 9 米大廳',
-        '雙動線分流 · 住戶 / 訪客',
-        '24h 飯店式禮賓',
-        '進口石材 · 義大利吊燈',
+        'TOTO 全自動智能馬桶 · 一體成型免縫設計',
+        'GROHE 定溫花灑 · SmartControl 智慧恆溫',
+        'TOTO 豪華浴缸 · 三孔混合加工高光澤工藝',
+        'TOTO 四合一暖風機 · 20 分鐘極速升溫',
+        'TOTO 下嵌式面盆 · 通過美日雙重防滲認證',
       ],
       theme: 'cream',
     },
     {
-      id: 'bay-wellness',
-      title: 'Wellness',
-      tag: 'BODY AS A HOME',
-      src: `${this.assetBase}/refers/公設-內部/254.jpg`,
-      lede:
-        '不必出門，就能在日光裡開始一天。健身、瑜珈、烤箱、SPA——身體的每一處需要，都被理解成住家的一部分。挑高採光的室內泳池，水波折射出整面天光。',
+      id: 'bay-kitchen',
+      title: 'Kitchen',
+      tag: 'WHERE CRAFT BECOMES RITUAL',
+      src: `${this.assetBase}/refers/廚房/stosa-main.jpg`,
+      lede: '引進義大利 STOSA 頂級廚具，搭配 BOSCH、SAKURA 旗艦廚電，SILESTONE 賽麗石無縫延伸料理台面。從動線規劃到收納美學，每個細節都為真正懂廚房的人而生——讓烹飪成為一種日常的儀式感。',
       stats: [
-        '25 米恆溫泳池',
-        '私人健身房 · 瑜珈室',
-        '蒸氣 · 烤箱 · SPA',
-        '景觀露天按摩池',
-      ],
-      theme: 'forest',
-    },
-    {
-      id: 'bay-equipment',
-      title: 'Equipment',
-      tag: 'STANDARD, UNSPOKEN',
-      src: `${this.assetBase}/refers/公設-內部/176.jpg`,
-      lede:
-        '德意原裝廚電、日德並陳衛浴、全屋恆境空調、智慧家居中控。四大系譜，皆為住家而設，不為展示而堆——真正的奢侈，是看不見的標準。',
-      stats: [
-        'Gaggenau · Miele 廚電',
-        'TOTO Neorest · Duravit · GROHE',
-        'DAIKIN VRV · ERV 新風系統',
-        'Control4 全戶中控',
+        'STOSA 義大利廚具 · 創立逾 164 年歐洲頂級品牌',
+        'SILESTONE 賽麗石檯面 · 超硬度抗刮耐熱終身保障',
+        'BOSCH IH 感應爐 · CHOTT 陶瓷面板智慧滾沸偵測',
+        'BOSCH 全嵌式洗碗機 · 70°C 高溫殺菌 AquaStop 防漏',
+        'SAKURA 近吸式排油煙機 · 專為台灣料理習慣設計',
       ],
       theme: 'umber',
+    },
+    {
+      id: 'bay-amenities',
+      title: 'Amenities',
+      tag: 'LIFE ELEVATED BEYOND THE UNIT',
+      src: `${this.assetBase}/refers/公設/skylounge-main.jpg`,
+      lede: '走出家門，生活仍在延伸。從幾何光影門廳到頂樓 Sky Lounge，從無邊際泳池到私人影院，每一處公共空間都以飯店規格設計——讓日常成為度假，讓棟內即是目的地。',
+      stats: [
+        'Sky Lounge 頂樓天空酒廊 · 金色弧形吧台環繞城市天際線',
+        '戶外無邊際泳池 · 櫻花樹列陣四季皆景',
+        'Theater 私人影音室 · 弧形穹頂沉浸式視聽',
+        '食藝空間 · 大理石中島專業廚房可宴客',
+        '森序庭園 · 蜿蜒步道穿越喬木城市私有森林',
+      ],
+      theme: 'forest',
     },
   ];
 
@@ -116,13 +127,25 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
   ];
 
   readonly specCells: SpecCell[] = [
-  { k: 'SEISMIC RESISTANCE · 耐震係數', v: '0.34g', sub: '六級耐震設計' },
-  { k: 'FOUNDATION DEPTH · 地樑深度', v: '3M', sub: '筏式基礎 · 深根入地' },
-  { k: 'EXCAVATION DEPTH · 開挖深度', v: '14.3M', sub: '地下室開挖深度' },
-  { k: 'REBAR STRENGTH · 鋼筋抗拉', v: '4,200', sub: 'kg/cm² · 樓版鋼筋強度' },
-  { k: 'SLAB THICKNESS · 樓板厚度', v: '15CM', sub: '雙層配筋 · 符合 CNS560' },
-  { k: 'CONNECTOR GRADE · 續接器等級', v: 'SA級', sub: '最高等級鋼筋續接工法' },
-];
+    { k: 'SEISMIC RESISTANCE · 耐震係數', v: '0.34g', sub: '六級耐震設計' },
+    { k: 'FOUNDATION DEPTH · 地樑深度', v: '3M', sub: '筏式基礎 · 深根入地' },
+    { k: 'EXCAVATION DEPTH · 開挖深度', v: '14.3M', sub: '地下室開挖深度' },
+    {
+      k: 'REBAR STRENGTH · 鋼筋抗拉',
+      v: '4,200',
+      sub: 'kg/cm² · 樓版鋼筋強度',
+    },
+    {
+      k: 'SLAB THICKNESS · 樓板厚度',
+      v: '15CM',
+      sub: '雙層配筋 · 符合 CNS560',
+    },
+    {
+      k: 'CONNECTOR GRADE · 續接器等級',
+      v: 'SA級',
+      sub: '最高等級鋼筋續接工法',
+    },
+  ];
 
   readonly layoutOptions: Array<{ v: '47' | '52' | 'any'; l: string }> = [
     { v: '47', l: '47 坪 · 精準' },
@@ -141,7 +164,7 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
   constructor(
     injector: Injector,
     private cdr: ChangeDetectorRef,
-    private host: ElementRef<HTMLElement>,
+    private host: ElementRef<HTMLElement>
   ) {
     super(injector);
   }
@@ -158,7 +181,8 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
 
   private initAnimations(): void {
     const prefersReduced =
-      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) return;
 
     gsap.registerPlugin(ScrollTrigger);
@@ -170,16 +194,37 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
       // ───── Hero entrance ─────
       const heroTl = gsap.timeline({ defaults: { ease, duration: 1.1 } });
       heroTl
-        .from('.hero .hero-bg', { scale: 1.08, opacity: 0, duration: 1.6, ease: 'power2.out' }, 0)
-        .from('.hero .hero-title', { y: 36, opacity: 0, duration: 1.2 }, '-=1.0')
-        .from('.hero .hero-lede > *', { y: 16, opacity: 0, stagger: 0.12, duration: 0.7 }, '-=0.6')
-        .from('.hero .scroll-cue', { opacity: 0, y: 12, duration: 0.6 }, '-=0.4');
+        .from(
+          '.hero .hero-bg',
+          { scale: 1.08, opacity: 0, duration: 1.6, ease: 'power2.out' },
+          0
+        )
+        .from(
+          '.hero .hero-title',
+          { y: 36, opacity: 0, duration: 1.2 },
+          '-=1.0'
+        )
+        .from(
+          '.hero .hero-lede > *',
+          { y: 16, opacity: 0, stagger: 0.12, duration: 0.7 },
+          '-=0.6'
+        )
+        .from(
+          '.hero .scroll-cue',
+          { opacity: 0, y: 12, duration: 0.6 },
+          '-=0.4'
+        );
 
       // ───── Hero image parallax ─────
       gsap.to('.hero .hero-bg', {
         yPercent: 12,
         ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+        scrollTrigger: {
+          trigger: '.hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
       });
 
       // ───── Hero content exit lift ─────
@@ -188,34 +233,52 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
         yPercent: -22,
         opacity: 0.25,
         ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 },
+        scrollTrigger: {
+          trigger: '.hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.6,
+        },
       });
 
       // Vignette 在 hero 退場時加深，與下一節米色形成柔焦
       gsap.to('.hero .hero-vignette', {
         opacity: 1.6,
         ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'center top', end: 'bottom top', scrub: 0.6 },
+        scrollTrigger: {
+          trigger: '.hero',
+          start: 'center top',
+          end: 'bottom top',
+          scrub: 0.6,
+        },
       });
 
       // ───── DISTRICT INTRO · pin + 四圖飛入 ─────
       const diSection = root.querySelector<HTMLElement>('.district-intro');
-      const diCanvas  = root.querySelector<HTMLElement>('.district-intro .di-canvas');
+      const diCanvas = root.querySelector<HTMLElement>(
+        '.district-intro .di-canvas'
+      );
       if (diSection && diCanvas) {
-        const diImgs     = gsap.utils.toArray<HTMLElement>('.district-intro .di-img');
-        const diHeadline = root.querySelector<HTMLElement>('.district-intro .di-headline');
-        const isMobile   = window.matchMedia('(max-width: 768px)').matches;
+        const diImgs = gsap.utils.toArray<HTMLElement>(
+          '.district-intro .di-img'
+        );
+        const diHeadline = root.querySelector<HTMLElement>(
+          '.district-intro .di-headline'
+        );
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
         if (!isMobile) {
           // 初始態：圖片偏移到邊緣之外，標題透明，veil 透明
           const offsets: Record<string, { x: number; y: number }> = {
             'di-img--tl': { x: -120, y: -60 },
-            'di-img--tr': { x:  120, y: -80 },
-            'di-img--bl': { x: -100, y:  80 },
-            'di-img--br': { x:  100, y:  60 },
+            'di-img--tr': { x: 120, y: -80 },
+            'di-img--bl': { x: -100, y: 80 },
+            'di-img--br': { x: 100, y: 60 },
           };
           diImgs.forEach((img) => {
-            const key = Object.keys(offsets).find((k) => img.classList.contains(k));
+            const key = Object.keys(offsets).find((k) =>
+              img.classList.contains(k)
+            );
             const off = key ? offsets[key] : { x: 0, y: 60 };
             gsap.set(img, { x: off.x, y: off.y, opacity: 0 });
           });
@@ -237,7 +300,7 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
                 end: 'top top',
                 scrub: 0.6,
               },
-            },
+            }
           );
 
           // 建立 pinned timeline（縮為 1.4× vh，移除尾段純停留）
@@ -261,39 +324,73 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
           });
           // 標題滑入（中段 0.25 → 0.55）
           if (diHeadline) {
-            diTl.to(diHeadline, { opacity: 1, yPercent: 0, duration: 0.3 }, 0.25);
+            diTl.to(
+              diHeadline,
+              { opacity: 1, yPercent: 0, duration: 0.3 },
+              0.25
+            );
           }
 
           // ── Outro：pin 末段（0.65 → 1.0）做 parallax 退場 ──
           // 整塊 canvas 上推 + 圖片 zoom out 淡出 + 標題向上飄走 + 深藍 veil 同步覆蓋
           // 模擬截圖中「上一節 parallax 退場」感
-          diTl.to(diCanvas, { yPercent: -22, ease: 'power2.in', duration: 0.35 }, 0.65);
-          diTl.to(diImgs, {
-            scale: 1.18,
-            opacity: 0,
-            ease: 'power2.in',
-            duration: 0.3,
-            stagger: 0.03,
-          }, 0.65);
+          diTl.to(
+            diCanvas,
+            { yPercent: -22, ease: 'power2.in', duration: 0.35 },
+            0.65
+          );
+          diTl.to(
+            diImgs,
+            {
+              scale: 1.18,
+              opacity: 0,
+              ease: 'power2.in',
+              duration: 0.3,
+              stagger: 0.03,
+            },
+            0.65
+          );
           if (diHeadline) {
-            diTl.to(diHeadline, { opacity: 0, yPercent: -45, ease: 'power2.in', duration: 0.3 }, 0.7);
+            diTl.to(
+              diHeadline,
+              { opacity: 0, yPercent: -45, ease: 'power2.in', duration: 0.3 },
+              0.7
+            );
           }
-          diTl.to('.district-intro .di-exit-veil', { opacity: 1, ease: 'power1.in', duration: 0.35 }, 0.65);
+          diTl.to(
+            '.district-intro .di-exit-veil',
+            { opacity: 1, ease: 'power1.in', duration: 0.35 },
+            0.65
+          );
         } else {
           // Mobile：簡單淡入，不做 pin
           if (diHeadline) gsap.set(diHeadline, { opacity: 0, y: 24 });
           diImgs.forEach((img) => gsap.set(img, { opacity: 0, y: 30 }));
           diImgs.forEach((img, i) => {
             gsap.to(img, {
-              opacity: 1, y: 0, duration: 0.9, ease,
-              scrollTrigger: { trigger: diSection, start: 'top 85%', toggleActions: 'play none none none' },
+              opacity: 1,
+              y: 0,
+              duration: 0.9,
+              ease,
+              scrollTrigger: {
+                trigger: diSection,
+                start: 'top 85%',
+                toggleActions: 'play none none none',
+              },
               delay: i * 0.1,
             });
           });
           if (diHeadline) {
             gsap.to(diHeadline, {
-              opacity: 1, y: 0, duration: 1, ease,
-              scrollTrigger: { trigger: diSection, start: 'top 80%', toggleActions: 'play none none none' },
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              ease,
+              scrollTrigger: {
+                trigger: diSection,
+                start: 'top 80%',
+                toggleActions: 'play none none none',
+              },
             });
           }
         }
@@ -301,12 +398,26 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
 
       // ───── THE CRAFT (甲級營造) reveals ─────
       gsap.from('.craft .craft-anchor', {
-        opacity: 0, y: 36, duration: 1.2, ease,
-        scrollTrigger: { trigger: '.craft .craft-anchor', start: 'top 85%', toggleActions: 'play none none none' },
+        opacity: 0,
+        y: 36,
+        duration: 1.2,
+        ease,
+        scrollTrigger: {
+          trigger: '.craft .craft-anchor',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
       });
       gsap.from('.craft .craft-hero img', {
-        scale: 1.12, opacity: 0.4, duration: 2, ease: 'power2.out',
-        scrollTrigger: { trigger: '.craft .craft-hero', start: 'top 85%', toggleActions: 'play none none none' },
+        scale: 1.12,
+        opacity: 0.4,
+        duration: 2,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.craft .craft-hero',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
       });
 
       // ───── SPRINGS BAYS — pin container + vertical slide-up storytelling ─────
@@ -324,14 +435,31 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
           bays.forEach((bay) => {
             const panel = bay.querySelector<HTMLElement>('.sb-panel');
             const stats = bay.querySelectorAll<HTMLElement>('.sb-stats li');
-            if (panel) gsap.from(panel, {
-              opacity: 0, y: 24, duration: 1, ease,
-              scrollTrigger: { trigger: bay, start: 'top 80%', toggleActions: 'play none none none' },
-            });
-            if (stats.length) gsap.from(stats, {
-              opacity: 0, y: 20, stagger: 0.1, duration: 0.8, ease,
-              scrollTrigger: { trigger: bay, start: 'top 75%', toggleActions: 'play none none none' },
-            });
+            if (panel)
+              gsap.from(panel, {
+                opacity: 0,
+                y: 24,
+                duration: 1,
+                ease,
+                scrollTrigger: {
+                  trigger: bay,
+                  start: 'top 80%',
+                  toggleActions: 'play none none none',
+                },
+              });
+            if (stats.length)
+              gsap.from(stats, {
+                opacity: 0,
+                y: 20,
+                stagger: 0.1,
+                duration: 0.8,
+                ease,
+                scrollTrigger: {
+                  trigger: bay,
+                  start: 'top 75%',
+                  toggleActions: 'play none none none',
+                },
+              });
           });
         } else {
           // ── Initial state: bays 2..n parked below viewport ──
@@ -383,13 +511,28 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
 
             if (i > 0) {
               const slideStart = 2 * i - 1;
-              tl.to(bay, { yPercent: 0, duration: 1, ease: 'power3.out' }, slideStart);
+              tl.to(
+                bay,
+                { yPercent: 0, duration: 1, ease: 'power3.out' },
+                slideStart
+              );
             }
 
             // Reveal sequence within the dwell slot
-            if (title) tl.to(title, { y: 0, opacity: 1, duration: 0.6 }, revealStart);
-            if (lede) tl.to(lede, { opacity: 1, y: 0, duration: 0.5 }, revealStart + 0.15);
-            if (stats.length) tl.to(stats, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08 }, revealStart + 0.3);
+            if (title)
+              tl.to(title, { y: 0, opacity: 1, duration: 0.6 }, revealStart);
+            if (lede)
+              tl.to(
+                lede,
+                { opacity: 1, y: 0, duration: 0.5 },
+                revealStart + 0.15
+              );
+            if (stats.length)
+              tl.to(
+                stats,
+                { opacity: 1, y: 0, duration: 0.5, stagger: 0.08 },
+                revealStart + 0.3
+              );
 
             // Small "stay" tween so the slot consumes ~1 unit of scroll
             tl.to({}, { duration: 0.5 }, revealStart + 0.5);
@@ -423,7 +566,7 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
               end: 'top 50%',
               scrub: 0.7,
             },
-          },
+          }
         );
       });
 
@@ -463,20 +606,32 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
             y: 28,
             duration: 1,
             ease,
-            scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 88%',
+              toggleActions: 'play none none none',
+            },
           });
         });
       });
 
       // ───── Image zoom-out on scroll-in ─────
-      gsap.utils.toArray<HTMLElement>('.bd-img .ph-img, .group-img .ph-img, .building-shot .ph-img').forEach((img) => {
-        gsap.from(img, {
-          scale: 1.12,
-          duration: 2,
-          ease: 'power2.out',
-          scrollTrigger: { trigger: img, start: 'top 92%', toggleActions: 'play none none none' },
+      gsap.utils
+        .toArray<HTMLElement>(
+          '.bd-img .ph-img, .group-img .ph-img, .building-shot .ph-img'
+        )
+        .forEach((img) => {
+          gsap.from(img, {
+            scale: 1.12,
+            duration: 2,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: img,
+              start: 'top 92%',
+              toggleActions: 'play none none none',
+            },
+          });
         });
-      });
 
       // ───── Spec value emphasise ─────
       gsap.utils.toArray<HTMLElement>('.spec .grid .cell .v').forEach((v) => {
@@ -486,15 +641,24 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
           letterSpacing: '0.18em',
           duration: 1.2,
           ease,
-          scrollTrigger: { trigger: v, start: 'top 85%', toggleActions: 'play none none none' },
+          scrollTrigger: {
+            trigger: v,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
         });
       });
 
       // ───── Building-shot quote subtle rise ─────
       gsap.from('.design .building-shot .quote-overlay .q', {
-        y: 40, opacity: 0, duration: 1.4, ease,
+        y: 40,
+        opacity: 0,
+        duration: 1.4,
+        ease,
         scrollTrigger: {
-          trigger: '.design .building-shot', start: 'top 70%', toggleActions: 'play none none none',
+          trigger: '.design .building-shot',
+          start: 'top 70%',
+          toggleActions: 'play none none none',
         },
       });
 
@@ -524,11 +688,20 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
     this.scrolled = y > 40;
     this.pastHero = y > window.innerHeight * 0.6;
 
-    const ids = ['hero', 'trust', 'whynow', 'spec', 'springs-bays', 'design', 'contact'];
+    const ids = [
+      'hero',
+      'trust',
+      'whynow',
+      'spec',
+      'springs-bays',
+      'design',
+      'contact',
+    ];
     let cur = 'hero';
     for (const id of ids) {
       const el = document.getElementById(id);
-      if (el && el.getBoundingClientRect().top < window.innerHeight * 0.35) cur = id;
+      if (el && el.getBoundingClientRect().top < window.innerHeight * 0.35)
+        cur = id;
     }
     this.active = cur;
     this.cdr.markForCheck();
@@ -540,9 +713,13 @@ export class DefaultComponent extends BBDBaseComponent implements AfterViewInit,
     if (el) window.scrollTo({ top: el.offsetTop - offset, behavior: 'smooth' });
   }
 
-  trackByIndex(index: number): number { return index; }
+  trackByIndex(index: number): number {
+    return index;
+  }
 
-  splitSpecValue(v: string): string[] { return v.split(' / '); }
+  splitSpecValue(v: string): string[] {
+    return v.split(' / ');
+  }
 
   submit(event: Event): void {
     event.preventDefault();
