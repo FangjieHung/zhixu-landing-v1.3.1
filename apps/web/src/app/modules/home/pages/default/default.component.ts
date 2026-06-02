@@ -669,7 +669,7 @@ export class DefaultComponent
                 document.querySelectorAll<HTMLVideoElement>(`${sectionId} video`)
               );
               videos.forEach((v, i) =>
-                setTimeout(() => { v.play().catch(() => undefined); }, i * delay)
+                gsap.delayedCall(i * delay / 1000, () => v.play().catch(() => void 0))
               );
             },
           },
