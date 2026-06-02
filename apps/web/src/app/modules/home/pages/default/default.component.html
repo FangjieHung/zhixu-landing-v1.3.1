@@ -50,7 +50,7 @@
     <div class="hero-foot">
       <div class="hero-lede">
         <p class="hero-sub">四面臨路 · 國際新奢寓所</p>
-        <p class="hero-yearmark">CENTRAL PARK · SHUI-NAN · 渲染示意圖</p>
+        <p class="hero-yearmark">CENTRAL PARK · 水湳 · 渲染合成示意圖</p>
       </div>
 
       <div class="scroll-cue">向下 · SCROLL</div>
@@ -102,58 +102,74 @@
 <!-- The Location · scroll-driven map -->
 <app-location-map></app-location-map>
 
-<!-- 06 · The Design -->
+<!-- Section 1 · THE CLUBHOUSE — left-large / right-small (3 videos) -->
 <section class="frame design" id="design">
   <div class="inner">
     <div class="col-narrow">
       <div class="eyebrow">
-        <span class="num">06</span><span>THE DESIGN · 設計者</span>
+        <span class="num">THE CLUBHOUSE · 獨棟會館</span>
       </div>
       <div style="height: 4rem"></div>
-      <div class="yearmark">建築 · 吳六合<br />景觀 · 許富居</div>
+      <h3 class="pull-zh">獨棟公設，<br />讓你的家，<br />只是你的家。</h3>
+      <p class="text-base mt-10 leading-normal">
+        一條動線屬於生活，<br/>一條動線屬於招待
+      </p>
     </div>
 
     <div class="col-wide">
-      <div class="ph tower building-shot">
-        <img
-          class="ph-img tinted"
-          [src]="img.tower"
-          alt="之序 · 建築外觀夜景"
-        />
-        <div class="quote-overlay">
-          <p class="q">它的輪廓，<br />本身就是整座<br />城市的仰望。</p>
+      <div class="video-grid vg-left-wide">
+        <div class="vg-card vg-card--main">
+          <video muted loop playsinline src="assets/video/garden-02.webm"></video>
+          <div class="caption-fade">OUTDOOR GROVE · 戶外林蔭</div>
         </div>
-        <div class="caption-fade">ARCHITECTURAL EXTERIOR</div>
+        <div class="vg-card vg-card--side">
+          <video muted loop playsinline src="assets/video/garden-01.webm"></video>
+          <div class="caption-fade">GARDEN PATH · 花園弧形步道</div>
+        </div>
+        <div class="vg-card vg-card--side">
+          <video muted loop playsinline src="assets/video/pool.webm"></video>
+          <div class="caption-fade">THE POOL · 游泳池</div>
+        </div>
       </div>
-      <div class="cap" style="display: flex; justify-content: space-between">
-        <span>美 · 在流線</span>
-        <span>強 · 在光影</span>
-      </div>
+    </div>
+  </div>
+</section>
 
-      <div class="arc-essay">
-        <div class="left">
-          <div class="eyebrow">
-            <span class="num">06 / A</span><span>THE CLUBHOUSE · 獨棟會館</span>
-          </div>
-          <div style="height: 1.5rem"></div>
-          <h3 class="pull-zh">獨棟公設，<br />讓你的家，<br />只是你的家。</h3>
+<!-- Section 2 · THE AMENITIES — full-width header + 2×2 grid (5 videos) -->
+<section class="frame design" id="design-b">
+  <div class="inner">
+    <div class="col-narrow">
+      <div class="eyebrow">
+        <span class="num">THE AMENITIES · 公設精選</span>
+      </div>
+      <div style="height: 4rem"></div>
+      <h3 class="pull-zh">每一個角落，<br />都是你的<br />私人領地。</h3>
+      <p class="text-base mt-10 leading-normal">
+        — 文案待補 —
+      </p>
+    </div>
+
+    <div class="col-wide">
+      <div class="video-grid vg-top-wide">
+        <div class="vg-card vg-card--top">
+          <video muted loop playsinline src="assets/video/main-gate.webm"></video>
+          <div class="caption-fade">LOBBY · 門廳</div>
         </div>
-        <div class="right">
-          <p class="body zh">
-            靈感來自一艘<span style="color: var(--accent)">泊岸的船</span>——
-            流線沒有銳角，回家不需要稜角。
-          </p>
-          <p class="body zh">
-            一條動線屬於生活，一條動線屬於招待<br />
-            ——細節，請於現場親見。
-          </p>
-          <div
-            style="margin-top: 5rem; display: flex; justify-content: flex-end"
-          >
-            <button class="tl" (click)="scrollToId('contact')">
-              預約入內 · 從建材看到公設
-            </button>
-          </div>
+        <div class="vg-card vg-card--bot">
+          <video muted loop playsinline src="assets/video/restaurant.webm"></video>
+          <div class="caption-fade">DINING · 食憩</div>
+        </div>
+        <div class="vg-card vg-card--bot">
+          <video muted loop playsinline src="assets/video/theater.webm"></video>
+          <div class="caption-fade">THEATER · 多功能視聽室</div>
+        </div>
+        <div class="vg-card vg-card--bot">
+          <video muted loop playsinline src="assets/video/elevator.webm"></video>
+          <div class="caption-fade">ELEVATOR HALL · 電梯廳</div>
+        </div>
+        <div class="vg-card vg-card--bot">
+          <video muted loop playsinline src="assets/video/bar.webm"></video>
+          <div class="caption-fade">SKY LOUNGE · 星空酒吧</div>
         </div>
       </div>
     </div>
@@ -399,9 +415,10 @@
     </div>
   </div>
 
+  <!--
   <div class="footnote foot">
     坪數採建坪計算 · 售價恕不在網頁揭露 · 完整型錄請於預約時索取
-  </div>
+  </div>-->
 
   <div style="margin-top: 4rem; display: flex; justify-content: flex-end">
     <button
