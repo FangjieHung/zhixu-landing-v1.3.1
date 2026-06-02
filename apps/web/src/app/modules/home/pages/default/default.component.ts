@@ -548,7 +548,8 @@ export class DefaultComponent
         ['.trust', '.trust .builder-deep'],
         ['#whynow', '#whynow .inner'],
         ['.spec', '.spec .head'],
-        ['.design', '.design .inner'],
+        ['#design', '#design .inner'],
+        ['#design-b', '#design-b .inner'],
         ['.contact', '.contact .pre'],
       ];
       sectionEntries.forEach(([trigger, target]) => {
@@ -589,8 +590,6 @@ export class DefaultComponent
         '.spec .pull-wrap > *',
         '.spec .layouts .lt',
         '.design .col-narrow > *',
-        '.design .building-shot',
-        '.design .arc-essay > *',
         '.contact .pre > *',
         '.contact .form .field',
         '.contact .form .submit',
@@ -618,7 +617,7 @@ export class DefaultComponent
       // ───── Image zoom-out on scroll-in ─────
       gsap.utils
         .toArray<HTMLElement>(
-          '.bd-img .ph-img, .group-img .ph-img, .building-shot .ph-img'
+          '.bd-img .ph-img, .group-img .ph-img'
         )
         .forEach((img) => {
           gsap.from(img, {
@@ -649,17 +648,32 @@ export class DefaultComponent
         });
       });
 
-      // ───── Building-shot quote subtle rise ─────
-      gsap.from('.design .building-shot .quote-overlay .q', {
-        y: 40,
-        opacity: 0,
-        duration: 1.4,
-        ease,
-        scrollTrigger: {
-          trigger: '.design .building-shot',
-          start: 'top 70%',
-          toggleActions: 'play none none none',
-        },
+      // ───── Design sections — video card fade-in + staggered autoplay ─────
+      (
+        [['#design', 0.25, 350], ['#design-b', 0.2, 250]] as [string, number, number][]
+      ).forEach(([sectionId, stagger, delay]) => {
+        const cards = gsap.utils.toArray<HTMLElement>(`${sectionId} .vg-card`);
+        if (!cards.length) return;
+        gsap.from(cards, {
+          opacity: 0,
+          y: 30,
+          duration: 0.9,
+          ease: 'power2.out',
+          stagger,
+          scrollTrigger: {
+            trigger: sectionId,
+            start: 'top 75%',
+            toggleActions: 'play none none none',
+            onEnter: () => {
+              const videos = Array.from(
+                document.querySelectorAll<HTMLVideoElement>(`${sectionId} video`)
+              );
+              videos.forEach((v, i) =>
+                setTimeout(() => { v.play().catch(() => undefined); }, i * delay)
+              );
+            },
+          },
+        });
       });
 
       // ── Refresh after fonts/layout settle ──
