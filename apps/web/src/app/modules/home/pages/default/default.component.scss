@@ -307,6 +307,7 @@ section.frame {
 /* Frame bridges — section 頂部 16vh 漸層銜接上一節色調 */
 /* design 接在 lm-stage (#212a36 深藍) 之後 → 米色 design 頂部 fade from 深藍 */
 section.frame.design {
+  background-image: linear-gradient(180deg, #212a36 0%, transparent 100%);
   background-size: 100% 16vh;
   background-repeat: no-repeat;
   background-position: top;
@@ -761,6 +762,7 @@ p.body {
 .trust {
   background-color: var(--bg-2);
   /* trust 接在 design (米色) 之後 → 深咖 trust 頂部 fade from 米色 */
+  background-image: linear-gradient(180deg, var(--bg-1) 0%, transparent 100%);
   background-size: 100% 16vh;
   background-repeat: no-repeat;
   background-position: top;
@@ -1408,6 +1410,7 @@ p.body {
 /* Spec */
 .spec {
   background-color: var(--bg-2);
+  background-image: linear-gradient(180deg, var(--bg-1) 0%, transparent 100%);
   background-size: 100% 16vh;
   background-repeat: no-repeat;
   background-position: top;
@@ -1594,6 +1597,10 @@ p.body {
     object-fit: cover;
     display: block;
   }
+}
+
+.video-grid {
+  display: grid;
 }
 
 .vg-left-wide {
