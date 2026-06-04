@@ -68,7 +68,7 @@ export class DefaultComponent
         'GROHE 定溫花灑 · SmartControl 智慧恆溫',
         'TOTO 豪華浴缸 · 三孔混合加工高光澤工藝',
         'TOTO 四合一暖風機 · 20 分鐘極速升溫',
-        'TOTO 下嵌式面盆 · 通過美日雙重防滲認證',
+        'TOTO 下嵌式面盆 · 美日雙重防滲認證',
       ],
       theme: 'cream',
     },
@@ -309,22 +309,9 @@ export class DefaultComponent
         const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
         if (!isMobile) {
-          // 初始態：圖片偏移到邊緣之外，標題透明，veil 透明
-          const offsets: Record<string, { x: number; y: number }> = {
-            'di-img--tl': { x: -120, y: -60 },
-            'di-img--tc': { x: 0, y: -90 },
-            'di-img--tr': { x: 120, y: -80 },
-            'di-img--ml': { x: -90, y: 0 },
-            'di-img--mr': { x: 90, y: 0 },
-            'di-img--bl': { x: -100, y: 80 },
-            'di-img--br': { x: 100, y: 60 },
-          };
+          // 初始態：壓低、透明，進場用單純 fade + 上滑（與 .sb-bay 一致）
           diImgs.forEach((img) => {
-            const key = Object.keys(offsets).find((k) =>
-              img.classList.contains(k)
-            );
-            const off = key ? offsets[key] : { x: 0, y: 60 };
-            gsap.set(img, { x: off.x, y: off.y, opacity: 0 });
+            gsap.set(img, { opacity: 0, y: 44 });
           });
           if (diHeadline) gsap.set(diHeadline, { opacity: 0, yPercent: 6 });
 
@@ -347,13 +334,14 @@ export class DefaultComponent
             }
           );
 
-          // 建立 pinned timeline（縮為 1.4× vh，移除尾段純停留）
+          // 建立 pinned timeline（拉長為 1.5× vh ≈ 150svh）
+          // 節奏：淡入(0→~0.55) + 全程 parallax 視差 → hold(0.64→0.80) → 退場(0.78→1.0)
           const diTl = gsap.timeline({
             defaults: { ease: 'power2.out' },
             scrollTrigger: {
               trigger: diSection,
               start: 'top top',
-              end: () => `+=${window.innerHeight * 1.4}`,
+              end: () => `+=${window.innerHeight * 1.5}`,
               pin: true,
               pinSpacing: true,
               scrub: 0.6,
@@ -362,26 +350,60 @@ export class DefaultComponent
             },
           });
 
-          // 圖片飛入（前段 0 → 0.55）
-          diImgs.forEach((img, i) => {
-            diTl.to(img, { x: 0, y: 0, opacity: 1, duration: 0.4 }, i * 0.08);
-          });
-          // 標題滑入（中段 0.25 → 0.55）
+          // 進場序列（對應草圖出現順序，diImgs 依 DOM 順序即 01→05 = 圖1→圖5）：
+          // 圖1(右上) → 圖2(中上) →【中間文字第 3 個出現】→ 圖3(左中) → 圖4(右下) → 圖5(中下)
+          // entryStep × 最後一格(5) + duration = 0.64，剛好銜接後段 hold(0.64)
+          const entryStep = 0.08;
+          const revealImg = (img: HTMLElement, slot: number) =>
+            diTl.to(
+              img,
+              { opacity: 1, y: 0, duration: 0.24, ease: 'power2.out' },
+              slot * entryStep
+            );
+
+          revealImg(diImgs[0], 0); // 圖1 · 右上
+          revealImg(diImgs[1], 1); // 圖2 · 中上
           if (diHeadline) {
+            // 中間文字 · 第 3 個出現（夾在 圖2 與 圖3 之間）
             diTl.to(
               diHeadline,
-              { opacity: 1, yPercent: 0, duration: 0.3 },
-              0.25
+              { opacity: 1, yPercent: 0, duration: 0.2, ease: 'power2.out' },
+              2 * entryStep
             );
           }
+          revealImg(diImgs[2], 3); // 圖3 · 左中
+          revealImg(diImgs[3], 4); // 圖4 · 右下
+          revealImg(diImgs[4], 5); // 圖5 · 中下
 
-          // ── Outro：pin 末段（0.65 → 1.0）做 parallax 退場 ──
+          // Parallax：各圖以不同幅度持續上飄（用 yPercent，與進場的 y/opacity
+          // 為獨立 transform 分量、互不覆蓋），全程隨 scrub 連動 → 景深視差
+          const parallax: Record<string, number> = {
+            'di-img--01': -8,
+            'di-img--02': -5,
+            'di-img--03': -14,
+            'di-img--04': -10,
+            'di-img--05': -16,
+          };
+          diImgs.forEach((img) => {
+            const key = Object.keys(parallax).find((k) =>
+              img.classList.contains(k)
+            );
+            const depth = key ? parallax[key] : -10;
+            diTl.to(img, { yPercent: depth, ease: 'none', duration: 1 }, 0);
+          });
+
+          // ── 定格 hold（0.64 → 0.80）──
+          // 全部圖片與標題就位後，timeline 此段刻意留白，
+          // scrub 滑過時畫面完全凍結，給足「全員定格」的停留感，
+          // 再進入退場、銜接下一節 location-map（解決切換過快）
+          diTl.to({}, { duration: 0.16 }, 0.64);
+
+          // ── Outro：pin 末段（0.78 → 1.0）做 parallax 退場 ──
           // 整塊 canvas 上推 + 圖片 zoom out 淡出 + 標題向上飄走 + 深藍 veil 同步覆蓋
-          // 模擬截圖中「上一節 parallax 退場」感
           diTl.to(
             diCanvas,
-            { yPercent: -22, ease: 'power2.in', duration: 0.35 },
-            0.65
+            { yPercent: -22, ease: 'power2.in', duration: 0.22 },
+            0.78
           );
           diTl.to(
             diImgs,
@@ -389,22 +411,22 @@ export class DefaultComponent
               scale: 1.18,
               opacity: 0,
               ease: 'power2.in',
-              duration: 0.3,
-              stagger: 0.03,
+              duration: 0.2,
+              stagger: 0.02,
             },
-            0.65
+            0.78
           );
           if (diHeadline) {
             diTl.to(
               diHeadline,
-              { opacity: 0, yPercent: -45, ease: 'power2.in', duration: 0.3 },
-              0.7
+              { opacity: 0, yPercent: -45, ease: 'power2.in', duration: 0.2 },
+              0.8
             );
           }
           diTl.to(
             '.district-intro .di-exit-veil',
-            { opacity: 1, ease: 'power1.in', duration: 0.35 },
-            0.65
+            { opacity: 1, ease: 'power1.in', duration: 0.22 },
+            0.78
           );
         } else {
           // Mobile：簡單淡入，不做 pin
@@ -706,7 +728,7 @@ export class DefaultComponent
           stagger,
           scrollTrigger: {
             trigger: sectionId,
-            start: 'top 75%',
+            start: 'top 90%',
             toggleActions: 'play none none none',
             onEnter: () => {
               const videos = Array.from(

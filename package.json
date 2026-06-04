@@ -12,6 +12,7 @@
     "clean-prod:web": "nx serve web ---prod --open --port=0",
     "build:web": "nx build web --prod --build-optimizer",
     "build:web-ssr": "nx build web --prod && nx run web:server:production",
+    "prerender:web": "nx run web:prerender",
     "build-stage:web": "nx build web --configuration=staging --build-optimizer --output-path=dist-stage/apps/web",
     "build-stage:web-ssr": "nx build webapp --configuration=staging --output-path=dist-stage/apps/web && nx run web:server-stage:staging",
     "start:cms": "nx serve cms --open",

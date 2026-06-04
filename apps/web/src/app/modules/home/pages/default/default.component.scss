@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap");
-
 :host {
   --color-surface-light: #f5f0e8;
   --color-surface-dark: #1a1a18;
@@ -15,8 +13,8 @@
   --bg-2: var(--color-surface-dark);
   --accent: var(--color-accent-warm);
 
-  --font-display: "Playfair Display", "Cormorant Garamond", "Noto Serif SC", serif;
-  --font-sans: "Montserrat", "Inter", system-ui, sans-serif;
+  --font-display: "Playfair Display", "Noto Serif TC", serif;
+  --font-sans: "Noto Sans TC", "Inter", system-ui, sans-serif;
 
   --ease-editorial: cubic-bezier(0.25, 0.1, 0.25, 1);
   --dur-slow: 600ms;
@@ -363,7 +361,7 @@ section.frame#whynow {
 }
 .pull-zh {
   @apply font-serif font-bold;
-  font-family: "Noto Serif SC", serif;
+  font-family: "Noto Serif TC", serif;
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: 0.04em;
@@ -457,7 +455,7 @@ p.body {
     align-self: center;
     margin: 0;
     color: var(--color-text-on-dark);
-    font-family: "Noto Serif SC", serif;
+    font-family: "Noto Serif TC", serif;
     font-weight: 500;
     line-height: 1.25;
     letter-spacing: 0.06em;
@@ -482,7 +480,7 @@ p.body {
     gap: 0.5rem;
     .hero-sub {
       margin: 0;
-      font-family: "Noto Serif SC", serif;
+      font-family: "Noto Serif TC", serif;
       font-size: clamp(1rem, 1.6vw, 1.3rem);
       letter-spacing: 0.12em;
       color: var(--color-text-on-dark);
@@ -602,81 +600,70 @@ p.body {
   .di-canvas {
     position: relative;
     height: 100vh; // GSAP pin 需要固定高度
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
-  /* ── 四張圖共用 ── */
+  /* ── 圖片共用 ──
+     尺寸用 vh 為基準（width 跟著 viewport 高度），
+     讓「圖高 + top%」都在同一個 vh 座標系裡計算，
+     不同螢幕都能維持鋸齒間距、不互相重疊 */
   .di-img {
     position: absolute;
     object-fit: cover;
-    border-radius: 2px;
+    border-radius: 4px;
     will-change: transform, opacity;
   }
 
-  // 左上 · 小直版 (387)
-  .di-img--tl {
-    width: clamp(140px, 15vw, 330px);
-    aspect-ratio: 3 / 4;
-    top: 8%;
-    left: 4%;
-  }
-
-  // 右上 · 寬景 (396) — 右側貼邊
-  .di-img--tr {
-    width: clamp(260px, 32vw, 690px);
+  /* 進場順序對應草圖（由上而下）：
+     01 右上 → 02 中上 →（中間文字第 3 個出現）→ 03 左中 → 04 右下 → 05 中下 */
+  .di-img--01 {
+    width: 36vh;
     aspect-ratio: 16 / 10;
     top: 4%;
-    right: 0;
+    right: 6%;
   }
 
-  // 左下 · 大直版 (364)
-  .di-img--bl {
-    width: clamp(220px, 26vw, 570px);
-    aspect-ratio: 3 / 4;
-    bottom: 0;
-    left: 8%;
-  }
-
-  // 右下 · 方版 (437)
-  .di-img--br {
-    width: clamp(200px, 22vw, 480px);
-    aspect-ratio: 4 / 3;
-    bottom: 50%;
-    right: 4%;
-  }
-
-  // 上中 · 橫版 (409) — 頂部居中略偏左
-  .di-img--tc {
-    width: clamp(160px, 18vw, 390px);
+  .di-img--02 {
+    width: 30vh;
     aspect-ratio: 16 / 9;
-    top: 0;
-    left: calc(50% - 9vw);
+    top: 17%;
+    left: 50%;
+    margin-left: -15vh; // 自身一半寬，水平置中（不用 transform，避讓 GSAP x/y）
   }
 
-  // 中左 · 直版 (428) — 左邊緣居中
-  .di-img--ml {
-    width: clamp(90px, 10vw, 225px);
-    aspect-ratio: 3 / 4;
-    top: 30%;
-    left: 0;
-  }
-
-  // 中右 · 橫版 (479) — 右邊緣居中偏下
-  .di-img--mr {
-    width: clamp(90px, 10vw, 225px);
+  .di-img--03 {
+    width: 38vh;
     aspect-ratio: 4 / 3;
-    bottom: 22%;
-    right: 0;
+    top: 50%;
+    left: 5%;
   }
 
-  /* ── 文字主體：寬佔 2/3 畫面 ── */
+  .di-img--04 {
+    width: 32vh;
+    aspect-ratio: 4 / 3;
+    top: 63%;
+    right: 5%;
+  }
+
+  .di-img--05 {
+    width: 30vh;
+    aspect-ratio: 4 / 3;
+    top: 82%;
+    left: 50%;
+    margin-left: -15vh;
+  }
+
+  /* ── 文字主體：置中浮在鋸齒中段空白 ── */
   .di-headline {
-    position: relative;
+    position: absolute;
+    top: 40%;
+    left: 0;
+    right: 0;
     z-index: 2;
-    width: 66vw;
+    display: flex;
+    justify-content: center;
+    padding: 0 6vw;
     text-align: center;
+    pointer-events: none;
     will-change: opacity, transform;
   }
 
@@ -694,6 +681,7 @@ p.body {
 
   .di-title {
     @apply font-serif;
+    max-width: 30rem; // 收窄置中，與左右兩欄圖片留出間距
     font-size: clamp(1.8rem, 3.6vw, 3.4rem);
     line-height: 1.65;
     color: var(--color-accent-warm);
@@ -738,46 +726,47 @@ p.body {
       height: 100svh;
     }
 
-    /* 重排為「上兩下兩」的對稱矩陣，避免互疊、讓 headline 居中可讀 */
-    .di-img--tl {
-      width: 42vw;
-      aspect-ratio: 3 / 4;
-      top: 6%;
-      left: 4%;
-    }
-
-    .di-img--tr {
-      width: 42vw;
-      aspect-ratio: 4 / 3;
-      top: 8%;
-      right: 4%;
-    }
-
-    .di-img--bl {
-      width: 42vw;
-      aspect-ratio: 4 / 5;
-      bottom: 6%;
-      left: 4%;
-    }
-
-    .di-img--br {
-      width: 42vw;
-      aspect-ratio: 1 / 1;
-      bottom: 8%;
-      right: 4%;
-    }
-
-    .di-img--tc,
-    .di-img--ml,
-    .di-img--mr {
+    /* mobile：保留 4 張側邊鋸齒，隱藏中下圖避免與置中標題重疊；尺寸改用 vw 基準 */
+    .di-img--05 {
       display: none;
     }
 
+    .di-img--01 {
+      width: 40vw;
+      aspect-ratio: 4 / 3;
+      top: 4%;
+      right: 4%;
+      left: auto;
+      margin-left: 0;
+    }
+    .di-img--02 {
+      width: 40vw;
+      aspect-ratio: 3 / 4;
+      top: 20%;
+      left: 4%;
+      margin-left: 0;
+    }
+    .di-img--03 {
+      width: 40vw;
+      aspect-ratio: 4 / 3;
+      top: 58%;
+      right: 4%;
+      left: auto;
+    }
+    .di-img--04 {
+      width: 40vw;
+      aspect-ratio: 3 / 4;
+      top: 76%;
+      left: 4%;
+      right: auto;
+    }
+
     .di-headline {
-      width: 90vw;
+      top: 44%;
     }
 
     .di-title {
+      max-width: 90vw;
       font-size: clamp(1.3rem, 4.4vw, 1.8rem);
       line-height: 1.6;
     }
@@ -847,7 +836,7 @@ p.body {
       text-transform: uppercase;
       color: var(--color-text-on-dark);
       &.zh {
-        font-family: "Noto Serif SC", serif;
+        font-family: "Noto Serif TC", serif;
         text-transform: none;
         letter-spacing: 0.04em;
       }
@@ -875,7 +864,7 @@ p.body {
     grid-template-columns: 4fr 8fr;
     gap: 2rem;
     .quote {
-      font-family: "Noto Serif SC", serif;
+      font-family: "Noto Serif TC", serif;
       font-size: clamp(1.1rem, 1.8vw, 1.6rem);
       line-height: 1.7;
       letter-spacing: 0.04em;
@@ -1003,7 +992,7 @@ p.body {
     flex-wrap: wrap;
   }
   .bd-works-cap {
-    font-family: "Noto Serif SC", serif;
+    font-family: "Noto Serif TC", serif;
     font-size: clamp(1.1rem, 1.6vw, 1.4rem);
     line-height: 1.5;
     color: var(--color-text-on-dark);
@@ -1028,7 +1017,7 @@ p.body {
     gap: 0.6rem;
   }
   .bd-work-name {
-    font-family: "Noto Serif SC", serif;
+    font-family: "Noto Serif TC", serif;
     font-size: clamp(1.2rem, 1.6vw, 1.5rem);
     color: var(--color-text-on-dark);
     letter-spacing: 0.04em;
@@ -1066,7 +1055,7 @@ p.body {
     padding: 3.5rem 0;
     border-top: 1px solid #3a3128;
     text-align: center;
-    font-family: "Noto Serif SC", serif;
+    font-family: "Noto Serif TC", serif;
     font-size: clamp(1.8rem, 3vw, 2.6rem);
     line-height: 1.5;
     letter-spacing: 0.08em;
@@ -1104,7 +1093,7 @@ p.body {
     margin-bottom: 4rem;
   }
   .craft-title {
-    font-family: "Noto Serif SC", serif;
+    font-family: "Noto Serif TC", serif;
     font-size: clamp(2.2rem, 4.4vw, 3.6rem);
     line-height: 1.3;
     letter-spacing: 0.06em;
@@ -1147,7 +1136,7 @@ p.body {
     padding: 3rem 0;
     border-top: 1px solid #3a3128;
     text-align: center;
-    font-family: "Noto Serif SC", serif;
+    font-family: "Noto Serif TC", serif;
     font-size: clamp(1.1rem, 1.6vw, 1.4rem);
     letter-spacing: 0.12em;
     color: #d8cdbb;
@@ -1242,7 +1231,7 @@ p.body {
       text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
       pointer-events: none;
       .sb-title {
-        font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+        font-family: "Playfair Display", "Noto Serif TC", serif;
         font-size: clamp(4.5rem, 9vw, 8rem);
         line-height: 0.9;
         font-weight: 300;
@@ -1299,7 +1288,7 @@ p.body {
           border-bottom: 1px solid currentColor;
         }
         .sb-stat {
-          font-family: "Cormorant Garamond", "Noto Serif SC", serif;
+          font-family: "Playfair Display", "Noto Serif TC", serif;
           font-size: clamp(1.5rem, 2vw, 2rem);
           line-height: 1.15;
           letter-spacing: 0.02em;
@@ -1393,7 +1382,7 @@ p.body {
         border-top: 1px solid var(--color-divider);
       }
       .place {
-        font-family: "Noto Serif SC", serif;
+        font-family: "Noto Serif TC", serif;
         font-size: 1.0625rem;
         font-weight: 500;
         letter-spacing: 0.04em;
@@ -1453,7 +1442,7 @@ p.body {
       color: #b8ad9e;
     }
     .lead {
-      font-family: "Noto Serif SC", serif;
+      font-family: "Noto Serif TC", serif;
       font-size: clamp(1.8rem, 3vw, 2.8rem);
       line-height: 1.3;
       letter-spacing: 0.04em;
@@ -1519,7 +1508,7 @@ p.body {
     gap: 3rem;
     align-items: start;
     .pull {
-      font-family: "Noto Serif SC", serif;
+      font-family: "Noto Serif TC", serif;
       font-size: clamp(1.8rem, 2.6vw, 2.4rem);
       line-height: 1.55;
       letter-spacing: 0.04em;
@@ -1568,7 +1557,7 @@ p.body {
         text-transform: uppercase;
         color: var(--color-text-on-dark);
         .zh {
-          font-family: "Noto Serif SC", serif;
+          font-family: "Noto Serif TC", serif;
           text-transform: none;
           margin-left: 12px;
           color: #b8ad9e;
@@ -1728,7 +1717,7 @@ p.body {
       color: #b8ad9e;
     }
     .invite {
-      font-family: "Noto Serif SC", serif;
+      font-family: "Noto Serif TC", serif;
       font-size: clamp(2.25rem, 4vw, 3.6rem);
       line-height: 1.4;
       letter-spacing: 0.04em;
@@ -1807,7 +1796,6 @@ p.body {
         }
       }
     }
-
   }
   .info {
     display: flex;
@@ -1826,7 +1814,7 @@ p.body {
         color: #8e827a;
       }
       .value {
-        font-family: "Noto Serif SC", serif;
+        font-family: "Noto Serif TC", serif;
         font-size: 1.125rem;
         line-height: 1.8;
         color: var(--color-text-on-dark);

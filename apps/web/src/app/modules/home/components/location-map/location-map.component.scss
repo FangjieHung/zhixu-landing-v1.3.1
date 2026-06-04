@@ -34,7 +34,7 @@
   padding: 20px 36px;
   background: rgba(18, 16, 14, 0.92);
   color: #f0e6d0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Noto Sans TC', sans-serif;
   font-size: 0.875rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -44,7 +44,7 @@
   .lm-tb-right { display: flex; gap: 22px; justify-content: flex-end; align-items: center; }
   .lm-tb-link { cursor: default; opacity: 0.92; }
   .lm-monogram {
-    font-family: 'Noto Serif SC', serif;
+    font-family: 'Noto Serif TC', serif;
     font-size: 1.125rem;
     letter-spacing: 0.18em;
     color: #c9b88a;
@@ -91,7 +91,7 @@
   max-width: 280px;
   background: rgba(18, 16, 14, 0.92);
   border: 1px solid rgba(201, 184, 138, 0.4);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Noto Sans TC', sans-serif;
   color: #c9b88a;
 }
 .lm-debug-hover {
@@ -169,7 +169,7 @@
     padding: 14px 20px 28px;
     background: var(--lm-cream);
     color: var(--lm-text-muted);
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Noto Sans TC', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.24em;
