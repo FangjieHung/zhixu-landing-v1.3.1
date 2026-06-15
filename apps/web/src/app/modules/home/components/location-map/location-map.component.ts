@@ -461,8 +461,8 @@ export class LocationMapComponent
 
       // ── Phase 2（0.59 ~ 1.0）───────────────────────────────────
       // 近端 POI 與 caption 淡出
-      tl.to('.lm-poi', { opacity: 0.7, duration: 0.05, ease: 'power1.in' }, 0.59);
-      tl.to('.lm-caption-near', { opacity: 0.7, duration: 0.05, ease: 'power1.in' }, 0.59);
+      tl.to('.lm-poi', { opacity: 0.9, duration: 0.05, ease: 'power1.in' }, 0.59);
+      tl.to('.lm-caption-near', { opacity: 0.9, duration: 0.05, ease: 'power1.in' }, 0.59);
 
       // 鏡頭再拉遠
       tl.to(svg, { scale: ZOOM_PHASE2_END, duration: 0.25 }, 0.60);

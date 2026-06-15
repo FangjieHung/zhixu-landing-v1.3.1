@@ -210,7 +210,7 @@ a {
 button.submit {
   @apply px-5 py-4;
   margin-top: 1rem;
-  font-family: var(--font-sans);
+  @apply font-sans;
   font-size: 1.125rem;
   font-weight: 600;
   letter-spacing: 0.28em;
@@ -230,13 +230,12 @@ button.submit {
 }
 
 button.primary {
-  font-family: var(--font-sans);
+  @apply text-black font-medium;
+  @apply font-sans;
   font-size: 1rem;
-  font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   background-color: var(--md-sys-color-secondary-fixed);
-  color: var(--md-sys-color-on-secondary-fixed);
   padding: 18px 26px;
   border: 0;
   cursor: pointer;
