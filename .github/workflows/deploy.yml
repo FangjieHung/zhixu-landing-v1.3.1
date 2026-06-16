@@ -35,4 +35,4 @@ jobs:
           git commit -m "deploy: $(date +'%Y-%m-%d %H:%M:%S') from ${{ github.sha }}"
           git push --force \
             https://x-access-token:${{ secrets.PAGES_DEPLOY_TOKEN }}@github.com/FangjieHung/zhixu-web.git \
-            HEAD:main
+            HEAD:gh-pages
