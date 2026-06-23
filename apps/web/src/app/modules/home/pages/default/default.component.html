@@ -1,14 +1,8 @@
 <!-- Sticky topbar -->
-<div class="version-note">
-    [v1.2.0] 測試版，僅供內部預覽使用。
-  </div>
+<div class="version-note">[v1.2.0] 測試版，僅供內部預覽使用。</div>
 <header class="topbar" [class.shown]="scrolled">
   <a class="mark" routerLink="/">
     <img src="assets/image/logo/type-main.svg" alt="之序" />
-    <div class="en">
-      <p>Crossing the</p>
-      <p>New Divide</p>
-    </div>
   </a>
   <nav class="ghost" aria-label="主要導覽">
     <ng-container *ngFor="let item of navItems">
@@ -23,45 +17,76 @@
   </nav>
 </header>
 
-<!-- Floating CTA -->
+<!-- Floating CTA · 右側懸浮直式頁籤 + LINE 方形鈕 -->
 <div class="cta-dock" [class.shown]="pastHero">
-  <button class="primary" (click)="scrollToId('contact')">預約鑒賞</button>
+  <button class="cta-tab" (click)="scrollToId('contact')" aria-label="預約鑒賞">
+    <span class="cta-tab__label">預約鑒賞</span>
+  </button>
   <a
-    class="secondary"
-    href="https://line.me/R/ti/p/@zhixu-taichung"
+    class="cta-line"
+    href="https://line.me/R/ti/p/@fuhua-inno"
     target="_blank"
     rel="noopener noreferrer"
-    style="border-left: 2px solid #00b900; padding-left: 12px"
+    aria-label="加入 LINE · 專人服務"
   >
-    加入 LINE · 專人服務
+    <span class="cta-line__word">LINE</span>
   </a>
 </div>
 
 <main>
-  <!-- 01 · Hero -->
-  <section class="hero dark" id="hero">
-    <img class="hero-bg" [src]="img.hero" alt="之序 · 建築外觀" />
+  <!-- 01 · Hero — 圖層堆疊主視覺：背景 → 標題字 → 前景建築 -->
+  <section class="hero" id="hero">
+    <!-- Layered scene (bottom → top) -->
+    <div class="hero-scene" aria-hidden="false">
+      <img
+        class="hero-bg"
+        [src]="heroLayers.background"
+        alt="之序 · 城市綠洲遠景"
+      />
+      <div class="hero-title">
+        <p class="hero-subtitle">
+          <span>四面臨路</span><span>&#8739;</span><span>國際新奢寓所</span>
+        </p>
+        <h1 class="hero-headline">
+          <img
+            class="hero-display hero-display--01"
+            [src]="heroLayers.display01"
+            alt="循自然之序，"
+          />
+          <img
+            class="hero-display hero-display--02"
+            [src]="heroLayers.display02"
+            alt="隱城市綠洲"
+          />
+        </h1>
+        <div class="hero-lead">
+          <div class="hero-lead-copy">
+            <p>在千坪獨立街廓中，為家族留下一座森林私域</p>
+            <p>這一席大隱市心的居所，是你的生活嶄新篇章。</p>
+          </div>
+          <button (click)="scrollToId('contact')" class="primary">
+            預約鑒賞
+          </button>
+        </div>
+      </div>
+      <img
+        class="hero-buildings"
+        [src]="heroLayers.buildings"
+        alt="之序 · 建築外觀"
+      />
+    </div>
+
     <div class="hero-vignette"></div>
 
     <div class="hero-content">
-      <div class="hero-title">
-        <h1>
-          航向中央公園<br />
-          泊岸理想生活
-        </h1>
-        <button (click)="scrollToId('contact')" class="primary">
-          預約鑒賞
-        </button>
-      </div>
-
       <div class="hero-foot">
         <div class="hero-lede">
           <p class="hero-sub">
-            <span>四面臨路</span><span>&#8739;</span><span>國際新奢寓所</span>
-          </p>
-          <p class="hero-yearmark">
-            <span>國際會展中心</span><span class="px-2">&#183;</span
-            ><span>綠美圖 </span><span>渲染合成示意圖</span>
+            <img
+              class="hero-brand-logo"
+              src="assets/image/logo/fuhua-inno-logo.webp"
+              alt="富華創新"
+            /><span>&#8739;</span><span>台中水湳</span>
           </p>
         </div>
 
@@ -69,60 +94,189 @@
           <div class="mouse"></div>
           <p>Scroll</p>
         </div>
+
+        <p class="text-base text-right text-white/70">渲染示意圖</p>
       </div>
     </div>
   </section>
 
-  <!-- District Intro · 周邊國際特區 -->
+  <!-- District Intro 第一段 · 周邊國際特區 · bento 橫向捲動（4 張） -->
   <section class="district-intro" id="district-intro">
     <div class="di-canvas">
-      <ul class="di-img-list">
-        <li class="di-img di-img--01">
+      <div class="di-track">
+        <!-- 第一格：標題 -->
+        <div class="di-cell di-headline">
+          <h2 class="di-title">
+            拉開窗簾，繁華與綠意早已為你預留最舒適的距離。
+          </h2>
+          <div class="di-body">
+            <p>
+              牽著孩子的手捕捉飛鳥，或是陪著寵物在草地上恣意奔跑，那些在自然裡揉碎的笑聲，是日常最珍貴的收藏。
+            </p>
+          </div>
+        </div>
+
+        <figure class="di-cell di-img di-img--01">
           <img
             src="assets/image/infrastructure/002-central-park.webp"
             alt="中央公園空拍景觀"
             loading="lazy"
           />
-          <div class="caption-fade">中央公園</div>
-        </li>
-        <li class="di-img di-img--02">
+          <figcaption class="caption-fade">
+            <span class="caption-title">中央公園</span>
+            <span class="caption-sub"
+              >67 公頃都會綠肺，四季風景是日常散步的延伸</span
+            >
+          </figcaption>
+        </figure>
+        <figure class="di-cell di-img di-img--02">
+          <img
+            src="assets/image/infrastructure/xinping-park.jpg"
+            alt="新平公園"
+            loading="lazy"
+          />
+          <figcaption class="caption-fade">
+            <span class="caption-title">新平公園</span>
+            <span class="caption-sub"
+              >67 公頃都會綠肺，四季風景是日常散步的延伸</span
+            >
+          </figcaption>
+        </figure>
+        <figure class="di-cell di-img di-img--03">
+          <img
+            src="assets/image/infrastructure/detention-basin.jpg"
+            alt="水湳蓄水池 粉紅楓林木合成示意圖"
+            loading="lazy"
+          />
+          <figcaption class="caption-fade">
+            <span class="caption-title">水湳蓄水池 粉紅楓林木合成示意圖</span>
+            <span class="caption-sub"
+              >67 公頃都會綠肺，四季風景是日常散步的延伸</span
+            >
+          </figcaption>
+        </figure>
+        <div class="di-cell di-headline">
+          <h2 class="di-title">省下時間，換成陪伴家人的溫暖時光。</h2>
+          <div class="di-body">
+            <p>
+              無論是穿梭市心還是轉身啟程，步伐始終從容不迫；而轉向中部科學園區的通勤路上，告別了塞車的焦慮。
+            </p>
+          </div>
+        </div>
+        <figure class="di-cell di-img di-img--04">
           <img
             src="assets/image/infrastructure/001-central-science-park.png"
             alt="中部科學園區空拍景觀"
             loading="lazy"
           />
-          <div class="caption-fade">中部科學園區</div>
-        </li>
-        <li class="di-img di-img--03">
+          <figcaption class="caption-fade">
+            <span class="caption-title">中部科學園區</span>
+            <span class="caption-sub"
+              >中台灣科技引擎，高薪族群匯聚的生活半徑</span
+            >
+          </figcaption>
+        </figure>
+        <figure class="di-cell di-img di-img--05">
           <img
-            src="assets/image/infrastructure/003-exhibition-center.png"
-            alt="台中國際會展中心"
+            src="assets/image/infrastructure/007-shuinan-transit.webp"
+            alt="水湳轉運中心"
             loading="lazy"
           />
-          <div class="caption-fade">台中國際會展中心</div>
-        </li>
-        <li class="di-img di-img--04">
+          <figcaption class="caption-fade">
+            <span class="caption-title">水湳轉運中心</span>
+            <span class="caption-sub"
+              >城市轉運核心，從家門無縫接軌四方移動</span
+            >
+          </figcaption>
+        </figure>
+
+        <figure class="di-cell di-img di-img--06">
           <img
             src="assets/image/infrastructure/005-mrt-green-line.jpg"
             alt="捷運綠線月台實景"
             loading="lazy"
           />
-          <div class="caption-fade">捷運綠線</div>
-        </li>
-        <li class="di-img di-img--05">
+          <figcaption class="caption-fade">
+            <span class="caption-title">捷運綠線</span>
+            <span class="caption-sub"
+              >軌道串起雙城核心，連通勤都成為移動的風景</span
+            >
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+    <!-- 第一段不收尾：橫滑後直接 unpin 接到第二段（同為金色底） -->
+  </section>
+
+  <!-- District Intro 第二段 · 大師地標 · bento 橫向捲動（4 張）；最後一段收尾接 location-map -->
+  <section class="district-intro" id="district-intro-b">
+    <div class="di-canvas">
+      <div class="di-track">
+        <!-- 第一格：標題（TODO：第二段標題文案待確認） -->
+        <div class="di-cell di-headline">
+          <h2 class="di-title">週末來臨，生活的劇本由藝術與未來接棒。</h2>
+          <div class="di-body">
+            <p>
+              讓建築美學與書香，浸潤孩子的成長視野。國際交流的台中會展中心近在咫尺，而引領城市熱情與脈搏的台中巨蛋，則在夜幕低垂時，為生活注入源源不絕的活力與期待。
+            </p>
+            <p>
+              居住不只構築在四面牆內，更是將整座城市的精華與遠景，溫柔地打包進你的散步生活圈。
+            </p>
+          </div>
+        </div>
+
+        <figure class="di-cell di-img di-img--01">
           <img
             src="assets/image/infrastructure/004-green-art-museum.webp"
             alt="臺中綠美圖建築外觀"
             loading="lazy"
           />
-          <div class="caption-fade">臺中綠美圖</div>
-        </li>
-      </ul>
-      <div class="di-headline">
-        <h2 class="di-title">
-          水湳<br/>
-          在你的步行距離裡成形
-        </h2>
+          <figcaption class="caption-fade">
+            <span class="caption-title">臺中綠美圖</span>
+            <span class="caption-sub"
+              >妹島和世的森林美術館，把藝術與閱讀種進日常</span
+            >
+          </figcaption>
+        </figure>
+        <figure class="di-cell di-img di-img--02">
+          <img
+            src="assets/image/infrastructure/006-taichung-arena.jpg"
+            alt="台中巨蛋"
+            loading="lazy"
+          />
+          <figcaption class="caption-fade">
+            <span class="caption-title">台中巨蛋</span>
+            <span class="caption-sub"
+              >萬人國際巨蛋，演唱會與賽事都在生活圈內</span
+            >
+          </figcaption>
+        </figure>
+        <figure class="di-cell di-img di-img--03">
+          <img
+            src="assets/image/infrastructure/003-exhibition-center.png"
+            alt="台中國際會展中心"
+            loading="lazy"
+          />
+          <figcaption class="caption-fade">
+            <span class="caption-title">台中國際會展中心</span>
+            <span class="caption-sub"
+              >國際會展能量，門前即是世界級的商機舞台</span
+            >
+          </figcaption>
+        </figure>
+        <figure class="di-cell di-img di-img--04">
+          <img
+            src="assets/image/infrastructure/008-cmu-art-museum.jpg"
+            alt="中國醫藥大學美術館"
+            loading="lazy"
+          />
+          <figcaption class="caption-fade">
+            <span class="caption-title">中國醫藥大學美術館</span>
+            <span class="caption-sub"
+              >大學城的人文厚度，醫療與藝術並肩生長</span
+            >
+          </figcaption>
+        </figure>
       </div>
     </div>
 
@@ -134,136 +288,128 @@
   <!-- The Location · scroll-driven map -->
   <app-location-map id="location-map"></app-location-map>
 
-  <!-- Section 1 ·  — left-large / right-small (3 videos) -->
-  <section class="frame design" id="design">
-    <div class="inner">
-      <div class="col-narrow">
-        <div class="eyebrow">
-          <span class="num">綠意漫步中庭・戶外休憩區</span>
-          <h2 class="pull-zh">在中央公園的微風裡，泊岸一幅無邊際的風景。</h2>
+  <!-- Section 1 · 綠意中庭 — catalog layout (text-left / swiper-right) -->
+  <section class="frame design catalog" id="design">
+    <div class="catalog-inner">
+      <!-- TEXT -->
+      <div class="catalog-text">
+        <span class="catalog-eyebrow"
+          ><em>01</em> / 綠意漫步中庭・戶外休憩區</span
+        >
+        <h2 class="catalog-title pull-zh">
+          在中央公園的微風裡，<br />泊岸一幅無邊際的風景。
+        </h2>
+        <div class="catalog-foot">
+          <p class="catalog-desc">
+            林蔭步道、弧形花徑與泳池在社區內層層展開，將中央公園的四季光景，收攏成日常裡最從容的散步路線。
+          </p>
+          <div class="catalog-nav">
+            <button
+              type="button"
+              class="cat-arrow"
+              aria-label="上一個"
+              (click)="gardenSwiper.swiperRef.slidePrev()"
+            >
+              <span aria-hidden="true">&#8249;</span>
+            </button>
+            <button
+              type="button"
+              class="cat-arrow"
+              aria-label="下一個"
+              (click)="gardenSwiper.swiperRef.slideNext()"
+            >
+              <span aria-hidden="true">&#8250;</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="col-wide">
-        <div class="video-grid vg-left-wide">
-          <div class="vg-card vg-card--main">
-            <video
-              muted
-              playsinline
-              preload="none"
-              src="assets/video/facilities/garden-01.webm"
-              poster="assets/video/facilities/garden-01.webp"
-            ></video>
-            <div class="caption-fade">
-              戶外林蔭<span class="caption-disclaimer">情境示意僅供參考</span>
+      <!-- MEDIA -->
+      <div class="catalog-media">
+        <swiper
+          #gardenSwiper
+          class="catalog-swiper"
+          [config]="catalogSwiperConfig"
+        >
+          <ng-template swiperSlide *ngFor="let clip of gardenClips">
+            <div class="cat-slide">
+              <video
+                muted
+                playsinline
+                preload="none"
+                [src]="clip.src"
+                [poster]="clip.poster"
+              ></video>
+              <div class="caption-fade">
+                {{ clip.caption
+                }}<span class="caption-disclaimer">情境示意僅供參考</span>
+              </div>
             </div>
-          </div>
-          <div class="vg-card vg-card--side">
-            <video
-              muted
-              playsinline
-              preload="none"
-              src="assets/video/facilities/garden-02.webm"
-              poster="assets/video/facilities/garden-02.webp"
-            ></video>
-            <div class="caption-fade">
-              花園弧形步道<span class="caption-disclaimer"
-                >情境示意僅供參考</span
-              >
-            </div>
-          </div>
-          <div class="vg-card vg-card--side">
-            <video
-              muted
-              playsinline
-              preload="none"
-              src="assets/video/facilities/pool.webm"
-              poster="assets/video/facilities/pool.webp"
-            ></video>
-            <div class="caption-fade">
-              游泳池<span class="caption-disclaimer">情境示意僅供參考</span>
-            </div>
-          </div>
-        </div>
+          </ng-template>
+        </swiper>
       </div>
     </div>
   </section>
 
-  <!-- Section 2 · — full-width header + 2×2 grid (5 videos) -->
-  <section class="frame design" id="design-b">
-    <div class="inner">
-      <div class="col-narrow">
-        <div class="eyebrow">
-          <span class="num">迎賓大廳・多功能交誼美學</span>
-          <h2 class="pull-zh">在洗鍊的奢華秩序裡，款待生活與最愛的人。</h2>
+  <!-- Section 2 · 迎賓大廳 — catalog layout, row-reverse (swiper-left / text-right) -->
+  <section class="frame design catalog catalog--reverse" id="design-b">
+    <div class="catalog-inner">
+      <!-- TEXT -->
+      <div class="catalog-text">
+        <span class="catalog-eyebrow"
+          ><em>02</em> / 迎賓大廳・多功能交誼美學</span
+        >
+        <h2 class="catalog-title pull-zh">
+          在洗鍊的奢華秩序裡，<br />款待生活與最愛的人。
+        </h2>
+        <div class="catalog-foot">
+          <p class="catalog-desc">
+            從門廳、食憩到星空酒吧，公共領域以飯店規格層層鋪陳，讓每一次迎賓與聚會，都成為值得細細品味的生活儀式。
+          </p>
+          <div class="catalog-nav">
+            <button
+              type="button"
+              class="cat-arrow"
+              aria-label="上一個"
+              (click)="lobbySwiper.swiperRef.slidePrev()"
+            >
+              <span aria-hidden="true">&#8249;</span>
+            </button>
+            <button
+              type="button"
+              class="cat-arrow"
+              aria-label="下一個"
+              (click)="lobbySwiper.swiperRef.slideNext()"
+            >
+              <span aria-hidden="true">&#8250;</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="col-wide">
-        <div class="video-grid vg-top-wide">
-          <div class="vg-card vg-card--top">
-            <video
-              muted
-              playsinline
-              preload="none"
-              src="assets/video/facilities/main-gate.webm"
-              poster="assets/video/facilities/main-gate.webp"
-            ></video>
-            <div class="caption-fade">
-              門廳<span class="caption-disclaimer">情境示意僅供參考</span>
+      <!-- MEDIA -->
+      <div class="catalog-media">
+        <swiper
+          #lobbySwiper
+          class="catalog-swiper"
+          [config]="catalogSwiperConfig"
+        >
+          <ng-template swiperSlide *ngFor="let clip of lobbyClips">
+            <div class="cat-slide">
+              <video
+                muted
+                playsinline
+                preload="none"
+                [src]="clip.src"
+                [poster]="clip.poster"
+              ></video>
+              <div class="caption-fade">
+                {{ clip.caption
+                }}<span class="caption-disclaimer">情境示意僅供參考</span>
+              </div>
             </div>
-          </div>
-          <div class="vg-card vg-card--bot">
-            <video
-              muted
-              playsinline
-              preload="none"
-              src="assets/video/facilities/restaurant.webm"
-              poster="assets/video/facilities/restaurant.webp"
-            ></video>
-            <div class="caption-fade">
-              食憩<span class="caption-disclaimer">情境示意僅供參考</span>
-            </div>
-          </div>
-          <div class="vg-card vg-card--bot">
-            <video
-              muted
-              playsinline
-              preload="none"
-              src="assets/video/facilities/theater.webm"
-              poster="assets/video/facilities/theater.webp"
-            ></video>
-            <div class="caption-fade">
-              多功能視聽室<span class="caption-disclaimer"
-                >情境示意僅供參考</span
-              >
-            </div>
-          </div>
-          <div class="vg-card vg-card--bot">
-            <video
-              muted
-              playsinline
-              preload="none"
-              src="assets/video/facilities/elevator.webm"
-              poster="assets/video/facilities/elevator.webp"
-            ></video>
-            <div class="caption-fade">
-              電梯廳<span class="caption-disclaimer">情境示意僅供參考</span>
-            </div>
-          </div>
-          <div class="vg-card vg-card--bot">
-            <video
-              muted
-              playsinline
-              preload="none"
-              src="assets/video/facilities/bar.webm"
-              poster="assets/video/facilities/bar.webp"
-            ></video>
-            <div class="caption-fade">
-              星空酒吧<span class="caption-disclaimer">情境示意僅供參考</span>
-            </div>
-          </div>
-        </div>
+          </ng-template>
+        </swiper>
       </div>
     </div>
   </section>
@@ -273,7 +419,10 @@
     <div class="builder-deep" id="builder-deep">
       <div class="bd-bg" aria-hidden="true">
         <video class="bd-bg-video" muted loop playsinline preload="none">
-          <source src="assets/video/cons-site/bg-video.webm" type="video/webm" />
+          <source
+            src="assets/video/cons-site/bg-video.webm"
+            type="video/webm"
+          />
         </video>
       </div>
       <div class="bd-overlay" aria-hidden="true"></div>
@@ -404,10 +553,7 @@
           <div class="desc">
             精品自住首選——方正格局、雙衛皆開窗、光線直進不折。
           </div>
-          <button
-            class="tl self-start"
-            (click)="scrollToId('contact')"
-          >
+          <button class="tl self-start" (click)="scrollToId('contact')">
             索取型錄
           </button>
         </div>
@@ -419,10 +565,7 @@
           <div class="desc">
             給自己更多餘裕——大主臥、寬景陽台、讓四季進得來的空間尺度。
           </div>
-          <button
-            class="tl self-start"
-            (click)="scrollToId('contact')"
-          >
+          <button class="tl self-start" (click)="scrollToId('contact')">
             索取型錄
           </button>
         </div>
@@ -442,7 +585,7 @@
     <div class="body-grid">
       <form class="form" (submit)="submit($event)">
         <ng-container *ngIf="!submitted; else thanks">
-          <mat-form-field appearance="fill" >
+          <mat-form-field appearance="fill">
             <mat-label>姓名</mat-label>
             <input
               matInput
@@ -453,7 +596,7 @@
             />
           </mat-form-field>
 
-          <mat-form-field appearance="fill" >
+          <mat-form-field appearance="fill">
             <mat-label>手機</mat-label>
             <input
               matInput
@@ -465,7 +608,7 @@
             />
           </mat-form-field>
 
-          <mat-form-field appearance="fill" >
+          <mat-form-field appearance="fill">
             <mat-label>電子郵件</mat-label>
             <input
               matInput

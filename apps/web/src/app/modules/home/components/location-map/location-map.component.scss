@@ -59,7 +59,7 @@
 .lm-zoom {
   position: absolute;
   inset: 0;
-  transform-origin: 48.9% 58.8%; /* = ZOOM_ORIGIN（之序），GSAP 會再 set 一次 */
+  transform-origin: 48.5% 73.6%; /* = ZOOM_ORIGIN（之序），GSAP 會再 set 一次 */
   will-change: transform;
   backface-visibility: hidden;
   transform: translateZ(0); /* 強制提升為獨立合成層 */
@@ -87,7 +87,8 @@
 
 /* Center pin sits above all */
 .lm-pin { will-change: transform; }
-.lm-pin .pin-pulse { transform-box: fill-box; transform-origin: center; }
+/* pin-pulse 的縮放原點交給 GSAP（transformOrigin: '50% 50%'）處理；
+   這裡不要再設 transform-box/transform-origin，否則會與 GSAP 的矩陣重複位移、導致脈衝圈偏移。 */
 
 /* TEMP: 路徑收集 debug 浮層 */
 .lm-debug-panel {

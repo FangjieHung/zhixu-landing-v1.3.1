@@ -230,17 +230,17 @@ button.submit {
 }
 
 button.primary {
-  @apply text-black font-medium;
+  @apply text-white font-medium;
   @apply font-sans;
   font-size: 1rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  background-color: var(--md-sys-color-secondary-fixed);
+  background-color: var(--token-gold-40);
   padding: 18px 26px;
   border: 0;
   cursor: pointer;
   &:hover {
-    color: var(--md-sys-color-secondary-fixed);
+    color: var(--token-gold-70);
     background: var(--md-sys-color-inverse-surface);
   }
 }

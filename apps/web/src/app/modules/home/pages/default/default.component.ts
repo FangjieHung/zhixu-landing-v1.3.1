@@ -10,11 +10,19 @@ import {
 import { BBDBaseComponent } from '@core/shared';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SwiperOptions } from 'swiper';
 
 interface Walk {
   p: string;
   m: string;
   n: string;
+}
+
+/** 設施影片片段：catalog 區塊的 swiper 投影片 + 右上分頁標籤共用資料源 */
+interface FacilityClip {
+  src: string;
+  poster: string;
+  caption: string;
 }
 interface SpecCell {
   k: string;
@@ -41,8 +49,19 @@ export class DefaultComponent
 
   readonly assetBase = 'assets/image';
   readonly img = {
-    hero: `${this.assetBase}/photo/hero-bg.webp`,
+    hero: `${this.assetBase}/photo/hero-landscpae.webp`,
     map: `${this.assetBase}/map/contact-map.webp`,
+  };
+
+  /**
+   * Hero 圖層堆疊（由下而上）：背景風景 → 標題字（display-01/02 包成 hero-title）→ 前景建築。
+   * 四張同尺寸（1672×941）全幅圖層，疊在一起構成有景深的主視覺。
+   */
+  readonly heroLayers = {
+    background: `${this.assetBase}/photo/hero-landscpae_background.png`,
+    display01: `${this.assetBase}/photo/hero-landscpae_display-01.png`,
+    display02: `${this.assetBase}/photo/hero-landscpae_display-02.png`,
+    buildings: `${this.assetBase}/photo/hero-landscpae_buildings.png`,
   };
 
   /**
@@ -122,6 +141,35 @@ export class DefaultComponent
     */
 
   ];
+
+  // ───── Catalog 設施展示（#design / #design-b）─────
+  /** 影片以 swiper 輪播呈現，右上分頁標籤與目前投影片同步 */
+  readonly gardenClips: FacilityClip[] = [
+    { src: 'assets/video/facilities/garden-01.webm', poster: 'assets/video/facilities/garden-01.webp', caption: '戶外林蔭' },
+    { src: 'assets/video/facilities/garden-02.webm', poster: 'assets/video/facilities/garden-02.webp', caption: '花園弧形步道' },
+    { src: 'assets/video/facilities/pool.webm', poster: 'assets/video/facilities/pool.webp', caption: '游泳池' },
+  ];
+
+  readonly lobbyClips: FacilityClip[] = [
+    { src: 'assets/video/facilities/main-gate.webm', poster: 'assets/video/facilities/main-gate.webp', caption: '門廳' },
+    { src: 'assets/video/facilities/restaurant.webm', poster: 'assets/video/facilities/restaurant.webp', caption: '食憩' },
+    { src: 'assets/video/facilities/theater.webm', poster: 'assets/video/facilities/theater.webp', caption: '多功能視聽室' },
+    { src: 'assets/video/facilities/elevator.webm', poster: 'assets/video/facilities/elevator.webp', caption: '電梯廳' },
+    { src: 'assets/video/facilities/bar.webm', poster: 'assets/video/facilities/bar.webp', caption: '星空酒吧' },
+  ];
+
+  /** catalog 區塊兩個 swiper 共用設定：露出下一張側邊、不自動輪播（交給影片自身播放） */
+  readonly catalogSwiperConfig: SwiperOptions = {
+    slidesPerView: 1.12,
+    spaceBetween: 14,
+    grabCursor: true,
+    speed: 600,
+    watchSlidesProgress: true,
+    breakpoints: {
+      960: { slidesPerView: 1.45, spaceBetween: 20 },
+      1280: { slidesPerView: 1.65, spaceBetween: 24 },
+    },
+  };
 
   readonly navItems: Array<{ id: string; label: string }> = [
     { id: 'location-map', label: '水湳特區' },
@@ -289,7 +337,7 @@ export class DefaultComponent
       const heroTl = gsap.timeline({ defaults: { ease, duration: 1.1 } });
       heroTl
         .from(
-          '.hero .hero-bg',
+          '.hero .hero-scene',
           { scale: 1.08, opacity: 0, duration: 1.6, ease: 'power2.out' },
           0
         )
@@ -309,9 +357,19 @@ export class DefaultComponent
           '-=0.4'
         );
 
-      // ───── Hero image parallax ─────
+      // ───── Hero layered parallax — 背景慢、前景建築快，疊出景深 ─────
       gsap.to('.hero .hero-bg', {
         yPercent: 12,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+      gsap.to('.hero .hero-buildings', {
+        yPercent: -8,
         ease: 'none',
         scrollTrigger: {
           trigger: '.hero',
@@ -343,188 +401,127 @@ export class DefaultComponent
           trigger: '.hero',
           start: 'center top',
           end: 'bottom top',
-          scrub: 0.6,
+          // scrub: 0.6,
         },
       });
 
-      // ───── DISTRICT INTRO · pin + 四圖飛入 ─────
-      const diSection = root.querySelector<HTMLElement>('.district-intro');
-      const diCanvas = root.querySelector<HTMLElement>(
-        '.district-intro .di-canvas'
-      );
-      if (diSection && diCanvas) {
-        const diImgs = gsap.utils.toArray<HTMLElement>(
-          '.district-intro .di-img'
-        );
-        const diHeadline = root.querySelector<HTMLElement>(
-          '.district-intro .di-headline'
-        );
+      // ───── DISTRICT INTRO · 兩段 bento 橫向捲動（各 4 張；最後一段收尾接 location-map） ─────
+      const diSections = gsap.utils.toArray<HTMLElement>('.district-intro');
+      if (diSections.length) {
         const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
         if (!isMobile) {
-          // 初始態：壓低、透明，進場用單純 fade + 上滑（與 .sb-bay 一致）
-          diImgs.forEach((img) => {
-            gsap.set(img, { opacity: 0, y: 44 });
-          });
-          if (diHeadline) gsap.set(diHeadline, { opacity: 0, yPercent: 6 });
+          diSections.forEach((diSection, idx) => {
+            const diCanvas = diSection.querySelector<HTMLElement>('.di-canvas');
+            const diTrack = diSection.querySelector<HTMLElement>('.di-track');
+            if (!diCanvas || !diTrack) return;
+            // 只有最後一段做深紅 veil 收尾、與 location-map(-100vh) 同步；前面段橫滑後直接 unpin
+            const isLast = idx === diSections.length - 1;
 
-          // ── Pre-pin entry：section 進入視窗 1/4 (top 75%) 起算 ──
-          // 到 pin 啟動 (top top) 完成：整塊 canvas 滑入淡入，
-          // 吃掉「米色 bg 已就位但內容還沒進場」的空白感
-          gsap.fromTo(
-            diCanvas,
-            { yPercent: 14, opacity: 0.55 },
-            {
-              yPercent: 0,
-              opacity: 1,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: diSection,
-                start: 'top 75%',
-                end: 'top top',
-                scrub: 0.6,
-              },
+            // 切成橫向 bento 軌道（寬版排列由 CSS 的 .is-horizontal 控制）
+            diSection.classList.add('is-horizontal');
+
+            // ── Pre-pin entry：section 進入視窗 1/4 起，canvas 滑入淡入 ──
+            gsap.fromTo(
+              diCanvas,
+              { yPercent: 12, opacity: 0.55 },
+              {
+                yPercent: 0,
+                opacity: 1,
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: diSection,
+                  start: 'top 75%',
+                  end: 'top top',
+                  scrub: 0.6,
+                },
+              }
+            );
+
+            // 橫向位移量＝軌道比畫布多出來的寬度（function 值，refresh 時重算）
+            const getShift = () =>
+              -Math.max(0, diTrack.scrollWidth - diCanvas.clientWidth);
+
+            if (isLast) {
+              // ── 銜接 location-map 的關鍵時序 ──
+              // location-map 有 margin-top:-100vh，會從畫面底部往上升起。
+              // outroDur 永遠 = 1/pinVh = 1 個 viewport，剛好對齊地圖升起的那一刻。
+              const pinVh = 2.4; // 4 張圖、軌道較短 → pin 較短
+              const outroStart = 1 - 1 / pinVh; // 地圖開始上升、veil 同步覆蓋的進度
+              const slideEnd = outroStart - 0.06; // 橫滑提前一點結束，最後一張先完整露出
+              const outroDur = 1 - outroStart;
+
+              // ── Pinned timeline：照片整列向左滑 → 定格 → outro 銜接 location-map ──
+              const diTl = gsap.timeline({
+                defaults: { ease: 'none' },
+                scrollTrigger: {
+                  trigger: diSection,
+                  start: 'top top',
+                  end: () => `+=${window.innerHeight * pinVh}`,
+                  pin: true,
+                  pinSpacing: true,
+                  scrub: 0.6,
+                  anticipatePin: 1,
+                  invalidateOnRefresh: true,
+                },
+              });
+
+              // 0 → slideEnd：bento 軌道向左滑（橫向捲動主體，最後一張在此完整露出）
+              diTl.to(diTrack, { x: getShift, duration: slideEnd }, 0);
+              // outroStart → 1：canvas 上推 + 深紅 veil 覆蓋，與地圖升起同步，無縫銜接
+              diTl.to(
+                diCanvas,
+                { yPercent: -14, ease: 'power2.in', duration: outroDur },
+                outroStart
+              );
+              const veil = diSection.querySelector<HTMLElement>('.di-exit-veil');
+              if (veil) {
+                diTl.to(
+                  veil,
+                  { opacity: 1, ease: 'power1.in', duration: outroDur },
+                  outroStart
+                );
+              }
+            } else {
+              // 前面段：橫滑後直接 unpin 接到下一段（同金色底、不需 veil）
+              const pinVh = 1.8;
+              const slideEnd = 0.92; // 0.92 → 1 留一點定格讓最後一張完整露出
+              const diTl = gsap.timeline({
+                defaults: { ease: 'none' },
+                scrollTrigger: {
+                  trigger: diSection,
+                  start: 'top top',
+                  end: () => `+=${window.innerHeight * pinVh}`,
+                  pin: true,
+                  pinSpacing: true,
+                  scrub: 0.6,
+                  anticipatePin: 1,
+                  invalidateOnRefresh: true,
+                },
+              });
+              diTl.to(diTrack, { x: getShift, duration: slideEnd }, 0);
             }
-          );
-
-          // 進場序列（對應草圖出現順序，diImgs 依 DOM 順序即 01→05 = 圖1→圖5）：
-          // 圖1(右上) → 圖2(中上) →【中間文字第 3 個出現】→ 圖3(左中) → 圖4(右下) → 圖5(中下)
-          // 與上方 canvas 滑入同步，於 top 75% → top top 區間 scrub 完成，
-          // 避免內容在進場期間長時間維持 opacity:0 的空白
-          const entryStep = 0.05;
-          // 圖1 之後（圖2-5、標題）額外延遲一點點進場，與圖1錯開更明顯
-          const lateDelay = 0.04;
-          const entryTl = gsap.timeline({
-            scrollTrigger: {
-              trigger: diSection,
-              start: 'top 75%',
-              end: 'top top',
-              scrub: 0.6,
-            },
           });
-          const revealEntry = (img: HTMLElement, slot: number) =>
-            entryTl.to(
-              img,
-              { opacity: 1, y: 0, duration: 0.19, ease: 'power2.out' },
-              slot === 0 ? 0 : slot * entryStep + lateDelay
-            );
-
-          revealEntry(diImgs[0], 0); // 圖1 · 右上
-          revealEntry(diImgs[1], 1); // 圖2 · 中上
-          if (diHeadline) {
-            // 中間文字 · 第 3 個出現（夾在 圖2 與 圖3 之間）
-            entryTl.to(
-              diHeadline,
-              { opacity: 1, yPercent: 0, duration: 0.16, ease: 'power2.out' },
-              2 * entryStep + lateDelay
-            );
-          }
-          revealEntry(diImgs[2], 3); // 圖3 · 左中
-          revealEntry(diImgs[3], 4); // 圖4 · 右下
-          revealEntry(diImgs[4], 5); // 圖5 · 中下
-
-          // 建立 pinned timeline（拉長為 2.0× vh ≈ 200svh）
-          // 節奏：全程 parallax 視差 → 定格 hold(0.45→0.72) → 緩慢退場(0.72→1.0)
-          // （圖片/標題進場已於 pin 前的 entryTl 階段完成）
-          const diTl = gsap.timeline({
-            defaults: { ease: 'power2.out' },
-            scrollTrigger: {
-              trigger: diSection,
-              start: 'top top',
-              end: () => `+=${window.innerHeight * 1.5}`,
-              pin: true,
-              pinSpacing: true,
-              scrub: 0.6,
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-            },
-          });
-
-          // Parallax：各圖以不同幅度持續上飄（用 yPercent，與進場的 y/opacity
-          // 為獨立 transform 分量、互不覆蓋），全程隨 scrub 連動 → 景深視差
-          const parallax: Record<string, number> = {
-            'di-img--01': -4,
-            'di-img--02': -2,
-            'di-img--03': -7,
-            'di-img--04': -5,
-            'di-img--05': -8,
-          };
-          diImgs.forEach((img) => {
-            const key = Object.keys(parallax).find((k) =>
-              img.classList.contains(k)
-            );
-            const depth = key ? parallax[key] : -10;
-            diTl.to(img, { yPercent: depth, ease: 'none', duration: 1 }, 0);
-          });
-
-          // ── 定格 hold（0.45 → 0.72）──
-          // 全部圖片與標題就位後，timeline 此段刻意留白且加長，
-          // scrub 滑過時畫面完全凍結，給足更長的「全員定格」停留，
-          // 再進入退場、銜接下一節 location-map
-          diTl.to({}, { duration: 0.27 }, 0.45);
-
-          // ── Outro：pin 末段（0.72 → 1.0）緩慢退場 ──
-          // 整塊 canvas 上推 + 圖片 zoom out 淡出 + 標題向上飄走 + 深藍 veil 同步覆蓋
-          // 退場區段加長 → location-map（同深藍）覆蓋上來更慢、更從容
-          diTl.to(
-            diCanvas,
-            { yPercent: -22, ease: 'power2.in', duration: 0.28 },
-            0.72
-          );
-          diTl.to(
-            diImgs,
-            {
-              scale: 1.18,
-              opacity: 0,
-              ease: 'power2.in',
-              duration: 0.26,
-              stagger: 0.02,
-            },
-            0.72
-          );
-          if (diHeadline) {
-            diTl.to(
-              diHeadline,
-              { opacity: 0, yPercent: -45, ease: 'power2.in', duration: 0.26 },
-              0.74
-            );
-          }
-          diTl.to(
-            '.district-intro .di-exit-veil',
-            { opacity: 1, ease: 'power1.in', duration: 0.28 },
-            0.72
-          );
         } else {
-          // Mobile：簡單淡入，不做 pin
-          if (diHeadline) gsap.set(diHeadline, { opacity: 0, y: 24 });
-          diImgs.forEach((img) => gsap.set(img, { opacity: 0, y: 30 }));
-          diImgs.forEach((img, i) => {
-            gsap.to(img, {
+          // Mobile：直向 bento，逐格淡入，不做 pin（兩段所有 cell 一起處理）
+          const diCells = gsap.utils.toArray<HTMLElement>(
+            '.district-intro .di-cell'
+          );
+          diCells.forEach((cell) => gsap.set(cell, { opacity: 0, y: 28 }));
+          diCells.forEach((cell, i) => {
+            gsap.to(cell, {
               opacity: 1,
               y: 0,
-              duration: 0.9,
+              duration: 0.8,
               ease,
+              delay: i * 0.04,
               scrollTrigger: {
-                trigger: diSection,
-                start: 'top 85%',
+                trigger: cell,
+                start: 'top 88%',
                 toggleActions: 'play none none none',
               },
-              delay: i * 0.1,
             });
           });
-          if (diHeadline) {
-            gsap.to(diHeadline, {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              ease,
-              scrollTrigger: {
-                trigger: diSection,
-                start: 'top 80%',
-                toggleActions: 'play none none none',
-              },
-            });
-          }
         }
       }
 
@@ -702,8 +699,8 @@ export class DefaultComponent
       // 只動 opacity 不動 transform，避免影響 .col-narrow 的 sticky 行為。
       const sectionEntries: Array<[string, string]> = [
         ['.spec', '.spec .head'],
-        ['#design', '#design .inner'],
-        ['#design-b', '#design-b .inner'],
+        ['#design', '#design .catalog-inner'],
+        ['#design-b', '#design-b .catalog-inner'],
         ['.contact', '.contact .pre'],
       ];
       sectionEntries.forEach(([trigger, target]) => {
@@ -797,23 +794,25 @@ export class DefaultComponent
         });
       });
 
-      // ───── Design sections — video card fade-in ─────
+      // ───── Catalog 設施區塊 — 文字 + swiper 進場淡入 ─────
       // 影片播放統一由 initVideoInViewPlayback() 的 IntersectionObserver 管理，
-      // 這裡只負責卡片進場淡入。
+      // 這裡只負責文字與媒體欄進場淡入上滑。
       (
-        [['#design', 0.25], ['#design-b', 0.2]] as [string, number][]
-      ).forEach(([sectionId, stagger]) => {
-        const cards = gsap.utils.toArray<HTMLElement>(`${sectionId} .vg-card`);
-        if (!cards.length) return;
-        gsap.from(cards, {
+        ['#design', '#design-b'] as string[]
+      ).forEach((sectionId) => {
+        const items = gsap.utils.toArray<HTMLElement>(
+          `${sectionId} .catalog-text > *, ${sectionId} .catalog-media`
+        );
+        if (!items.length) return;
+        gsap.from(items, {
           opacity: 0,
           y: 30,
           duration: 0.9,
           ease: 'power2.out',
-          stagger,
+          stagger: 0.12,
           scrollTrigger: {
             trigger: sectionId,
-            start: 'top 90%',
+            start: 'top 80%',
             toggleActions: 'play none none none',
           },
         });

@@ -77,11 +77,11 @@ interface EdgeMarker {
 
 // SVG viewBox 對齊底圖 (assets/image/map/map-bg.svg) 的 1831×1013
 // SVG_CENTER = 之序在底圖上的實際 SVG 座標（使用者用 debug 浮層校正過）
-const SVG_CENTER = { x: 895, y: 596 };
+const SVG_CENTER = { x: 888, y: 746 };
 
 // transform-origin in CSS % — 鏡頭 zoom 以「之序」為中心
-// 895 / 1831 ≈ 48.88 %, 596 / 1013 ≈ 58.83 %
-const ZOOM_ORIGIN = '48.9% 58.8%';
+// 888 / 1831 ≈ 48.50 %, 746 / 1013 ≈ 73.64 %
+const ZOOM_ORIGIN = '48.5% 73.6%';
 
 // 鏡頭縮放關鍵節點
 const ZOOM_PHASE1_START = 3.0;  // 緊鎖之序
@@ -112,18 +112,17 @@ export class LocationMapComponent
    * min 為非尖峰時段車程估算，待使用者用 Google Maps 路線確認。
    */
   readonly pois: Poi[] = [
-    { x: 755,  y: 592, min: 5,  name: '中央公園 · 主入口', reveal: 0.22, anchor: 'end',   vAnchor: 'above' },
+    { x: 755,  y: 592, min: 5,  name: '中央公園', reveal: 0.22, anchor: 'end',   vAnchor: 'above' },
     { x: 776,  y: 363, min: 8,  name: '台中綠美圖',        reveal: 0.25, anchor: 'end',   vAnchor: 'above' },
     { x: 710,  y: 248, min: 10,  name: '水湳轉運中心',      reveal: 0.28, anchor: 'end',   vAnchor: 'above' },
-    { x: 268,  y: 290, min: 10,  name: '台中國際會展中心',  reveal: 0.31, anchor: 'start', vAnchor: 'above' },
-    { x: 598,  y: 835, min: 10,  name: '台中超巨蛋',        reveal: 0.34, anchor: 'end',   vAnchor: 'below' },
+    { x: 630,  y: 320, min: 10,  name: '台中國際會展中心',  reveal: 0.31, anchor: 'start', vAnchor: 'above' },
+    { x: 707,  y: 779, min: 10,  name: '台中超巨蛋',        reveal: 0.34, anchor: 'end',   vAnchor: 'below' },
     { x: 853,  y: 770, min: 8,  name: '台中流行影音中心',  reveal: 0.37, anchor: 'start', vAnchor: 'below' },
     { x: 855,  y: 697, min: 6,  name: '水湳經貿園區站',    reveal: 0.40, anchor: 'start', vAnchor: 'above' },
     { x: 861,  y: 935, min: 25,  name: '捷運文華高中站',    reveal: 0.43, anchor: 'end',   vAnchor: 'below' },
     { x: 858,  y: 370, min: 15,  name: '迪卡儂',           reveal: 0.46, anchor: 'start', vAnchor: 'above' },
     { x: 1477, y: 188, min: 30, name: '臺中洲際棒球場',   reveal: 0.49, anchor: 'end',   vAnchor: 'above' },
-    { x: 1024, y: 184, min: 15,  name: '中清商圈',         reveal: 0.52, anchor: 'end',   vAnchor: 'above' },
-    { x: 554,  y: 189, min: 30,  name: '逢甲商圈',         reveal: 0.55, anchor: 'end',   vAnchor: 'above' },
+    { x: 943, y: 486, min: 15,  name: '中清商圈',         reveal: 0.52, anchor: 'end',   vAnchor: 'above' },
   ];
 
   /**
@@ -144,9 +143,10 @@ export class LocationMapComponent
    * 圓心內移到 x≈95，避免被 viewBox 左邊界裁切。
    */
   readonly edgeMarkers: EdgeMarker[] = [
-    { x: 95, y: 122, r: 90, min: 15, name: '中部科學園區', reveal: 0.77 },
-    { x: 95, y: 952, r: 90, min: 10, name: '台中七期',     reveal: 0.81 },
-    { x: 95, y: 651, r: 90, min: 15, name: '台中工業區',   reveal: 0.85 },
+    { x: 95, y: 122, r: 180, min: 15, name: '中部科學園區', reveal: 0.77 },
+    { x: 95, y: 952, r: 180, min: 10, name: '台中七期',     reveal: 0.81 },
+    { x: 95, y: 651, r: 120, min: 15, name: '台中工業區',   reveal: 0.85 },
+    { x: 549,  y: 782, r: 90, min: 5, name: '逢甲商圈',   reveal: 0.85 },
   ];
 
   /**
@@ -373,7 +373,7 @@ export class LocationMapComponent
       const svg = this.mapRef.nativeElement;
       const mapWidth = svg.getBoundingClientRect().width;
       const stageWidth = stage.getBoundingClientRect().width;
-      // 之序 在 viewBox 的水平比例 = 895 / 1831 ≈ 0.489
+      // 之序 在 viewBox 的水平比例 = 888 / 1831 ≈ 0.485
       const target = mapWidth * (SVG_CENTER.x / 1831) - stageWidth / 2;
       stage.scrollLeft = Math.max(0, target);
     });
@@ -510,6 +510,7 @@ export class LocationMapComponent
           ease: 'power1.out',
           repeat: -1,
           repeatDelay: 0.2,
+          transformOrigin: '50% 50%', // 以圓心為原點，脈衝圈才會與 pin 同心
         },
       );
 
