@@ -97,7 +97,7 @@ export class DefaultComponent
       title: '浴室',
       tag: '日常淨心儀式',
       src: `${this.assetBase}/photo/toto-main.jpg`,
-      lede: '以 TOTO 全系列精工衛浴，重新定義沐浴的儀式感。智能馬桶、豪華浴缸、四合一暖風機，每一件配備皆源自對生活品質的嚴謹堅持——洗浴不再只是日常清潔，而是每日可以期待的私人療癒時光。',
+      lede: '無需試探、不必等待，用恰到好處的淋浴溫度喚醒感官，這一刻自然鬆開、緩緩融化。每天在回到家後，都能在這裡，真正地療癒一天的疲憊',
       stats: [
         'TOTO 全自動智能馬桶 · 一體成型免縫設計',
         'GROHE 定溫花灑 · SmartControl 智慧恆溫',
@@ -112,7 +112,7 @@ export class DefaultComponent
       title: '廚房',
       tag: '烹飪成為藝術',
       src: `${this.assetBase}/photo/stosa-main.jpg`,
-      lede: '引進義大利 STOSA 頂級廚具，搭配 BOSCH、SAKURA 旗艦廚電，SILESTONE 賽麗石無縫延伸料理台面。從動線規劃到收納美學，每個細節都為真正懂廚房的人而生——讓烹飪成為一種日常的儀式感。',
+      lede: '當洗碗機溫柔承接了杯盤狼藉後的鬆弛，暖盤機悄悄溫熱著器皿，這些體貼入微的細節，讓料理回歸最本質的模樣：輕鬆、從容，享受全然被療癒的料理時光。',
       stats: [
         'STOSA 義大利廚具 · 創立逾 164 年歐洲頂級品牌',
         'SILESTONE 賽麗石檯面 · 超硬度抗刮耐熱',
@@ -142,6 +142,29 @@ export class DefaultComponent
 
   ];
 
+  /**
+   * 甲級精工 #trust：頂部兩則信任主張（標題＋說明）＋ 下方四格實績展示。
+   * 仿截圖排版：暗底主張橫列 → 四欄等寬深色影像（序號＋品牌＋側邊直書標籤）。
+   */
+  readonly precisionPoints: Array<{ title: string; desc: string }> = [
+    {
+      title: '國家級甲級營造',
+      desc: '以承攬國家公共工程的最高嚴苛標準，把關結構的每一道細節，為您與家人築起足以傳承世代的安心基石。',
+    },
+    {
+      title: '工地高標準領先業界',
+      desc: '2009 年起率先推行 24 小時全面監控，更堅持材料進場全數嚴格抽檢。',
+    },
+  ];
+
+  /** 四格實績影像（暫用既有素材，可日後替換為實際工程照） */
+  readonly precisionShowcase: Array<{ no: string; src: string; tag: string }> = [
+    { no: '01', src: `${this.assetBase}/showcase/precision-01.webp`, tag: '天匯' },
+    { no: '02', src: `${this.assetBase}/showcase/precision-02.webp`, tag: '心之所向' },
+    { no: '03', src: `${this.assetBase}/showcase/precision-03.webp`, tag: '織築' },
+    { no: '04', src: `${this.assetBase}/showcase/precision-04.webp`, tag: '澐光' },
+  ];
+
   // ───── Catalog 設施展示（#design / #design-b）─────
   /** 影片以 swiper 輪播呈現，右上分頁標籤與目前投影片同步 */
   readonly gardenClips: FacilityClip[] = [
@@ -158,12 +181,16 @@ export class DefaultComponent
     { src: 'assets/video/facilities/bar.webm', poster: 'assets/video/facilities/bar.webp', caption: '星空酒吧' },
   ];
 
-  /** catalog 區塊兩個 swiper 共用設定：露出下一張側邊、不自動輪播（交給影片自身播放） */
+  /** catalog 區塊兩個 swiper 共用設定：露出下一張側邊、自動輪播（每張停留 5 秒，手動切換後仍會繼續） */
   readonly catalogSwiperConfig: SwiperOptions = {
     slidesPerView: 1.12,
     spaceBetween: 14,
     grabCursor: true,
     speed: 600,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
     watchSlidesProgress: true,
     breakpoints: {
       960: { slidesPerView: 1.45, spaceBetween: 20 },
@@ -421,6 +448,52 @@ export class DefaultComponent
             // 切成橫向 bento 軌道（寬版排列由 CSS 的 .is-horizontal 控制）
             diSection.classList.add('is-horizontal');
 
+            // ── 編輯式覆蓋層：底部進度條 + 頁碼／文案 ──
+            const diFill =
+              diSection.querySelector<HTMLElement>('.di-progress-fill');
+            const diCounter =
+              diSection.querySelector<HTMLElement>('.di-counter');
+            const diCurEl =
+              diSection.querySelector<HTMLElement>('.di-counter-cur');
+            const diTotalEl =
+              diSection.querySelector<HTMLElement>('.di-counter-total');
+            const diImgCount = diSection.querySelectorAll('.di-img').length;
+
+            // phrase 模式：data-stops 提供「圖片索引上限 → 前導詞 + 說明」對照，隨橫滑切換文案
+            type DiStop = { to: number; lead: string; note: string };
+            let diStops: DiStop[] = [];
+            const rawStops = diCounter?.dataset['stops'];
+            if (rawStops) {
+              try {
+                diStops = JSON.parse(rawStops) as DiStop[];
+              } catch {
+                diStops = [];
+              }
+            }
+            // 數字模式才預填總數；phrase 模式文字由 data-stops 決定
+            if (diTotalEl && !diStops.length)
+              diTotalEl.textContent = String(diImgCount).padStart(2, '0');
+
+            // 進度（0→1）同步驅動進度條 scaleX 與頁碼／文案
+            const diDriver = { p: 0 };
+            const setDiProgress = () => {
+              if (diFill) gsap.set(diFill, { scaleX: diDriver.p });
+              if (!diImgCount) return;
+              const i = Math.min(
+                diImgCount,
+                Math.max(1, Math.floor(diDriver.p * diImgCount) + 1)
+              );
+              if (diStops.length) {
+                const stop =
+                  diStops.find((s) => i <= s.to) ?? diStops[diStops.length - 1];
+                if (diCurEl) diCurEl.textContent = stop.lead;
+                if (diTotalEl) diTotalEl.textContent = stop.note;
+              } else if (diCurEl) {
+                diCurEl.textContent = String(i).padStart(2, '0');
+              }
+            };
+            setDiProgress();
+
             // ── Pre-pin entry：section 進入視窗 1/4 起，canvas 滑入淡入 ──
             gsap.fromTo(
               diCanvas,
@@ -468,6 +541,12 @@ export class DefaultComponent
 
               // 0 → slideEnd：bento 軌道向左滑（橫向捲動主體，最後一張在此完整露出）
               diTl.to(diTrack, { x: getShift, duration: slideEnd }, 0);
+              // 進度條 + 頁碼與橫滑同步（並行於 0 位置、同 duration）
+              diTl.to(
+                diDriver,
+                { p: 1, duration: slideEnd, onUpdate: setDiProgress },
+                0
+              );
               // outroStart → 1：canvas 上推 + 深紅 veil 覆蓋，與地圖升起同步，無縫銜接
               diTl.to(
                 diCanvas,
@@ -500,6 +579,11 @@ export class DefaultComponent
                 },
               });
               diTl.to(diTrack, { x: getShift, duration: slideEnd }, 0);
+              diTl.to(
+                diDriver,
+                { p: 1, duration: slideEnd, onUpdate: setDiProgress },
+                0
+              );
             }
           });
         } else {

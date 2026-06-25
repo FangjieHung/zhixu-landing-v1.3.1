@@ -892,6 +892,10 @@ p.body {
     margin: 0; // figure 預設左右 40px margin → grid 對齊用，需歸零
     border-radius: 6px;
     overflow: hidden;
+
+    .di-describe {
+      @apply text-lg pt-5 mt-auto max-w-full;
+    }
   }
 
   .di-img {
@@ -932,8 +936,12 @@ p.body {
     font-size: clamp(1rem, 1.6vw, 1.25rem);
     font-weight: 700;
   }
+  /* caption-sub 分左右：左為說明、右為附註（合成示意圖／圖片來源） */
   .caption-sub {
-    display: block;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem;
     margin-top: 0.4rem;
     font-size: clamp(0.74rem, 1.05vw, 0.86rem);
     font-weight: 400;
@@ -941,10 +949,22 @@ p.body {
     line-height: 1.5;
     opacity: 0.86;
   }
+  .caption-sub__desc {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .caption-sub__note {
+    flex: 0 0 auto;
+    align-self: flex-end;
+    font-size: 0.85em;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    opacity: 0.7;
+  }
 
   /* 標題格：手機版佔滿整行（col-span-full） */
   .di-headline {
-    @apply flex flex-col justify-center items-start col-span-full md:col-span-1;
+    @apply flex flex-col justify-center items-start w-fit m-auto col-span-full md:col-span-1;
     padding: 0.5rem 0.25rem 0.75rem;
     will-change: opacity, transform;
   }
@@ -958,6 +978,12 @@ p.body {
 
   .di-body {
     @apply max-w-md space-y-3 mt-10 text-lg;
+  }
+
+  /* 編輯式覆蓋層與旋轉圓環：預設隱藏，僅桌機橫向（.is-horizontal）顯示 */
+  .di-overlay,
+  .di-ring {
+    display: none;
   }
 
   /* ── exit veil：pin 末段淡入，把米色畫面收進深紅預告下一節 ── */
@@ -992,53 +1018,184 @@ p.body {
       align-items: center;
     }
 
+    /* ── 單列水平軌道：卡片高低錯落漂浮（仿 ELSE 編輯式）；GSAP 期間整列左滑 ── */
     .di-track {
+      display: flex;
+      align-items: center;
       flex: 0 0 auto;
       width: max-content;
-      height: 80vh;
-      /* 內容無關排版：欄位由 auto-flow 依 DOM 順序自動生成（標題與每組第一張圖各自成一欄），
-         新增 / 刪改 / 重排圖片都不需再動 CSS，避免之前 hard-code 索引造成的重疊與漏圖。 */
-      grid-auto-flow: column;
-      grid-auto-columns: 35vw;
-      grid-template-rows: repeat(2, minmax(0, 1fr));
-      gap: 1.4vh 1.2vw;
-      // 右側留 1rem：scrollWidth 含此 padding → 橫滑要滑過它才算到底
-      padding: 0 1rem 0 4vw;
+      height: 100vh;
+      gap: clamp(1.4rem, 2.6vw, 3.2rem);
+      grid-template-columns: none; // 取消基底 grid 設定
+      grid-template-rows: none;
+      // 右側留白：scrollWidth 含此 padding → 橫滑要滑過它才算到底
+      padding: 0 8vw 0 5vw;
       will-change: transform;
     }
 
     .di-cell {
-      height: 100%;
+      flex: 0 0 auto;
+      height: auto;
+      border-radius: 2px;
     }
 
+    /* 圖卡預設：置中、固定寬高。下面用 :nth-of-type(figure) 製造高低錯落，
+       不論標題（div）穿插在哪都能穩定計數，內容增刪不必動 CSS。 */
     .di-img {
-      aspect-ratio: auto; // 尺寸交給 grid 列高決定
+      aspect-ratio: auto;
+      width: 32vw;
+      height: 56vh;
+      align-self: center;
+    }
+    figure.di-img:nth-of-type(3n + 1) {
+      @apply h-[64svh];
+      align-self: center;
+
+      &.di-img--01 {
+        @apply w-auto aspect-video;
+      }
+    }
+    figure.di-img:nth-of-type(3n + 2) {
+      width: 21vw;
+      height: 48vh;
+      align-self: flex-end;
+      transform: translateY(-3vh);
+    }
+    figure.di-img:nth-of-type(3n + 3) {
+      width: 23vw;
+      height: 58vh;
+      align-self: center;
+    }
+    /* 每組 hero（col-span-2）＝最大、落地對齊，像 ELSE 的主商品照。
+       用 figure.di-img.col-span-2 與上面 nth-of-type 同特異度，靠後出現勝出。 */
+    figure.di-img.col-span-2 {
+      width: 32vw;
+      height: 74vh;
+      align-self: center;
     }
 
-    /* 標題格：跨兩列、自成一欄。auto-flow 會把每個標題排到下一個空欄，
-       所以多個標題不會再互相重疊（先前 grid-column:1 寫死才會疊在一起）。 */
+    /* 標題格：超大左側標題、垂直置中、佔較寬一欄 */
     .di-headline {
-      grid-row: 1 / span 2;
-      padding: 2.4vh 1.6vw;
-    }
-
-    /* 每組（標題之後）的第一張圖＝整欄直幅 hero；其餘圖片上下堆疊，組成 bento 節奏。
-       這也讓「標題 + 奇數張圖」的一組剛好填滿欄位、不留空格。 */
-    .di-headline + .di-img {
-      grid-row: 1 / span 2;
+      align-self: center;
+      width: clamp(360px, 33vw, 600px);
+      margin: 0;
+      padding: 0 2vw;
     }
 
     .di-title {
-      font-size: clamp(1.9rem, 2.7vw, 3rem);
-      line-height: 1.45;
-      // 不覆寫 max-width → 沿用基底 22ch，橫向標題收成較窄的字塊
+      font-size: clamp(2.6rem, 4.6vw, 4.6rem);
+      line-height: 1.12;
+      letter-spacing: 0.01em;
+      max-width: 14ch;
+    }
+
+    .di-body {
+      @apply text-xl leading-loose;
+      margin-top: 1.6rem;
+      max-width: 32ch;
+    }
+
+    .di-cell .caption-fade {
+      padding: 1rem 1.1rem;
+    }
+
+    /* ── 旋轉圓環（裝飾，疊在中央圖上）── */
+    .di-ring {
+      @apply w-96 h-96;
+      display: block;
+      position: absolute;
+      z-index: 2;
+      top: 35%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: di-ring-spin 20s linear infinite;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+      text {
+        @apply font-serif text-sm font-light;
+        letter-spacing: 0.25rem;
+        fill: var(--token-gold-80);
+        text-transform: uppercase;
+      }
+    }
+
+    /* ── 覆蓋層：側邊直書主題、底部進度條、頁碼（固定於畫布，不隨軌道滑動）── */
+    .di-overlay {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .di-progress {
+      position: absolute;
+      left: 5vw;
+      bottom: 8vh;
+      width: clamp(120px, 16vw, 280px);
+      height: 2px;
+      background: rgba(43, 10, 13, 0.18);
+      overflow: hidden;
+    }
+    .di-progress-fill {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: var(--color-text-tertiary);
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+
+    .di-counter {
+      position: absolute;
+      right: 5vw;
+      bottom: 8vh;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      font-family: "Playfair Display", serif;
+      color: var(--token-gold-30);
+    }
+    .di-counter-cur {
+      font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+      line-height: 1;
+    }
+    .di-counter-sep,
+    .di-counter-total {
+      font-size: 0.95rem;
+      opacity: 0.55;
+    }
+
+    /* phrase 模式：頁碼改放文案 —— 前導詞(serif 大) ． 說明(serif 小) */
+    .di-counter.is-phrase {
+      font-family: "Noto Serif TC", serif;
+    }
+    .di-counter.is-phrase .di-counter-cur {
+      font-size: clamp(1.4rem, 2vw, 2rem);
+      letter-spacing: 0.08em;
+    }
+    .di-counter.is-phrase .di-counter-sep {
+      opacity: 0.5;
+    }
+    .di-counter.is-phrase .di-counter-total {
+      font-size: clamp(0.95rem, 1.1vw, 1.1rem);
+      letter-spacing: 0.1em;
+      opacity: 0.8;
     }
   }
+}
 
-  /* 第二段為偶數張（標題 + 4 張）：把最後一張也設為整欄直幅 hero，
-     避免末欄留半格空白；與第一張 hero 形成左右對稱的 bento。 */
-  #district-intro-b.is-horizontal .di-track > .di-img:last-child {
-    grid-row: 1 / span 2;
+@keyframes di-ring-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .di-ring {
+    animation: none !important;
   }
 }
 
@@ -1504,15 +1661,17 @@ p.body {
       gap: 3rem;
     }
 
+    /* 主述：放大為面板的主聲音（serif、舒展行距、窄欄好讀） */
     .sb-lede {
-      @apply font-sans;
-      font-size: 1rem;
-      line-height: 2;
+      @apply font-serif;
+      font-size: clamp(1.2rem, 1.7vw, 1.55rem);
+      line-height: 1.85;
       letter-spacing: 0.04em;
-      max-width: 44ch;
+      max-width: 32ch;
       margin: 0;
     }
 
+    /* 規格條列：縮為細節層級（sans 小字、緊湊列高、細線分隔），讓主述成為焦點 */
     .sb-stats {
       list-style: none;
       padding: 0;
@@ -1520,16 +1679,16 @@ p.body {
       display: flex;
       flex-direction: column;
       li {
-        padding: 1.6rem 0;
+        padding: 0.85rem 0;
         border-top: 1px solid currentColor;
-        opacity: 0.95;
+        opacity: 0.82;
         &:last-child {
           border-bottom: 1px solid currentColor;
         }
         .sb-stat {
-          font-family: "Playfair Display", "Noto Serif TC", serif;
-          font-size: clamp(1.5rem, 2vw, 2rem);
-          line-height: 1.15;
+          @apply font-sans;
+          font-size: clamp(0.85rem, 1vw, 0.95rem);
+          line-height: 1.6;
           letter-spacing: 0.02em;
           font-weight: 400;
           display: block;
@@ -1585,6 +1744,198 @@ p.body {
       padding: 3rem 1.5rem;
       gap: 2rem;
     }
+  }
+}
+
+/* ───── PRECISION · 甲級精工（仿截圖：暗底主張橫列 + 四格實績）───── */
+.precision {
+  background: var(--color-surface-tertiary-dark);
+  color: var(--fg-2);
+  padding: clamp(3.5rem, 7vw, 6rem) clamp(20px, 5vw, 80px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.75rem, 5.5vw, 4.75rem);
+}
+
+/* ── 序章：建立由大到小的閱讀層級 ──
+   eyebrow(紅·定位) → 主標(serif 金·主角) → 本文(sans 弱·最小) → 對句(serif 米) → 收尾(serif 亮金·尾韻) */
+.precision .pre-essay {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.precision .pe-eyebrow {
+  @apply font-sans;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.36em;
+  color: var(--color-text-tertiary);
+  margin-bottom: 0.25rem;
+}
+
+.precision .pre-essay h2 {
+  margin: 0;
+  font-family: "Noto Serif TC", serif;
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.4vw, 3.1rem);
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--fg-1);
+  text-wrap: balance;
+}
+
+.precision .pre-essay p {
+  margin: 0;
+}
+
+.precision .pe-lead {
+  @apply text-base font-sans;
+  line-height: 2.05;
+  letter-spacing: 0.05em;
+  color: var(--fg-2);
+  max-width: 46ch;
+}
+
+.precision .pe-verse {
+  font-family: "Noto Serif TC", serif;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  line-height: 1.95;
+  letter-spacing: 0.05em;
+  color: var(--token-rose-muted);
+}
+
+.precision .pe-sign {
+  margin-top: 0.4rem;
+  font-family: "Noto Serif TC", serif;
+  font-size: clamp(1.2rem, 1.9vw, 1.6rem);
+  line-height: 1.5;
+  letter-spacing: 0.1em;
+  color: var(--fg-1-bright);
+}
+
+/* 兩則信任主張 —— 以細線與序章分隔；中央直線分欄、兩側等寬 */
+.precision .pc-claims {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 6rem);
+  padding-top: clamp(2.5rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--color-divider-on-tertiary);
+}
+
+.precision .pc-claims::before {
+  content: "";
+  position: absolute;
+  top: clamp(2.5rem, 4vw, 3.5rem);
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--color-divider-on-tertiary);
+}
+
+.precision .pc-claim {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 46ch;
+}
+
+.precision .pc-title {
+  margin: 0;
+  font-family: "Noto Serif TC", serif;
+  font-size: clamp(1.4rem, 2vw, 1.95rem);
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  color: var(--fg-1);
+}
+
+.precision .pc-desc {
+  @apply text-base font-sans;
+  margin: 0;
+  line-height: 2;
+  letter-spacing: 0.03em;
+  color: var(--fg-2);
+}
+
+/* 下方四格實績影像 */
+.precision .pc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: var(--color-divider);
+}
+
+.precision .pc-card {
+  position: relative;
+  aspect-ratio: 3 / 5;
+  overflow: hidden;
+  background: #150202;
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.68);
+    transition:
+      transform var(--dur-slow) var(--ease-editorial),
+      filter var(--dur-slow) var(--ease-editorial);
+  }
+
+  /* 上下漸層：確保序號／標籤在深色影像上仍清晰 */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 2, 2, 0.55) 0%, rgba(15, 2, 2, 0) 34%, rgba(15, 2, 2, 0.62) 100%);
+    pointer-events: none;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+    filter: brightness(0.8);
+  }
+}
+
+.precision .pc-head {
+  position: absolute;
+  z-index: 1;
+  top: clamp(1.2rem, 2vw, 2rem);
+  left: clamp(1.2rem, 2vw, 2rem);
+  right: clamp(1.2rem, 2vw, 2rem);
+}
+
+.precision .pc-no {
+  display: block;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--fg-1);
+}
+
+.precision .pc-brand {
+  display: block;
+  margin-top: 0.65rem;
+  font-family: "Noto Serif TC", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  color: var(--color-text-on-dark);
+}
+
+@media (max-width: 768px) {
+  .precision .pc-claims {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .precision .pc-claims::before {
+    display: none;
+  }
+  .precision .pc-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -1816,22 +2167,21 @@ section.frame.catalog {
   line-height: 1.5;
 }
 
-/* 說明文字 + 導覽按鈕推到欄底，呼應參考圖的左下排版 */
+/* 內文緊接標題；只把導覽按鈕推到欄底（呼應參考圖左下排版） */
 .catalog-foot {
-  margin-top: auto;
-  padding-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .catalog-desc {
-  @apply font-sans;
-  font-size: 1rem;
-  line-height: 1.95;
-  letter-spacing: 0.04em;
+  @apply text-lg leading-loose tracking-wide;
   color: var(--token-gold-30);
   margin: 0 0 1.75rem;
 }
 
 .catalog-nav {
+  margin-top: auto;
   display: flex;
   gap: 0.75rem;
 }
@@ -1914,7 +2264,7 @@ section.frame.catalog {
 .contact {
   background-color: var(--color-surface-tertiary-dark);
   color: var(--color-text-on-dark);
-  padding: 8rem 3rem 4rem;
+  padding: 4rem 3rem;
   .pre {
     display: grid;
     grid-template-columns: 5fr 7fr;
