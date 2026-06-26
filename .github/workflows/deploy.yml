@@ -17,7 +17,7 @@ jobs:
 
       - name: Deploy pre-built dist to gh-pages
         run: |
-          sed -i 's|<base href="/">|<base href="/zhixu-landing/">|g' dist/apps/web/browser/index.html
+          sed -i "s|<base href=\"/\">|<base href=\"/${{ github.event.repository.name }}/\">|g" dist/apps/web/browser/index.html
           touch dist/apps/web/browser/.nojekyll
           cd dist/apps/web/browser
           git init
@@ -26,5 +26,5 @@ jobs:
           git add .
           git commit -m "deploy: $(date +'%Y-%m-%d %H:%M:%S') from ${{ github.sha }}"
           git push --force \
-            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/FangjieHung/zhixu-landing.git \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git \
             HEAD:gh-pages
