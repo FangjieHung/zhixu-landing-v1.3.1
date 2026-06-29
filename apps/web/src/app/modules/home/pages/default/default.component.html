@@ -1,5 +1,5 @@
 <!-- Sticky topbar -->
-<div class="version-note">[v1.3.1] 測試版，僅供內部預覽使用。</div>
+<div class="version-note">[v1.3.2] 測試版，僅供內部預覽使用。</div>
 <header class="topbar" [class.shown]="scrolled">
   <a class="mark" routerLink="/">
     <img src="assets/image/logo/type-main.svg" alt="之序" />
@@ -495,35 +495,10 @@
         <h2 class="catalog-title pull-zh">
           頂級的奢華，<br />是擁有隨時讓身心沉澱的餘裕
         </h2>
-        <div class="catalog-foot">
-          <div class="catalog-desc">
-            <p>健康的律動與味蕾的犒賞，是下樓即享的優雅日常</p>
-            <p>在波光中悠閒舒壓、看著孩子在安全的空間裡探索成長。</p>
-            <p>這不只是犒賞自己，更是給予家人最長情的陪伴。</p>
-          </div>
-
-          <div class="catalog-nav">
-            <button
-              type="button"
-              class="cat-arrow-outlined cat-arrow-outlined--prev"
-              aria-label="上一個"
-              (click)="gardenSwiper.swiperRef.slidePrev()"
-            >
-              <span class="material-symbols-outlined" aria-hidden="true"
-                >chevron_left</span
-              >
-            </button>
-            <button
-              type="button"
-              class="cat-arrow-outlined cat-arrow-outlined--next"
-              aria-label="下一個"
-              (click)="gardenSwiper.swiperRef.slideNext()"
-            >
-              <span class="material-symbols-outlined" aria-hidden="true"
-                >chevron_right</span
-              >
-            </button>
-          </div>
+        <div class="catalog-desc">
+          <p>健康的律動與味蕾的犒賞，是下樓即享的優雅日常。</p>
+          <p>在波光中悠閒舒壓、看著孩子在安全的空間裡探索成長。</p>
+          <p>這不只是犒賞自己，更是給予家人最長情的陪伴。</p>
         </div>
       </div>
 
@@ -552,6 +527,30 @@
           </ng-template>
         </swiper>
       </div>
+
+      <!-- NAV -->
+      <div class="catalog-nav">
+        <button
+          type="button"
+          class="cat-arrow-outlined cat-arrow-outlined--prev"
+          aria-label="上一個"
+          (click)="gardenSwiper.swiperRef.slidePrev()"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true"
+            >chevron_left</span
+          >
+        </button>
+        <button
+          type="button"
+          class="cat-arrow-outlined cat-arrow-outlined--next"
+          aria-label="下一個"
+          (click)="gardenSwiper.swiperRef.slideNext()"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true"
+            >chevron_right</span
+          >
+        </button>
+      </div>
     </div>
   </section>
 
@@ -566,36 +565,12 @@
         <h2 class="catalog-title pull-zh">
           在洗鍊的奢華秩序裡，<br />款待生活與最愛的人。
         </h2>
-        <div class="catalog-foot">
-          <div class="catalog-desc">
-            <p>這裡是你款待知己、拓展人脈的私人沙龍，夠體面、也夠隱私。</p>
-            <p>更是你卸下身分、與家人坦誠相見的專屬城堡。</p>
-            <p>
-              飯店級的體貼款待，讓在外運籌帷幄的你，一回到家，就能安心當回被照顧的自己。
-            </p>
-          </div>
-          <div class="catalog-nav">
-            <button
-              type="button"
-              class="cat-arrow-outlined cat-arrow-outlined--prev"
-              aria-label="上一個"
-              (click)="lobbySwiper.swiperRef.slidePrev()"
-            >
-              <span class="material-symbols-outlined" aria-hidden="true"
-                >chevron_left</span
-              >
-            </button>
-            <button
-              type="button"
-              class="cat-arrow-outlined cat-arrow-outlined--next"
-              aria-label="下一個"
-              (click)="lobbySwiper.swiperRef.slideNext()"
-            >
-              <span class="material-symbols-outlined" aria-hidden="true"
-                >chevron_right</span
-              >
-            </button>
-          </div>
+        <div class="catalog-desc">
+          <p>這裡是你款待知己、拓展人脈的私人沙龍，夠體面、也夠隱私。</p>
+          <p>更是你卸下身分、與家人坦誠相見的專屬城堡。</p>
+          <p>
+            飯店級的體貼款待，讓在外運籌帷幄的你，一回到家，就能安心當回被照顧的自己。
+          </p>
         </div>
       </div>
 
@@ -623,6 +598,30 @@
             </div>
           </ng-template>
         </swiper>
+      </div>
+
+      <!-- NAV -->
+      <div class="catalog-nav">
+        <button
+          type="button"
+          class="cat-arrow-outlined cat-arrow-outlined--prev"
+          aria-label="上一個"
+          (click)="lobbySwiper.swiperRef.slidePrev()"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true"
+            >chevron_left</span
+          >
+        </button>
+        <button
+          type="button"
+          class="cat-arrow-outlined cat-arrow-outlined--next"
+          aria-label="下一個"
+          (click)="lobbySwiper.swiperRef.slideNext()"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true"
+            >chevron_right</span
+          >
+        </button>
       </div>
     </div>
   </section>

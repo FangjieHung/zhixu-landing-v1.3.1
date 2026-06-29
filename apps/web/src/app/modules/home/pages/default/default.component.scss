@@ -1718,6 +1718,8 @@ app-location-map {
 
 /* ─── Catalog layout — 設施展示區（#design / #design-b）─── */
 /* 參考排版：左欄標題＋說明＋圓形上一頁/下一頁；右欄分頁標籤＋影片 swiper */
+/* < 960px：text → media → nav 依序堆疊，nav 靠右浮在 swiper 下方（DOM 順序即視覺順序） */
+/* ≥ 960px：改用 grid area 把 nav 放回文字欄底部，還原原本左欄排版 */
 section.frame.catalog {
   .catalog-inner {
     display: flex;
@@ -1725,16 +1727,24 @@ section.frame.catalog {
     gap: 2.5rem;
 
     @media (min-width: 960px) {
-      flex-direction: row;
-      align-items: stretch;
-      gap: clamp(2rem, 4vw, 4.5rem);
+      display: grid;
+      grid-template-columns: minmax(0, 33%) 1fr;
+      grid-template-rows: 1fr auto;
+      column-gap: clamp(2rem, 4vw, 4.5rem);
+      row-gap: 1.5rem;
+      grid-template-areas:
+        "text  media"
+        "nav   media";
     }
   }
 
-  /* row-reverse 變體：媒體在左、文字在右 */
+  /* 反轉變體：媒體在左、文字＋nav 在右 */
   &.catalog--reverse .catalog-inner {
     @media (min-width: 960px) {
-      flex-direction: row-reverse;
+      grid-template-columns: 1fr minmax(0, 33%);
+      grid-template-areas:
+        "media text"
+        "media nav";
     }
   }
 }
@@ -1744,8 +1754,7 @@ section.frame.catalog {
   flex-direction: column;
 
   @media (min-width: 960px) {
-    flex: 0 0 33%;
-    max-width: 33%;
+    grid-area: text;
     padding-top: 0.25rem;
   }
 }
@@ -1770,24 +1779,20 @@ section.frame.catalog {
   line-height: 1.5;
 }
 
-/* 內文緊接標題；只把導覽按鈕推到欄底（呼應參考圖左下排版） */
-.catalog-foot {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
 .catalog-desc {
-  @apply text-lg leading-loose tracking-wide;
+  @apply text-lg leading-loose tracking-wide md:mb-7;
   color: var(--token-gold-30);
-  margin: 0 0 1.75rem;
 }
 
 .catalog-nav {
-  @apply justify-end md:justify-start;
-  margin-top: auto;
   display: flex;
+  justify-content: center;
   gap: 0.75rem;
+
+  @media (min-width: 960px) {
+    grid-area: nav;
+    justify-content: flex-start;
+  }
 }
 
 [class*="cat-arrow"] {
@@ -1849,7 +1854,7 @@ section.frame.catalog {
   flex-direction: column;
 
   @media (min-width: 960px) {
-    flex: 1 1 auto;
+    grid-area: media;
   }
 }
 
