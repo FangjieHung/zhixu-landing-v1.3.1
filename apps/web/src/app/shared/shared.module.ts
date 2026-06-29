@@ -8,10 +8,10 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SwiperModule } from 'swiper/angular';
 import { YouTubePlayerModule } from '@angular/youtube-player';
-import SwiperCore, { Autoplay, Navigation } from 'swiper';
+import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
 
 // Register Swiper modules globally so features like autoplay work
-SwiperCore.use([Autoplay, Navigation]);
+SwiperCore.use([Autoplay, Navigation, Pagination]);
 
 // Custom packages
 import { SharedModule as CoreSharedModule } from '@core/shared';
